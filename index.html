@@ -131,11 +131,29 @@ tr:hover td{background:#FAFAFA}
 /* ── DRAWER ── */
 .drawer-head{display:flex;align-items:center;gap:12px;padding:18px 22px 16px}
 .drawer-avatar{width:44px;height:44px;border-radius:12px;background:var(--primary);color:#fff;font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.drawer-metrics{display:flex;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:#FAFBFC}
-.drawer-metric{flex:1;text-align:center;padding:12px 6px;position:relative}
-.drawer-metric + .drawer-metric::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);height:26px;width:1px;background:var(--border)}
-.drawer-metric-val{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.4px}
-.drawer-metric-label{font-size:10.5px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+.drawer-metrics{display:flex;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:#FCFCFD}
+.drawer-metric{flex:1;text-align:center;padding:16px 6px;position:relative}
+.drawer-metric + .drawer-metric::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);height:24px;width:1px;background:var(--border)}
+.drawer-metric-val{font-size:15px;font-weight:600;color:var(--text);letter-spacing:-.2px}
+.drawer-metric-label{font-size:11.5px;color:#9CA3AF;margin-top:4px;text-transform:none;letter-spacing:0}
+/* ── PREMIUM DRAWER REDESIGN ── */
+.dh-title{font-size:18px;font-weight:600;letter-spacing:-.3px;color:var(--text)}
+.panel-body .drawer-head{padding:20px 22px 16px}
+.panel-body .drawer-head .text-sm,.panel-body .drawer-head .text-muted{font-size:13px;color:#9CA3AF}
+.panel-body .section-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:#9CA3AF;margin:20px 0 9px}
+.panel-body .drawer-tabpane>.section-title:first-child,.panel-body .section-title:first-child{margin-top:8px}
+.panel-body .stat-row{padding:9px 0;font-size:14px}
+.panel-body .stat-row>span:first-child{font-size:13px;color:#9CA3AF}
+.panel-body .stat-row>span:last-child{font-weight:500}
+.prof-cell{padding:10px 0}
+.prof-cell .k{font-size:11px;text-transform:none;letter-spacing:0;color:#9CA3AF}
+.prof-cell .v{font-size:14px;font-weight:500}
+/* compact contact card */
+.contact-card{border:1px solid var(--border);border-radius:12px;padding:15px 16px;background:#fff}
+.cc-name{font-size:15px;font-weight:600;color:var(--text);letter-spacing:-.2px}
+.cc-role{font-size:12.5px;color:#9CA3AF;margin-top:1px}
+.cc-line{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--text);margin-top:11px}
+.cc-line svg{width:15px;height:15px;color:#9CA3AF;flex-shrink:0}
 .drawer-tabs{display:flex;gap:2px;padding:0 14px;border-bottom:1px solid var(--border);position:sticky;top:0;background:#fff;z-index:2;overflow-x:auto}
 .drawer-tab{padding:11px 12px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:.12s}
 .drawer-tab.active{color:var(--primary);border-bottom-color:var(--primary)}
@@ -1365,20 +1383,20 @@ function openReviewDrawer(id){
     <div class="drawer-head">
       <div class="drawer-avatar">${app.name.charAt(0)}</div>
       <div style="flex:1;min-width:0">
-        <div style="font-size:16px;font-weight:700;letter-spacing:-.3px">${app.name}</div>
+        <div class="dh-title">${app.name}</div>
         <div class="text-sm text-muted">${app.city}</div>
       </div>
       ${onbBadge(ds)}
     </div>
     <div style="padding:0 22px 18px">
-      <div class="section-title" style="margin:6px 0 10px;font-size:13px">Application Details</div>
+      <div class="section-title" style="margin:6px 0 10px">Application Details</div>
       <div class="stat-row"><span class="text-sm text-muted">Contact Person</span><span style="font-weight:600">${app.contact}</span></div>
       <div class="stat-row"><span class="text-sm text-muted">Phone</span><span style="font-weight:600">${app.phone}</span></div>
       <div class="stat-row"><span class="text-sm text-muted">City</span><span style="font-weight:600">${app.city}</span></div>
       <div class="stat-row"><span class="text-sm text-muted">Submitted</span><span style="font-weight:600">${app.submitted}</span></div>
       <div class="stat-row"><span class="text-sm text-muted">Waiting Time</span><span class="onb-wait ${wd>=10?'urgent':wd<=4?'fresh':''}">${wd} day${wd===1?'':'s'}</span></div>
 
-      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Documents Checklist</div>
+      <div class="section-title" style="margin:18px 0 6px">Documents Checklist</div>
       ${ALL_DOCS.map(doc=>{
         const st=docStatus(doc);
         return `<div class="chk-row">
@@ -1392,7 +1410,7 @@ function openReviewDrawer(id){
               :`<button class="drawer-doc-act" title="Request" onclick="showNotif('Requested ${doc}','warning')"><i data-lucide="rotate-cw"></i></button>`}
         </div>`;}).join('')}
 
-      <div class="section-title" style="margin:18px 0 8px;font-size:13px">Internal Review Notes</div>
+      <div class="section-title" style="margin:18px 0 8px">Internal Review Notes</div>
       <textarea class="notes-area" id="review-notes-${id}" placeholder="Add internal notes for the review team (not visible to agency)..."></textarea>
     </div>`;
 
@@ -1549,7 +1567,7 @@ function openRevenueDrawer(i){
     <div class="drawer-head">
       <div class="drawer-avatar">${r.agency.charAt(0)}</div>
       <div style="flex:1;min-width:0">
-        <div style="font-size:16px;font-weight:700;letter-spacing:-.3px">${r.agency}</div>
+        <div class="dh-title">${r.agency}</div>
         <div class="text-sm text-muted">${r.city}</div>
       </div>
       ${badge(r.status)}
@@ -1563,20 +1581,20 @@ function openRevenueDrawer(i){
 
     <div style="padding:2px 22px 18px">
       <!-- 1. agency summary -->
-      <div class="section-title" style="margin:10px 0 6px;font-size:13px">Agency Summary</div>
+      <div class="section-title" style="margin:10px 0 6px">Agency Summary</div>
       <div class="stat-row"><span class="text-sm text-muted">Agency Name</span><span style="font-weight:600">${r.agency}</span></div>
       <div class="stat-row"><span class="text-sm text-muted">City</span><span style="font-weight:600">${r.city}</span></div>
       <div class="stat-row"><span class="text-sm text-muted">Settlement Status</span>${badge(r.status)}</div>
       <div class="stat-row"><span class="text-sm text-muted">Commission Rate</span><span style="font-weight:600">15%</span></div>
 
       <!-- 2. revenue breakdown -->
-      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Revenue Breakdown</div>
+      <div class="section-title" style="margin:18px 0 6px">Revenue Breakdown</div>
       <div class="stat-row"><span class="text-sm text-muted">Gross Revenue</span><span style="font-weight:700">${r.gross}</span></div>
       <div class="stat-row"><span class="text-sm text-muted">Platform Commission</span><span style="font-weight:600;color:var(--primary)">− ${r.commission}</span></div>
       <div class="stat-row"><span class="text-sm text-muted">Net Payout</span><span style="font-weight:700;color:var(--success)">${r.net}</span></div>
 
       <!-- 3. ride analytics -->
-      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Ride Analytics</div>
+      <div class="section-title" style="margin:18px 0 6px">Ride Analytics</div>
       <div class="prof-grid">
         <div class="prof-cell"><div class="k">Total Rides</div><div class="v">${r.rides.toLocaleString()}</div></div>
         <div class="prof-cell"><div class="k">Completed</div><div class="v">${completed.toLocaleString()}</div></div>
@@ -1585,7 +1603,7 @@ function openRevenueDrawer(i){
       </div>
 
       <!-- 4. revenue trend -->
-      <div class="section-title" style="margin:18px 0 8px;font-size:13px">Revenue Trend</div>
+      <div class="section-title" style="margin:18px 0 8px">Revenue Trend</div>
       <div style="display:flex;align-items:flex-end;gap:8px;height:64px">
         ${trend.map((h,k)=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
           <div style="width:100%;height:${h*0.5}px;background:${k===trend.length-1?'var(--primary)':'#C7D2FE'};border-radius:4px 4px 0 0"></div>
@@ -1596,14 +1614,14 @@ function openRevenueDrawer(i){
       </div>
 
       <!-- 5. settlement history -->
-      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Settlement History</div>
+      <div class="section-title" style="margin:18px 0 6px">Settlement History</div>
       <table style="font-size:12.5px">
         <thead><tr><th style="padding:6px 0">Month</th><th style="padding:6px 0">Status</th><th style="padding:6px 0;text-align:right">Paid Date</th></tr></thead>
         <tbody>${settle.map(s=>`<tr><td style="padding:8px 0;border-bottom:1px solid #F1F5F9">${s.m}</td><td style="padding:8px 0;border-bottom:1px solid #F1F5F9">${badge(s.s)}</td><td style="padding:8px 0;border-bottom:1px solid #F1F5F9;text-align:right">${s.d}</td></tr>`).join('')}</tbody>
       </table>
 
       <!-- 6. commission history -->
-      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Commission History</div>
+      <div class="section-title" style="margin:18px 0 6px">Commission History</div>
       <table style="font-size:12.5px">
         <thead><tr><th style="padding:6px 0">Revenue</th><th style="padding:6px 0;text-align:right">Commission</th><th style="padding:6px 0;text-align:right">Net Payout</th></tr></thead>
         <tbody>${commHist.map(h=>`<tr><td style="padding:8px 0;border-bottom:1px solid #F1F5F9">${fmt(h.rev)}</td><td style="padding:8px 0;border-bottom:1px solid #F1F5F9;text-align:right;color:var(--primary)">${fmt(h.c)}</td><td style="padding:8px 0;border-bottom:1px solid #F1F5F9;text-align:right;color:var(--success);font-weight:600">${fmt(h.n)}</td></tr>`).join('')}</tbody>
@@ -1653,7 +1671,7 @@ const AGENCY_NAMES=['LifeLine','Metro Medic','NovaCare','Swift','Falcon','Mediva
 function openAddDriver(){
   document.getElementById('driver-add-content').innerHTML=`
     <div style="padding:18px 22px">
-      <div class="section-title" style="margin-bottom:12px;font-size:13px">Basic Information</div>
+      <div class="section-title" style="margin-bottom:12px">Basic Information</div>
       <div class="form-group"><label class="label">Full Name *</label><input class="input" id="ad-name" placeholder="Full name"></div>
       <div class="grid-2" style="gap:12px">
         <div class="form-group"><label class="label">Phone Number *</label><input class="input" id="ad-phone" maxlength="10" placeholder="9820000000"></div>
@@ -1663,19 +1681,19 @@ function openAddDriver(){
         </div>
       </div>
 
-      <div class="section-title" style="margin:8px 0 12px;font-size:13px">Agency Assignment</div>
+      <div class="section-title" style="margin:8px 0 12px">Agency Assignment</div>
       <div class="form-group"><label class="label">Select Agency *</label>
         <select class="input" id="ad-agency"><option value="">Select agency</option>${AGENCY_NAMES.map(a=>`<option>${a}</option>`).join('')}</select>
       </div>
 
-      <div class="section-title" style="margin:8px 0 12px;font-size:13px">License Information</div>
+      <div class="section-title" style="margin:8px 0 12px">License Information</div>
       <div class="form-group"><label class="label">License Number *</label><input class="input" id="ad-license" placeholder="MH01-2026-0000000"></div>
       <div class="grid-2" style="gap:12px">
         <div class="form-group"><label class="label">License Expiry Date</label><input class="input" id="ad-expiry" type="date"></div>
         <div class="form-group"><label class="label">Years of Experience</label><input class="input" id="ad-exp" placeholder="e.g. 5 years"></div>
       </div>
 
-      <div class="section-title" style="margin:8px 0 10px;font-size:13px">Documents</div>
+      <div class="section-title" style="margin:8px 0 10px">Documents</div>
       ${DRIVER_DOCS.map((doc,di)=>`
         <label class="chk-row" style="cursor:pointer">
           <input type="checkbox" id="ad-doc-${di}" style="width:16px;height:16px;accent-color:var(--primary)">
@@ -1714,7 +1732,7 @@ function openDriverDetail(i){
     <div class="drawer-head">
       <div class="drawer-avatar">${d.name.charAt(0)}</div>
       <div style="flex:1;min-width:0">
-        <div style="font-size:16px;font-weight:700;letter-spacing:-.3px">${d.name}</div>
+        <div class="dh-title">${d.name}</div>
         <div class="text-sm text-muted">${d.agency} · ${d.city}</div>
       </div>
       ${badge(d.status)}
@@ -1727,7 +1745,7 @@ function openDriverDetail(i){
 
     <div style="padding:2px 22px 18px">
       <!-- A. profile -->
-      <div class="section-title" style="margin:10px 0 6px;font-size:13px">Driver Profile</div>
+      <div class="section-title" style="margin:10px 0 6px">Driver Profile</div>
       <div class="stat-row"><span class="text-sm text-muted">Name</span><span style="font-weight:600">${d.name}</span></div>
       <div class="stat-row"><span class="text-sm text-muted">Status</span>${badge(d.status)}</div>
       <div class="stat-row"><span class="text-sm text-muted">Agency</span><span style="font-weight:600">${d.agency}</span></div>
@@ -1736,7 +1754,7 @@ function openDriverDetail(i){
       <div class="stat-row"><span class="text-sm text-muted">Total Rides</span><span style="font-weight:600">${d.rides}</span></div>
 
       <!-- B. information -->
-      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Driver Information</div>
+      <div class="section-title" style="margin:18px 0 6px">Driver Information</div>
       <div class="prof-grid">
         <div class="prof-cell"><div class="k">Phone</div><div class="v">${d.phone}</div></div>
         <div class="prof-cell"><div class="k">Experience</div><div class="v">${exp}</div></div>
@@ -1745,7 +1763,7 @@ function openDriverDetail(i){
       </div>
 
       <!-- C. performance -->
-      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Performance Summary</div>
+      <div class="section-title" style="margin:18px 0 6px">Performance Summary</div>
       <div class="prof-grid">
         <div class="prof-cell"><div class="k">Total Rides</div><div class="v">${d.rides.toLocaleString()}</div></div>
         <div class="prof-cell"><div class="k">Completed</div><div class="v">${completed.toLocaleString()}</div></div>
@@ -1755,7 +1773,7 @@ function openDriverDetail(i){
       </div>
 
       <!-- D. documents -->
-      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Documents</div>
+      <div class="section-title" style="margin:18px 0 6px">Documents</div>
       ${DRIVER_DOCS.map((doc,di)=>{
         const ok=di<submitted;
         return `<div class="chk-row">
@@ -1767,7 +1785,7 @@ function openDriverDetail(i){
         </div>`;}).join('')}
 
       <!-- E. recent activity -->
-      <div class="section-title" style="margin:18px 0 10px;font-size:13px">Recent Activity</div>
+      <div class="section-title" style="margin:18px 0 10px">Recent Activity</div>
       <div class="timeline">
         <div class="tl-item done"><div class="tl-dot"></div><div class="tl-title">Completed ride · ${d.city}</div><div class="tl-sub">₹1,840 · 2 hours ago</div></div>
         <div class="tl-item done"><div class="tl-dot"></div><div class="tl-title">Completed ride · ${d.city}</div><div class="tl-sub">₹2,260 · 5 hours ago</div></div>
@@ -1835,7 +1853,7 @@ function openUserDetail(i){
     <div class="drawer-head">
       <div class="drawer-avatar">${u.name.charAt(0)}</div>
       <div style="flex:1;min-width:0">
-        <div style="font-size:16px;font-weight:700;letter-spacing:-.3px">${u.name}</div>
+        <div class="dh-title">${u.name}</div>
         <div class="text-sm text-muted">${u.city}</div>
       </div>
       ${badge(u.status)}
@@ -1848,7 +1866,7 @@ function openUserDetail(i){
 
     <div style="padding:2px 22px 18px">
       <!-- 1. profile -->
-      <div class="section-title" style="margin:10px 0 6px;font-size:13px">Customer Profile</div>
+      <div class="section-title" style="margin:10px 0 6px">Customer Profile</div>
       <div class="stat-row"><span class="text-sm text-muted">Customer Name</span><span style="font-weight:600">${u.name}</span></div>
       <div class="stat-row"><span class="text-sm text-muted">Status</span>${badge(u.status)}</div>
       <div class="stat-row"><span class="text-sm text-muted">City</span><span style="font-weight:600">${u.city}</span></div>
@@ -1856,12 +1874,16 @@ function openUserDetail(i){
       <div class="stat-row"><span class="text-sm text-muted">Last Active</span><span style="font-weight:600">${u.last}</span></div>
 
       <!-- 2. contact -->
-      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Contact Information</div>
-      <div class="stat-row"><span class="text-sm text-muted">Phone Number</span><span style="font-weight:600">${u.phone}</span></div>
-      <div class="stat-row"><span class="text-sm text-muted">Email Address</span><span style="font-weight:600">${email}</span></div>
+      <div class="section-title">Contact</div>
+      <div class="contact-card">
+        <div class="cc-name">${u.name}</div>
+        <div class="cc-role">Customer · ${u.city}</div>
+        <div class="cc-line"><i data-lucide="phone"></i> ${u.phone}</div>
+        <div class="cc-line"><i data-lucide="mail"></i> ${email}</div>
+      </div>
 
       <!-- 3. ride summary -->
-      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Ride Summary</div>
+      <div class="section-title" style="margin:18px 0 6px">Ride Summary</div>
       <div class="prof-grid">
         <div class="prof-cell"><div class="k">Total Rides</div><div class="v">${u.rides.toLocaleString()}</div></div>
         <div class="prof-cell"><div class="k">Completed</div><div class="v">${completed.toLocaleString()}</div></div>
@@ -1871,7 +1893,7 @@ function openUserDetail(i){
       </div>
 
       <!-- 4. spending -->
-      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Spending Summary</div>
+      <div class="section-title" style="margin:18px 0 6px">Spending Summary</div>
       <div class="stat-row"><span class="text-sm text-muted">Lifetime Spend</span><span style="font-weight:700">${u.spent}</span></div>
       <div class="stat-row"><span class="text-sm text-muted">Avg Spend / Ride</span><span style="font-weight:600">${avgFare}</span></div>
       <div class="text-sm text-muted" style="margin:12px 0 8px">Monthly Spending Trend</div>
@@ -1881,14 +1903,14 @@ function openUserDetail(i){
       <div style="display:flex;gap:8px;margin-top:4px">${['Jan','Feb','Mar','Apr','May','Jun'].map(m=>`<div style="flex:1;text-align:center;font-size:10px;color:var(--muted)">${m}</div>`).join('')}</div>
 
       <!-- 5. recent rides -->
-      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Recent Rides</div>
+      <div class="section-title" style="margin:18px 0 6px">Recent Rides</div>
       <table style="font-size:12.5px">
         <thead><tr><th style="padding:6px 0">Date</th><th style="padding:6px 0">Type</th><th style="padding:6px 0;text-align:right">Fare</th><th style="padding:6px 0;text-align:right">Status</th></tr></thead>
         <tbody>${u.rides?rides.map(r=>`<tr><td style="padding:8px 0;border-bottom:1px solid #F1F5F9">${r.d}</td><td style="padding:8px 0;border-bottom:1px solid #F1F5F9">${r.t}</td><td style="padding:8px 0;border-bottom:1px solid #F1F5F9;text-align:right">${r.f}</td><td style="padding:8px 0;border-bottom:1px solid #F1F5F9;text-align:right">${badge(r.s)}</td></tr>`).join(''):'<tr><td colspan="4" style="padding:14px 0;text-align:center;color:var(--muted)">No rides yet</td></tr>'}</tbody>
       </table>
 
       <!-- 6. activity timeline -->
-      <div class="section-title" style="margin:18px 0 10px;font-size:13px">Activity Timeline</div>
+      <div class="section-title" style="margin:18px 0 10px">Activity Timeline</div>
       <div class="timeline">
         <div class="tl-item done"><div class="tl-dot"></div><div class="tl-title">Account created</div><div class="tl-sub">${regDates[i%regDates.length]}</div></div>
         <div class="tl-item done"><div class="tl-dot"></div><div class="tl-title">First ride booked</div><div class="tl-sub">${u.rides?u.city+' · BLS':'—'}</div></div>
@@ -2012,7 +2034,7 @@ function openAgencyPanel(id){
     <div class="drawer-head">
       <div class="drawer-avatar">${a.name.charAt(0)}</div>
       <div style="flex:1;min-width:0">
-        <div style="font-size:16px;font-weight:700;letter-spacing:-.3px">${a.name}</div>
+        <div class="dh-title">${a.name}</div>
         <div class="text-sm text-muted">${a.city} · Est. ${a.established}</div>
       </div>
       ${badge(a.status)}
@@ -2035,12 +2057,14 @@ function openAgencyPanel(id){
 
     <!-- OVERVIEW -->
     <div class="drawer-tabpane active" data-pane="overview">
-      <div class="section-title" style="margin-bottom:10px;font-size:13px">Contact Details</div>
-      <div class="stat-row"><span class="text-sm text-muted">Contact</span><span style="font-weight:600">${a.contact}</span></div>
-      <div class="stat-row"><span class="text-sm text-muted">Phone</span><span style="font-weight:600">${a.phone}</span></div>
-      <div class="stat-row"><span class="text-sm text-muted">Email</span><span style="font-weight:600">${a.email}</span></div>
-      <div class="stat-row"><span class="text-sm text-muted">Type</span><span style="font-weight:600">Private</span></div>
-      <div class="section-title" style="margin:18px 0 10px;font-size:13px">Verification</div>
+      <div class="section-title">Contact</div>
+      <div class="contact-card">
+        <div class="cc-name">${a.contact}</div>
+        <div class="cc-role">Primary Contact · Private Agency</div>
+        <div class="cc-line"><i data-lucide="phone"></i> ${a.phone}</div>
+        <div class="cc-line"><i data-lucide="mail"></i> ${a.email}</div>
+      </div>
+      <div class="section-title">Verification</div>
       <div class="stat-row"><span class="text-sm text-muted">Documents</span><span style="font-weight:600">${a.status==='active'?'5/5 verified':'3/5 verified'}</span></div>
       <div class="stat-row"><span class="text-sm text-muted">KYC Status</span>${badge(a.status==='active'?'verified':'pending')}</div>
     </div>
@@ -2147,7 +2171,7 @@ function openDriverPanel(i){
     <div class="drawer-head">
       <div class="drawer-avatar">${d.name.charAt(0)}</div>
       <div style="flex:1;min-width:0">
-        <div style="font-size:16px;font-weight:700;letter-spacing:-.3px">${d.name}</div>
+        <div class="dh-title">${d.name}</div>
         <div class="text-sm text-muted">${d.agency}</div>
       </div>
       ${badge(d.status)}
@@ -2155,7 +2179,7 @@ function openDriverPanel(i){
 
     <div style="padding:2px 22px 18px">
       <!-- profile -->
-      <div class="section-title" style="margin:8px 0 6px;font-size:13px">Driver Profile</div>
+      <div class="section-title" style="margin:8px 0 6px">Driver Profile</div>
       <div class="prof-grid">
         <div class="prof-cell"><div class="k">Agency</div><div class="v">${d.agency}</div></div>
         <div class="prof-cell"><div class="k">City</div><div class="v">${d.city}</div></div>
@@ -2166,7 +2190,7 @@ function openDriverPanel(i){
       </div>
 
       <!-- doc summary -->
-      <div class="section-title" style="margin:18px 0 8px;font-size:13px">Documents</div>
+      <div class="section-title" style="margin:18px 0 8px">Documents</div>
       <div class="doc-summary">
         <div style="flex:1">
           <div style="font-weight:700;font-size:14px">${submitted}/5 Documents Submitted</div>
@@ -2192,7 +2216,7 @@ function openDriverPanel(i){
       </div>
 
       <!-- timeline -->
-      <div class="section-title" style="margin:18px 0 10px;font-size:13px">Verification Timeline</div>
+      <div class="section-title" style="margin:18px 0 10px">Verification Timeline</div>
       <div class="timeline">
         <div class="tl-item done"><div class="tl-dot"></div><div class="tl-title">Submitted by Agency</div><div class="tl-sub">${d.agency} · ${d.submitted}</div></div>
         <div class="tl-item ${missing.length?'active':'done'}"><div class="tl-dot"></div><div class="tl-title">Documents Reviewed</div><div class="tl-sub">${submitted}/5 verified${missing.length?' · awaiting remaining docs':''}</div></div>
@@ -2200,7 +2224,7 @@ function openDriverPanel(i){
       </div>
 
       <!-- notes -->
-      <div class="section-title" style="margin:18px 0 8px;font-size:13px">Internal Verification Notes</div>
+      <div class="section-title" style="margin:18px 0 8px">Internal Verification Notes</div>
       <textarea class="notes-area" id="driver-notes-${i}" placeholder="Add internal notes (not visible to driver or agency)..."></textarea>
     </div>`;
 
