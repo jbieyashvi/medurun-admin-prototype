@@ -1,0 +1,2322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medurun — Super Admin</title>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+/* ── LUCIDE ICONS (1.5px stroke, monochrome, no fill) ── */
+svg.lucide{width:16px;height:16px;stroke-width:1.5;fill:none;flex-shrink:0;color:inherit}
+i[data-lucide]{display:inline-flex;width:16px;height:16px}
+.login-brand svg{width:24px;height:24px}
+.sb-logo-icon svg,.login-logo-icon svg{width:20px;height:20px;color:#fff}
+.h-notif svg{width:18px;height:18px}
+.h-search svg{width:15px;height:15px}
+.field-icon svg{width:16px;height:16px}
+.login-secure svg{width:14px;height:14px}
+.drawer-doc-icon svg{width:16px;height:16px}
+.chk-icon svg{width:15px;height:15px}
+.rating svg{width:13px;height:13px;vertical-align:-2px}
+.btn svg{width:14px;height:14px}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#635BFF;--primary-dark:#5048E5;--primary-light:#EEF2FF;
+  --navy:#1E1B4B;--white:#FFFFFF;--bg:#F8FAFC;
+  --success:#10B981;--warning:#F59E0B;--danger:#EF4444;--info:#3B82F6;
+  --text:#111827;--muted:#6B7280;--border:#E5E7EB;
+  --card:#FFFFFF;--sidebar-w:260px;
+  --shadow-sm:0 1px 2px rgba(17,24,39,.04);
+  --shadow:0 1px 3px rgba(17,24,39,.05),0 1px 2px rgba(17,24,39,.03);
+}
+body{font-family:'Inter',-apple-system,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+/* ── SIDEBAR ── */
+#sidebar{position:fixed;left:0;top:0;width:var(--sidebar-w);height:100vh;background:#F9FAFB;border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;transition:.3s}
+.sb-logo{padding:18px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.sb-logo-icon{width:34px;height:34px;background:var(--primary);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.sb-logo-text{color:var(--text);font-weight:700;font-size:17px;letter-spacing:-.3px}
+.sb-logo-sub{color:var(--muted);font-size:11px;font-weight:500}
+.sb-nav{flex:1;overflow-y:auto;padding:12px 0}
+.sb-section{padding:12px 20px 6px;color:#94A3B8;font-size:10.5px;font-weight:600;letter-spacing:.6px;text-transform:uppercase}
+.sb-item{display:flex;align-items:center;gap:11px;padding:9px 12px;cursor:pointer;color:#334155;font-size:13.5px;font-weight:500;transition:.12s;position:relative;margin:1px 10px;border-radius:8px}
+.sb-item:hover{background:#F1F5F9;color:var(--text)}
+.sb-item.active{background:var(--primary-light);color:var(--primary);font-weight:600}
+.sb-item.active .icon{color:var(--primary)}
+.sb-item .icon{width:18px;height:18px;flex-shrink:0;color:#64748B;display:flex;align-items:center;justify-content:center}
+.sb-item .icon svg{width:18px;height:18px;stroke-width:1.8}
+.sb-item .badge{margin-left:auto;background:#FEE2E2;color:#DC2626;font-size:10.5px;font-weight:600;padding:1px 7px;border-radius:20px}
+.sb-bottom{padding:12px 10px;border-top:1px solid var(--border)}
+.sb-bottom .sb-item .icon{color:#94A3B8}
+/* ── HEADER ── */
+#header{position:fixed;left:var(--sidebar-w);top:0;right:0;height:60px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;gap:16px;z-index:99}
+.h-title{font-size:15px;font-weight:600;color:var(--text);flex:1}
+.h-search{display:flex;align-items:center;gap:8px;background:#F8FAFC;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:13px;color:#94A3B8;cursor:pointer;min-width:240px}
+.h-notif{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;font-size:15px;color:#64748B}
+.h-notif .dot{position:absolute;top:7px;right:7px;width:7px;height:7px;background:var(--danger);border-radius:50%;border:2px solid #fff}
+.h-avatar{width:34px;height:34px;border-radius:50%;background:var(--primary);color:#fff;font-size:12.5px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer}
+/* ── MAIN ── */
+#main{margin-left:var(--sidebar-w);margin-top:60px;padding:28px 32px;min-height:calc(100vh - 60px)}
+.screen{display:none}
+.screen.active{display:block}
+/* ── CARDS ── */
+.card{background:var(--card);border-radius:14px;border:1px solid var(--border);padding:22px;box-shadow:var(--shadow-sm)}
+.card-sm{padding:16px}
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:18px;margin-bottom:24px}
+.metric-card{background:#fff;border-radius:14px;border:1px solid var(--border);padding:18px;position:relative;box-shadow:var(--shadow-sm);min-height:118px;transition:.15s}
+.metric-card:hover{box-shadow:var(--shadow);border-color:#D8DCE3}
+.metric-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;background:#F1F5F9;color:#475569}
+.metric-icon svg{width:17px;height:17px}
+.metric-icon.purple,.metric-icon.green,.metric-icon.orange,.metric-icon.red,.metric-icon.blue{background:#F1F5F9;color:#475569}
+.metric-label{font-size:12.5px;color:var(--muted);font-weight:500;margin-bottom:5px}
+.metric-value{font-size:24px;font-weight:700;color:var(--text);letter-spacing:-.6px}
+.metric-change{font-size:11.5px;margin-top:6px;font-weight:500}
+.metric-change.up{color:var(--success)}
+.metric-change.down{color:var(--danger)}
+/* ── TABLES ── */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;padding:10px 14px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:12px 14px;border-bottom:1px solid #F1F5F9;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#FAFAFA}
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:600}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.7}
+.badge.active,.badge.approved,.badge.verified,.badge.paid{background:#D1FAE5;color:#065F46}
+.badge.pending,.badge.review{background:#FEF3C7;color:#92400E}
+.badge.rejected,.badge.failed{background:#FEE2E2;color:#991B1B}
+.badge.inactive{background:#F1F5F9;color:#475569}
+.badge.processing{background:#DBEAFE;color:#1E40AF}
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:.15s}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-success{background:var(--success);color:#fff}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-warning{background:var(--warning);color:#fff}
+.btn-outline{background:#fff;color:var(--text);border:1px solid var(--border)}
+.btn-outline:hover{background:var(--bg)}
+.btn-sm{padding:5px 12px;font-size:12px;border-radius:6px}
+.btn-xs{padding:3px 10px;font-size:11.5px;border-radius:6px}
+/* ── INPUTS ── */
+.input{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13.5px;color:var(--text);background:#fff;outline:none;transition:.15s;font-family:inherit}
+.input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+.label{font-size:12.5px;font-weight:600;color:var(--text);margin-bottom:5px;display:block}
+.form-group{margin-bottom:16px}
+/* ── UTILITIES ── */
+.flex{display:flex}.items-center{align-items:center}.gap-8{gap:8px}.gap-12{gap:12px}.gap-16{gap:16px}
+.justify-between{justify-content:space-between}.flex-1{flex:1}.ml-auto{margin-left:auto}
+.mt-4{margin-top:4px}.mt-8{margin-top:8px}.mt-16{margin-top:16px}.mt-20{margin-top:20px}.mt-24{margin-top:24px}
+.mb-4{margin-bottom:4px}.mb-8{margin-bottom:8px}.mb-16{margin-bottom:16px}.mb-24{margin-bottom:24px}
+.text-sm{font-size:12.5px}.text-muted{color:var(--muted)}.text-bold{font-weight:700}.text-right{text-align:right}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-title{font-size:15px;font-weight:700;color:var(--text)}
+.section-sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+/* ── FILTERS ── */
+.filter-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.filter-input{padding:7px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;background:#fff;outline:none;color:var(--text);font-family:inherit}
+.filter-input:focus{border-color:var(--primary)}
+/* ── TABS ── */
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:20px}
+.tab{padding:10px 18px;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.15s}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab:hover{color:var(--text)}
+/* ── PANELS ── */
+.panel{position:fixed;top:0;right:-480px;width:460px;height:100vh;background:#fff;border-left:1px solid var(--border);z-index:200;display:flex;flex-direction:column;transition:.28s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 32px rgba(17,24,39,.1)}
+.panel.open{right:0}
+.panel-header{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:#fff;flex-shrink:0}
+.panel-body{padding:0;overflow-y:auto;flex:1}
+/* ── DRAWER ── */
+.drawer-head{display:flex;align-items:center;gap:12px;padding:18px 22px 16px}
+.drawer-avatar{width:44px;height:44px;border-radius:12px;background:var(--primary);color:#fff;font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.drawer-metrics{display:flex;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:#FAFBFC}
+.drawer-metric{flex:1;text-align:center;padding:12px 6px;position:relative}
+.drawer-metric + .drawer-metric::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);height:26px;width:1px;background:var(--border)}
+.drawer-metric-val{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.4px}
+.drawer-metric-label{font-size:10.5px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+.drawer-tabs{display:flex;gap:2px;padding:0 14px;border-bottom:1px solid var(--border);position:sticky;top:0;background:#fff;z-index:2;overflow-x:auto}
+.drawer-tab{padding:11px 12px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:.12s}
+.drawer-tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.drawer-tab:hover{color:var(--text)}
+.drawer-tabpane{padding:18px 22px;display:none}
+.drawer-tabpane.active{display:block}
+.drawer-doc{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid #F1F5F9}
+.drawer-doc:last-child{border-bottom:none}
+.drawer-doc-icon{width:34px;height:34px;border-radius:8px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.drawer-doc-act{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer;color:#64748B;display:flex;align-items:center;justify-content:center;font-size:13px}
+.drawer-doc-act:hover{background:var(--bg);color:var(--primary)}
+.mini-list-row{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid #F1F5F9}
+.mini-list-row:last-child{border-bottom:none}
+.drawer-foot{flex-shrink:0;border-top:1px solid var(--border);padding:14px 22px;background:#fff;display:flex;flex-direction:column;gap:10px}
+.danger-zone{border:1px solid #FECACA;background:#FEF2F2;border-radius:10px;padding:12px 14px}
+.danger-zone-title{font-size:11px;font-weight:700;color:#DC2626;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:199;display:none}
+.overlay.show{display:block}
+/* ── DOC REVIEW CARDS ── */
+.doc-card{border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;background:#fff}
+.doc-icon{width:44px;height:44px;border-radius:8px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.doc-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+/* ── CHART ── */
+.chart-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.chart-label{font-size:12px;color:var(--muted);width:100px;flex-shrink:0;font-weight:500}
+.chart-bar-bg{flex:1;height:8px;background:var(--bg);border-radius:4px;overflow:hidden}
+.chart-bar-fill{height:100%;border-radius:4px;background:var(--primary);transition:.3s}
+.chart-val{font-size:12px;font-weight:700;width:60px;text-align:right;flex-shrink:0}
+/* ── MINI LINE CHART ── */
+.sparkline{width:100%;height:60px}
+/* ── DONUT ── */
+.donut-wrap{display:flex;align-items:center;gap:24px}
+.donut-legend{display:flex;flex-direction:column;gap:8px}
+.donut-legend-item{display:flex;align-items:center;gap:8px;font-size:12.5px}
+.donut-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+/* ── LOGIN ── */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#FAFAFC;margin-left:0;margin-top:0;color:#111827;gap:72px;padding:48px;position:relative;overflow:hidden}
+/* subtle bg illustration */
+.login-bg{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.5}
+.login-bg svg{position:absolute}
+.login-bg .bg-cross-1{top:8%;right:6%;width:180px;height:180px;color:#635BFF;opacity:.04}
+.login-bg .bg-cross-2{bottom:10%;left:4%;width:120px;height:120px;color:#635BFF;opacity:.035}
+.login-bg .bg-pulse{bottom:14%;right:12%;width:340px;color:#635BFF;opacity:.05}
+.login-left{flex:1 1 0;display:flex;flex-direction:column;justify-content:center;max-width:540px;position:relative;z-index:1}
+.login-brand{display:flex;align-items:center;gap:10px;font-size:23px;font-weight:800;color:#111827;margin-bottom:40px;letter-spacing:-.5px}
+.login-headline{font-size:43px;font-weight:800;line-height:1.12;letter-spacing:-1.4px;color:#111827;margin-bottom:20px}
+.login-headline .accent{color:#635BFF}
+.login-desc{font-size:16px;line-height:1.7;color:#6B7280;max-width:420px;margin-bottom:40px}
+.login-stats{display:flex;align-items:center;background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:18px 8px;box-shadow:0 1px 3px rgba(17,24,39,.03);max-width:480px}
+.login-stat{flex:1;text-align:center;padding:0 16px;position:relative}
+.login-stat + .login-stat::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);height:34px;width:1px;background:#E5E7EB}
+.login-stat-value{font-size:24px;font-weight:800;color:#111827;letter-spacing:-.5px}
+.login-stat-label{font-size:12px;color:#6B7280;margin-top:3px}
+.login-right{flex:1 1 0;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.login-card{background:#fff;border-radius:20px;padding:44px;width:100%;max-width:580px;border:1px solid #E5E7EB;box-shadow:0 4px 24px rgba(17,24,39,.04),0 16px 56px rgba(17,24,39,.07)}
+.login-welcome{font-size:26px;font-weight:800;color:#111827;letter-spacing:-.6px;margin-bottom:6px}
+.login-welcome-sub{font-size:14px;color:#6B7280;margin-bottom:30px}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.login-logo-icon{width:44px;height:44px;background:var(--primary);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.login-field{position:relative;display:flex;align-items:center}
+.login-field .field-icon{position:absolute;left:15px;font-size:15px;color:#9CA3AF;pointer-events:none}
+.login-input{width:100%;height:50px;padding:0 16px 0 42px;border:1px solid #E5E7EB;border-radius:11px;font-size:14.5px;color:#111827;background:#fff;outline:none;transition:.15s;font-family:inherit}
+.login-input:focus{border-color:#635BFF;box-shadow:0 0 0 3px rgba(99,91,255,.12)}
+.login-input::placeholder{color:#9CA3AF}
+.login-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.login-check{display:flex;align-items:center;gap:7px;font-size:13.5px;color:#6B7280;cursor:pointer;user-select:none}
+.login-check input{width:16px;height:16px;accent-color:#635BFF;cursor:pointer}
+.login-link{font-size:13.5px;color:#635BFF;cursor:pointer;font-weight:600}
+.btn-login{width:100%;height:50px;justify-content:center;background:linear-gradient(135deg,#635BFF 0%,#5048E5 100%);color:#fff;border:none;border-radius:11px;font-size:15px;font-weight:600;cursor:pointer;transition:.15s;box-shadow:0 4px 12px rgba(99,91,255,.25)}
+.btn-login:hover{box-shadow:0 6px 18px rgba(99,91,255,.35);transform:translateY(-1px)}
+.login-secure{display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;color:#9CA3AF;margin-top:16px}
+@media(max-width:980px){
+  #login-screen{flex-direction:column;gap:36px;padding:48px 32px;justify-content:flex-start}
+  .login-left{max-width:580px;width:100%;text-align:center;align-items:center}
+  .login-headline{font-size:34px}
+  .login-desc{margin-left:auto;margin-right:auto}
+  .login-right{width:100%}
+}
+/* ── OTP ── */
+.otp-inputs{display:flex;gap:10px;justify-content:center;margin:16px 0}
+.otp-input{width:48px;height:52px;border:2px solid var(--border);border-radius:10px;text-align:center;font-size:22px;font-weight:700;color:var(--text);outline:none;transition:.15s}
+.otp-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+/* ── TOGGLE ── */
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:#CBD5E1;border-radius:12px;cursor:pointer;transition:.2s}
+.toggle-slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle input:checked + .toggle-slider{background:var(--primary)}
+.toggle input:checked + .toggle-slider::before{transform:translateX(20px)}
+/* ── AVATAR ── */
+.avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+/* ── RATING ── */
+.rating{color:#F59E0B;font-size:12px;font-weight:700}
+/* ── PROGRESS ── */
+.progress{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:4px}
+.progress-fill{height:100%;border-radius:3px;background:var(--primary)}
+/* ── STAT ROW ── */
+.stat-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #F1F5F9}
+.stat-row:last-child{border-bottom:none}
+/* ── NOTIFICATION ── */
+.notif{position:fixed;top:20px;right:20px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 18px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:999;font-size:13.5px;display:flex;align-items:center;gap:10px;transform:translateX(300px);transition:.3s;max-width:320px}
+.notif.show{transform:translateX(0)}
+.notif.success{border-left:4px solid var(--success)}
+.notif.warning{border-left:4px solid var(--warning)}
+.notif.danger{border-left:4px solid var(--danger)}
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(99,102,241,.3);border-radius:4px}
+/* ── FARE TABLE ── */
+.fare-row{display:grid;grid-template-columns:1fr 1fr 1fr 80px;gap:12px;align-items:center;margin-bottom:10px}
+/* ── ONBOARDING ── */
+.onb-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.onb-stat{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:13px}
+.onb-stat-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#F1F5F9;color:#475569}
+.onb-stat-icon svg{width:18px;height:18px}
+.onb-stat-val{font-size:21px;font-weight:700;letter-spacing:-.5px;line-height:1}
+.onb-stat-label{font-size:12px;color:var(--muted);margin-top:3px}
+.onb-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:14px;box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:18px;transition:.15s}
+.onb-card:hover{box-shadow:var(--shadow);border-color:#D8DCE3}
+.onb-card.missing{border-color:#FDE68A;background:#FFFBEB}
+.onb-card.flagged{border-color:#FECACA;background:#FEF2F2}
+.onb-card-avatar{width:46px;height:46px;border-radius:12px;background:var(--primary);color:#fff;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.onb-card.missing .onb-card-avatar{background:#F59E0B}
+.onb-card.flagged .onb-card-avatar{background:#EF4444}
+.onb-meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:6px}
+.onb-meta-item{font-size:12.5px;color:var(--muted)}
+.onb-meta-item b{color:var(--text);font-weight:600}
+.onb-wait{font-size:12px;font-weight:600;color:#B45309;background:#FEF3C7;padding:2px 9px;border-radius:20px}
+.onb-wait.urgent{color:#B91C1C;background:#FEE2E2}
+.onb-wait.fresh{color:#047857;background:#D1FAE5}
+.onb-doc-prog{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px;margin-top:8px}
+/* checklist in drawer */
+.chk-row{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid #F1F5F9}
+.chk-row:last-child{border-bottom:none}
+.chk-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.chk-icon.verified{background:#ECFDF5;color:var(--success)}
+.chk-icon.missing{background:#FEF2F2;color:var(--danger)}
+.chk-icon.review{background:#FFFBEB;color:var(--warning)}
+.notes-area{width:100%;min-height:72px;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit;color:var(--text);outline:none;resize:vertical}
+.notes-area:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,91,255,.1)}
+/* ── TIMELINE ── */
+.timeline{position:relative;padding-left:6px}
+.tl-item{position:relative;padding-left:24px;padding-bottom:16px}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:'';position:absolute;left:5px;top:14px;bottom:-2px;width:2px;background:var(--border)}
+.tl-item:last-child::before{display:none}
+.tl-dot{position:absolute;left:0;top:2px;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--border);background:#fff;z-index:1}
+.tl-item.done .tl-dot{background:var(--success);box-shadow:0 0 0 1px var(--success)}
+.tl-item.active .tl-dot{background:var(--primary);box-shadow:0 0 0 1px var(--primary)}
+.tl-item.active::before,.tl-item.done::before{background:var(--success)}
+.tl-title{font-size:13px;font-weight:600;color:var(--text)}
+.tl-sub{font-size:12px;color:var(--muted);margin-top:1px}
+.tl-item.pending .tl-title{color:var(--muted)}
+/* profile grid */
+.prof-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.prof-cell{padding:9px 0;border-bottom:1px solid #F1F5F9}
+.prof-cell .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.prof-cell .v{font-size:13px;font-weight:600;color:var(--text);margin-top:2px}
+.doc-summary{display:flex;align-items:center;gap:12px;background:#FAFBFC;border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:4px}
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(17,24,39,.4);z-index:300;display:none;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(2px)}
+.modal-overlay.show{display:flex}
+.modal{background:#fff;border-radius:18px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;border:1px solid var(--border);box-shadow:0 24px 64px rgba(17,24,39,.18);animation:modalIn .2s ease}
+@keyframes modalIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.modal-head{padding:22px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-head-title{font-size:17px;font-weight:700;color:var(--text)}
+.modal-head-sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+.modal-x{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:#fff;cursor:pointer;color:#64748B;display:flex;align-items:center;justify-content:center;font-size:15px}
+.modal-x:hover{background:var(--bg)}
+.modal-body{padding:24px}
+.modal-foot{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-grid .full{grid-column:1/-1}
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:48px 24px;color:var(--muted)}
+.empty-state .empty-icon{width:56px;height:56px;border-radius:14px;background:var(--bg);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;color:#94A3B8}
+.empty-state .empty-icon svg{width:26px;height:26px;stroke-width:1.6}
+.empty-state-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px}
+.empty-state-sub{font-size:13px;color:var(--muted)}
+/* ── SKELETON LOADING ── */
+.skeleton{background:linear-gradient(90deg,#F1F5F9 25%,#E8EDF3 37%,#F1F5F9 63%);background-size:400% 100%;animation:shimmer 1.2s ease infinite;border-radius:6px;height:14px}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+/* ── CLICKABLE ROW ── */
+tr.row-clickable{cursor:pointer}
+tr.row-clickable:hover td{background:#F8FAFC}
+.row-hint{font-size:11px;color:var(--primary);font-weight:600;opacity:0;transition:.15s}
+tr.row-clickable:hover .row-hint{opacity:1}
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .metric-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen" class="screen active" style="position:fixed;inset:0;z-index:500;margin:0">
+  <div class="login-bg">
+    <svg class="bg-cross-1" viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M40 10h20v30h30v20H60v30H40V60H10V40h30z"/></svg>
+    <svg class="bg-cross-2" viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M40 10h20v30h30v20H60v30H40V60H10V40h30z"/></svg>
+    <svg class="bg-pulse" viewBox="0 0 340 80" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M0 40h70l18-30 26 60 22-50 16 30 14-10h158"/></svg>
+  </div>
+  <div class="login-left">
+    <div class="login-brand"><i data-lucide="ambulance"></i> Medurun</div>
+    <div class="login-headline">Emergency Care,<br>Managed <span class="accent">Smarter.</span></div>
+    <div class="login-desc">Unified super admin platform for ambulance agencies, drivers, dispatchers, and patients across all cities.</div>
+    <div class="login-stats">
+      <div class="login-stat"><div class="login-stat-value">142</div><div class="login-stat-label">Active Agencies</div></div>
+      <div class="login-stat"><div class="login-stat-value">3,841</div><div class="login-stat-label">Verified Drivers</div></div>
+      <div class="login-stat"><div class="login-stat-value">₹2.4Cr</div><div class="login-stat-label">Monthly Revenue</div></div>
+    </div>
+  </div>
+  <div class="login-right">
+    <div class="login-card">
+      <div id="login-step-1">
+        <div class="login-welcome">Welcome Back</div>
+        <div class="login-welcome-sub">Sign in to continue</div>
+        <div class="form-group">
+          <label class="label">Email Address</label>
+          <div class="login-field">
+            <span class="field-icon"><i data-lucide="mail"></i></span>
+            <input class="login-input" type="email" placeholder="admin@medurun.com" value="admin@medurun.com">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="label">Password</label>
+          <div class="login-field">
+            <span class="field-icon"><i data-lucide="lock"></i></span>
+            <input class="login-input" type="password" placeholder="••••••••" value="password123">
+          </div>
+        </div>
+        <div class="login-row">
+          <label class="login-check"><input type="checkbox" checked>Remember me</label>
+          <span class="login-link">Forgot password?</span>
+        </div>
+        <button class="btn-login" onclick="showOTP()">Continue →</button>
+        <div class="login-secure"><i data-lucide="shield-check"></i> Secure access with 2FA verification</div>
+      </div>
+      <div id="login-step-2" style="display:none">
+        <div style="font-size:20px;font-weight:700;margin-bottom:4px">OTP Verification</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Code sent to admin@medurun.com</div>
+        <div class="otp-inputs">
+          <input class="otp-input" maxlength="1" value="4" oninput="moveOTP(this,0)">
+          <input class="otp-input" maxlength="1" value="8" oninput="moveOTP(this,1)">
+          <input class="otp-input" maxlength="1" value="2" oninput="moveOTP(this,2)">
+          <input class="otp-input" maxlength="1" value="1" oninput="moveOTP(this,3)">
+          <input class="otp-input" maxlength="1" value="" oninput="moveOTP(this,4)">
+          <input class="otp-input" maxlength="1" value="" oninput="moveOTP(this,5)">
+        </div>
+        <div style="text-align:center;font-size:12.5px;color:var(--muted);margin-bottom:20px">Didn't receive? <span style="color:var(--primary);cursor:pointer;font-weight:600">Resend OTP</span></div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;padding:11px" onclick="loginSuccess()">Verify & Sign In</button>
+        <button class="btn btn-outline" style="width:100%;justify-content:center;padding:10px;margin-top:8px" onclick="document.getElementById('login-step-1').style.display='block';document.getElementById('login-step-2').style.display='none'">← Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="closePanel()"></div>
+
+<!-- SIDEBAR -->
+<div id="sidebar" style="display:none">
+  <div class="sb-logo">
+    <div class="sb-logo-icon"><i data-lucide="ambulance"></i></div>
+    <div>
+      <div class="sb-logo-text">Medurun</div>
+      <div class="sb-logo-sub">Super Admin</div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Overview</div>
+    <div class="sb-item active" onclick="navigate('dashboard',this)"><span class="icon"><i data-lucide="layout-dashboard"></i></span>Dashboard</div>
+    <div class="sb-section">Management</div>
+    <div class="sb-item" onclick="navigate('agencies',this)"><span class="icon"><i data-lucide="building-2"></i></span>Agency Management</div>
+    <div class="sb-item" onclick="navigate('onboarding',this)"><span class="icon"><i data-lucide="clipboard-check"></i></span>Onboarding Review<span class="badge">7</span></div>
+    <div class="sb-item" onclick="navigate('drivers-q',this)"><span class="icon"><i data-lucide="user-check"></i></span>Driver Verification<span class="badge">12</span></div>
+    <div class="sb-item" onclick="navigate('ambulance-q',this)"><span class="icon"><i data-lucide="ambulance"></i></span>Ambulance Queue<span class="badge">5</span></div>
+    <div class="sb-section">Finance</div>
+    <div class="sb-item" onclick="navigate('revenue',this)"><span class="icon"><i data-lucide="indian-rupee"></i></span>Revenue & Commission</div>
+    <div class="sb-item" onclick="navigate('payouts',this)"><span class="icon"><i data-lucide="credit-card"></i></span>Payout Management</div>
+    <div class="sb-section">People</div>
+    <div class="sb-item" onclick="navigate('drivers',this)"><span class="icon"><i data-lucide="car"></i></span>Driver Overview</div>
+    <div class="sb-item" onclick="navigate('users',this)"><span class="icon"><i data-lucide="users"></i></span>Users / Customers</div>
+    <div class="sb-section">Insights</div>
+    <div class="sb-item" onclick="navigate('analytics',this)"><span class="icon"><i data-lucide="line-chart"></i></span>Platform Analytics</div>
+    <div class="sb-section">System</div>
+    <div class="sb-item" onclick="navigate('settings',this)"><span class="icon"><i data-lucide="settings"></i></span>Platform Settings</div>
+  </nav>
+  <div class="sb-bottom">
+    <div class="sb-item" onclick="logout()"><span class="icon"><i data-lucide="log-out"></i></span>Sign Out</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div id="header" style="display:none">
+  <div class="h-title" id="page-title">Dashboard</div>
+  <div class="h-search"><i data-lucide="search"></i> Search anything...</div>
+  <div class="h-notif"><i data-lucide="bell"></i><div class="dot"></div></div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <div>
+      <div style="font-size:13px;font-weight:600">Arjun Mehta</div>
+      <div style="font-size:11px;color:var(--muted)">Super Admin</div>
+    </div>
+    <div class="h-avatar">AM</div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main" style="display:none">
+
+<!-- ── SCREEN: DASHBOARD ── -->
+<div class="screen active" id="screen-dashboard">
+  <div style="margin-bottom:20px">
+    <div style="font-size:22px;font-weight:800">Platform Overview</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:2px">Sunday, 22 June 2026 · Live data</div>
+  </div>
+
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="metric-icon"><i data-lucide="building-2"></i></div>
+      <div class="metric-label">Total Agencies</div>
+      <div class="metric-value">189</div>
+      <div class="metric-change up">↑ 4 this month</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon"><i data-lucide="circle-check"></i></div>
+      <div class="metric-label">Active Agencies</div>
+      <div class="metric-value">142</div>
+      <div class="metric-change up">↑ 3 new</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon"><i data-lucide="clock"></i></div>
+      <div class="metric-label">Pending Agencies</div>
+      <div class="metric-value">31</div>
+      <div class="metric-change down">↓ needs review</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon"><i data-lucide="ambulance"></i></div>
+      <div class="metric-label">Total Ambulances</div>
+      <div class="metric-value">2,847</div>
+      <div class="metric-change up">↑ 62 added</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon"><i data-lucide="user-check"></i></div>
+      <div class="metric-label">Verified Drivers</div>
+      <div class="metric-value">3,841</div>
+      <div class="metric-change up">↑ 128 this month</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon"><i data-lucide="users"></i></div>
+      <div class="metric-label">Registered Users</div>
+      <div class="metric-value">92,341</div>
+      <div class="metric-change up">↑ 1.2k this week</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon"><i data-lucide="indian-rupee"></i></div>
+      <div class="metric-label">Today Revenue</div>
+      <div class="metric-value">₹4.82L</div>
+      <div class="metric-change up">↑ 12% vs yesterday</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon"><i data-lucide="credit-card"></i></div>
+      <div class="metric-label">Commission Earned</div>
+      <div class="metric-value">₹72,300</div>
+      <div class="metric-change up">↑ 15%</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon"><i data-lucide="activity"></i></div>
+      <div class="metric-label">Active Rides</div>
+      <div class="metric-value">847</div>
+      <div class="metric-change up">↑ Live</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="section-header">
+        <div><div class="section-title">Revenue Trend (7 days)</div><div class="section-sub">Daily platform revenue</div></div>
+        <span class="badge active">Live</span>
+      </div>
+      <svg class="sparkline" viewBox="0 0 400 60" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="lg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6366F1" stop-opacity=".2"/><stop offset="100%" stop-color="#6366F1" stop-opacity="0"/></linearGradient></defs>
+        <path d="M0,45 L57,38 L114,42 L171,28 L228,32 L285,18 L342,22 L400,12" fill="none" stroke="#6366F1" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M0,45 L57,38 L114,42 L171,28 L228,32 L285,18 L342,22 L400,12 L400,60 L0,60 Z" fill="url(#lg1)"/>
+        <circle cx="400" cy="12" r="4" fill="#6366F1"/>
+      </svg>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px">
+        <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-header">
+        <div><div class="section-title">City Distribution</div><div class="section-sub">Active agencies by city</div></div>
+      </div>
+      <div class="chart-bar-row"><div class="chart-label">Mumbai</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:82%"></div></div><div class="chart-val">38 agencies</div></div>
+      <div class="chart-bar-row"><div class="chart-label">Delhi</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:71%"></div></div><div class="chart-val">33 agencies</div></div>
+      <div class="chart-bar-row"><div class="chart-label">Bangalore</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:58%"></div></div><div class="chart-val">27 agencies</div></div>
+      <div class="chart-bar-row"><div class="chart-label">Hyderabad</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:45%"></div></div><div class="chart-val">21 agencies</div></div>
+      <div class="chart-bar-row"><div class="chart-label">Chennai</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:34%"></div></div><div class="chart-val">16 agencies</div></div>
+      <div class="chart-bar-row"><div class="chart-label">Others</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:15%;background:var(--muted)"></div></div><div class="chart-val">7 agencies</div></div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:16px">
+    <div class="card">
+      <div class="section-header"><div class="section-title">Pending Actions</div></div>
+      <div class="stat-row"><span>Agency Onboarding Reviews</span><span class="badge pending">7 pending</span></div>
+      <div class="stat-row"><span>Driver Verifications</span><span class="badge pending">12 pending</span></div>
+      <div class="stat-row"><span>Ambulance Verifications</span><span class="badge pending">5 pending</span></div>
+      <div class="stat-row"><span>Pending Payouts</span><span class="badge pending">₹18.4L</span></div>
+      <div class="stat-row"><span>Flagged Documents</span><span class="badge rejected">3 flagged</span></div>
+    </div>
+    <div class="card">
+      <div class="section-header"><div class="section-title">Recent Activity</div></div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;align-items:flex-start"><div class="avatar" style="background:#10B981;font-size:11px"><i data-lucide="check"></i></div><div><div style="font-size:13px;font-weight:600">LifeLine Ambulance approved</div><div style="font-size:12px;color:var(--muted)">Mumbai · 2 min ago</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><div class="avatar" style="background:var(--primary);font-size:11px">+</div><div><div style="font-size:13px;font-weight:600">New agency registered: RapidCare</div><div style="font-size:12px;color:var(--muted)">Pune · 8 min ago</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><div class="avatar" style="background:var(--warning);font-size:11px">!</div><div><div style="font-size:13px;font-weight:600">Driver Rahul flagged for incomplete docs</div><div style="font-size:12px;color:var(--muted)">Delhi · 22 min ago</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><div class="avatar" style="background:var(--info);font-size:11px">₹</div><div><div style="font-size:13px;font-weight:600">Payout ₹2.4L processed to Metro Medic</div><div style="font-size:12px;color:var(--muted)">Bangalore · 1 hr ago</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><div class="avatar" style="background:var(--danger);font-size:11px"><i data-lucide="x"></i></div><div><div style="font-size:13px;font-weight:600">Agency CarePlus rejected — missing NOC</div><div style="font-size:12px;color:var(--muted)">Chennai · 2 hr ago</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: AGENCIES ── -->
+<div class="screen" id="screen-agencies">
+  <div class="section-header">
+    <div><div style="font-size:22px;font-weight:800">Agency Management</div><div style="font-size:13px;color:var(--muted);margin-top:2px">189 total agencies across all cities</div></div>
+    <button class="btn btn-primary" onclick="openAddAgency()">+ Add Agency</button>
+  </div>
+  <div class="card">
+    <div class="filter-row">
+      <input class="filter-input" placeholder="Search agency..." style="min-width:220px" oninput="filterAgencies(this.value)">
+      <select class="filter-input" onchange="filterAgencies()">
+        <option>All Cities</option><option>Mumbai</option><option>Delhi</option><option>Bangalore</option><option>Hyderabad</option><option>Chennai</option>
+      </select>
+      <select class="filter-input" id="agency-status-filter" onchange="filterAgencies()">
+        <option>All Status</option><option>Active</option><option>Pending</option><option>Inactive</option><option>Rejected</option>
+      </select>
+      <button class="btn btn-outline btn-sm">Export CSV</button>
+    </div>
+    <div class="table-wrap">
+      <table id="agencies-table">
+        <thead>
+          <tr><th>Agency</th><th>City</th><th>Status</th><th>Ambulances</th><th>Drivers</th><th>Revenue (Month)</th><th>Rating</th><th>Action</th></tr>
+        </thead>
+        <tbody id="agencies-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: ONBOARDING ── -->
+<div class="screen" id="screen-onboarding">
+  <div class="section-header">
+    <div><div style="font-size:22px;font-weight:800">Agency Onboarding Review</div><div style="font-size:13px;color:var(--muted);margin-top:2px">Review and verify incoming agency applications</div></div>
+  </div>
+  <div class="onb-summary">
+    <div class="onb-stat">
+      <div class="onb-stat-icon"><i data-lucide="clock"></i></div>
+      <div><div class="onb-stat-val">7</div><div class="onb-stat-label">Pending</div></div>
+    </div>
+    <div class="onb-stat">
+      <div class="onb-stat-icon"><i data-lucide="flag"></i></div>
+      <div><div class="onb-stat-val">3</div><div class="onb-stat-label">Flagged</div></div>
+    </div>
+    <div class="onb-stat">
+      <div class="onb-stat-icon"><i data-lucide="file-warning"></i></div>
+      <div><div class="onb-stat-val">2</div><div class="onb-stat-label">Missing Docs</div></div>
+    </div>
+    <div class="onb-stat">
+      <div class="onb-stat-icon"><i data-lucide="circle-check"></i></div>
+      <div><div class="onb-stat-val">4</div><div class="onb-stat-label">Approved Today</div></div>
+    </div>
+  </div>
+  <div id="onboarding-list"></div>
+</div>
+
+<!-- ── SCREEN: DRIVER QUEUE ── -->
+<div class="screen" id="screen-drivers-q">
+  <div class="section-header">
+    <div><div style="font-size:22px;font-weight:800">Driver Verification Queue</div><div style="font-size:13px;color:var(--muted);margin-top:2px">12 drivers pending verification</div></div>
+  </div>
+  <div class="card">
+    <div class="filter-row">
+      <input class="filter-input" placeholder="Search driver...">
+      <select class="filter-input"><option>All Status</option><option>Pending</option><option>Under Review</option><option>Flagged</option></select>
+      <select class="filter-input"><option>All Cities</option><option>Mumbai</option><option>Delhi</option><option>Bangalore</option></select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Driver</th><th>Phone</th><th>Agency</th><th>City</th><th>Documents</th><th>Status</th><th>Submitted</th><th>Action</th></tr></thead>
+        <tbody id="driver-queue-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: AMBULANCE QUEUE ── -->
+<div class="screen" id="screen-ambulance-q">
+  <div class="section-header">
+    <div><div style="font-size:22px;font-weight:800">Ambulance Verification Queue</div><div style="font-size:13px;color:var(--muted);margin-top:2px">5 ambulances pending verification</div></div>
+  </div>
+  <div class="card">
+    <div class="filter-row">
+      <input class="filter-input" placeholder="Search registration...">
+      <select class="filter-input"><option>All Types</option><option>BLS</option><option>ALS</option><option>Neonatal</option><option>Patient Transport</option></select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Registration</th><th>Type</th><th>Agency</th><th>City</th><th>Year</th><th>Equipment</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="ambulance-queue-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: REVENUE ── -->
+<div class="screen" id="screen-revenue">
+  <div class="section-header">
+    <div><div style="font-size:22px;font-weight:800">Revenue & Commission</div><div style="font-size:13px;color:var(--muted);margin-top:2px">June 2026</div></div>
+    <div class="flex gap-8">
+      <select class="filter-input"><option>June 2026</option><option>May 2026</option><option>April 2026</option></select>
+      <button class="btn btn-outline btn-sm">Export</button>
+    </div>
+  </div>
+  <div class="metric-grid" style="grid-template-columns:repeat(4,1fr)">
+    <div class="metric-card green"><div class="metric-icon green"><i data-lucide="indian-rupee"></i></div><div class="metric-label">Total Revenue</div><div class="metric-value">₹2.41Cr</div><div class="metric-change up">↑ 18% MoM</div></div>
+    <div class="metric-card blue" id="rev-kpi-commission" style="cursor:pointer" onclick="revenueFilter('commission')"><div class="metric-icon blue"><i data-lucide="credit-card"></i></div><div class="metric-label">Platform Commission</div><div class="metric-value">₹36.15L</div><div class="metric-change up">↑ 15% · sort ↓</div></div>
+    <div class="metric-card purple" id="rev-kpi-payouts" style="cursor:pointer" onclick="revenueFilter('settled')"><div class="metric-icon purple"><i data-lucide="landmark"></i></div><div class="metric-label">Agency Payouts</div><div class="metric-value">₹2.05Cr</div><div class="metric-change up">↑ Settled · filter</div></div>
+    <div class="metric-card orange" id="rev-kpi-pending" style="cursor:pointer" onclick="revenueFilter('pending')"><div class="metric-icon orange"><i data-lucide="clock"></i></div><div class="metric-label">Pending Settlement</div><div class="metric-value">₹18.4L</div><div class="metric-change down">↓ 6 agencies · filter</div></div>
+  </div>
+  <div class="card">
+    <div class="section-header"><div class="section-title">Agency-wise Revenue Breakdown</div></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Agency</th><th>City</th><th>Total Rides</th><th>Gross Revenue</th><th>Commission (15%)</th><th>Net Payout</th><th>Settlement</th><th>Action</th></tr></thead>
+        <tbody id="revenue-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="grid-2" style="margin-top:16px">
+    <div class="card">
+      <div class="section-header"><div class="section-title">Commission by Type</div></div>
+      <div class="chart-bar-row"><div class="chart-label">BLS</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:72%"></div></div><div class="chart-val">₹14.2L</div></div>
+      <div class="chart-bar-row"><div class="chart-label">ALS</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:54%"></div></div><div class="chart-val">₹10.6L</div></div>
+      <div class="chart-bar-row"><div class="chart-label">ICU</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:38%;background:var(--success)"></div></div><div class="chart-val">₹7.5L</div></div>
+      <div class="chart-bar-row"><div class="chart-label">Neonatal</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:20%;background:var(--warning)"></div></div><div class="chart-val">₹3.9L</div></div>
+    </div>
+    <div class="card">
+      <div class="section-header"><div class="section-title">Monthly Trend</div></div>
+      <svg class="sparkline" viewBox="0 0 400 60" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="lg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity=".2"/><stop offset="100%" stop-color="#10B981" stop-opacity="0"/></linearGradient></defs>
+        <path d="M0,50 L66,44 L132,40 L198,32 L264,26 L330,18 L400,12" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M0,50 L66,44 L132,40 L198,32 L264,26 L330,18 L400,12 L400,60 L0,60 Z" fill="url(#lg2)"/>
+      </svg>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px">
+        <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: DRIVERS ── -->
+<div class="screen" id="screen-drivers">
+  <div class="section-header">
+    <div><div style="font-size:22px;font-weight:800">Driver Overview</div><div style="font-size:13px;color:var(--muted);margin-top:2px">3,841 total drivers</div></div>
+    <button class="btn btn-primary" onclick="openAddDriver()">+ Add Driver</button>
+  </div>
+  <div class="metric-grid" style="grid-template-columns:repeat(4,1fr)">
+    <div class="metric-card green"><div class="metric-icon green"><i data-lucide="circle-check"></i></div><div class="metric-label">Verified</div><div class="metric-value">3,841</div></div>
+    <div class="metric-card orange"><div class="metric-icon orange"><i data-lucide="clock"></i></div><div class="metric-label">Pending</div><div class="metric-value">248</div></div>
+    <div class="metric-card red"><div class="metric-icon red"><i data-lucide="activity"></i></div><div class="metric-label">On Ride</div><div class="metric-value">847</div></div>
+    <div class="metric-card blue"><div class="metric-icon blue"><i data-lucide="moon"></i></div><div class="metric-label">Offline</div><div class="metric-value">2,146</div></div>
+  </div>
+  <div class="card">
+    <div class="filter-row">
+      <input class="filter-input" placeholder="Search driver...">
+      <select class="filter-input"><option>All Status</option><option>Online</option><option>On Ride</option><option>Offline</option></select>
+      <select class="filter-input"><option>All Cities</option><option>Mumbai</option><option>Delhi</option><option>Bangalore</option></select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Driver</th><th>Phone</th><th>Agency</th><th>City</th><th>License</th><th>Rides</th><th>Rating</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="drivers-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: USERS ── -->
+<div class="screen" id="screen-users">
+  <div class="section-header">
+    <div><div style="font-size:22px;font-weight:800">Users / Customers</div><div style="font-size:13px;color:var(--muted);margin-top:2px">92,341 registered users</div></div>
+    <button class="btn btn-outline btn-sm">Export</button>
+  </div>
+  <div class="metric-grid" style="grid-template-columns:repeat(4,1fr)">
+    <div class="metric-card purple"><div class="metric-icon purple"><i data-lucide="users"></i></div><div class="metric-label">Total Users</div><div class="metric-value">92,341</div></div>
+    <div class="metric-card green"><div class="metric-icon green"><i data-lucide="circle-dot"></i></div><div class="metric-label">Active (30d)</div><div class="metric-value">34,127</div></div>
+    <div class="metric-card blue"><div class="metric-icon blue"><i data-lucide="smartphone"></i></div><div class="metric-label">App Installs</div><div class="metric-value">1.14L</div></div>
+    <div class="metric-card orange"><div class="metric-icon orange"><i data-lucide="ban"></i></div><div class="metric-label">Blocked</div><div class="metric-value">284</div></div>
+  </div>
+  <div class="card">
+    <div class="filter-row">
+      <input class="filter-input" placeholder="Search user...">
+      <select class="filter-input"><option>All Status</option><option>Active</option><option>Inactive</option><option>Blocked</option></select>
+      <select class="filter-input"><option>Sort: Newest</option><option>Most Rides</option><option>Highest Spend</option></select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>User</th><th>Phone</th><th>City</th><th>Total Rides</th><th>Total Spent</th><th>Last Active</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="users-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: ANALYTICS ── -->
+<div class="screen" id="screen-analytics">
+  <div class="section-header">
+    <div><div style="font-size:22px;font-weight:800">Platform Analytics</div><div style="font-size:13px;color:var(--muted);margin-top:2px">June 2026 Summary</div></div>
+    <select class="filter-input"><option>Last 30 days</option><option>Last 7 days</option><option>Last 90 days</option></select>
+  </div>
+  <div class="metric-grid" style="grid-template-columns:repeat(4,1fr)">
+    <div class="metric-card purple"><div class="metric-icon purple"><i data-lucide="car"></i></div><div class="metric-label">Total Rides</div><div class="metric-value">48,291</div><div class="metric-change up">↑ 22%</div></div>
+    <div class="metric-card green"><div class="metric-icon green"><i data-lucide="timer"></i></div><div class="metric-label">Avg Response Time</div><div class="metric-value">8.4 min</div><div class="metric-change up">↓ 1.2 min</div></div>
+    <div class="metric-card orange"><div class="metric-icon orange"><i data-lucide="circle-x"></i></div><div class="metric-label">Cancellation Rate</div><div class="metric-value">4.2%</div><div class="metric-change up">↓ 0.8%</div></div>
+    <div class="metric-card blue"><div class="metric-icon blue"><i data-lucide="star"></i></div><div class="metric-label">Avg Rating</div><div class="metric-value">4.6</div><div class="metric-change up">↑ 0.1</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="section-header"><div class="section-title">Rides by City</div></div>
+      <div class="chart-bar-row"><div class="chart-label">Mumbai</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:85%"></div></div><div class="chart-val">14,842</div></div>
+      <div class="chart-bar-row"><div class="chart-label">Delhi</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:72%"></div></div><div class="chart-val">12,614</div></div>
+      <div class="chart-bar-row"><div class="chart-label">Bangalore</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:55%"></div></div><div class="chart-val">9,619</div></div>
+      <div class="chart-bar-row"><div class="chart-label">Hyderabad</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:40%"></div></div><div class="chart-val">6,980</div></div>
+      <div class="chart-bar-row"><div class="chart-label">Pune</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:24%;background:var(--success)"></div></div><div class="chart-val">4,236</div></div>
+    </div>
+    <div class="card">
+      <div class="section-header"><div class="section-title">Ambulance Type Utilization</div></div>
+      <div class="donut-wrap">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="46" fill="none" stroke="#EEF2FF" stroke-width="18"/>
+          <circle cx="60" cy="60" r="46" fill="none" stroke="#6366F1" stroke-width="18" stroke-dasharray="116 173" stroke-dashoffset="-43" stroke-linecap="round"/>
+          <circle cx="60" cy="60" r="46" fill="none" stroke="#10B981" stroke-width="18" stroke-dasharray="87 202" stroke-dashoffset="-159" stroke-linecap="round"/>
+          <circle cx="60" cy="60" r="46" fill="none" stroke="#F59E0B" stroke-width="18" stroke-dasharray="52 237" stroke-dashoffset="-246" stroke-linecap="round"/>
+          <circle cx="60" cy="60" r="46" fill="none" stroke="#EF4444" stroke-width="18" stroke-dasharray="34 255" stroke-dashoffset="-298" stroke-linecap="round"/>
+          <text x="60" y="57" text-anchor="middle" font-size="13" font-weight="700" fill="#1F2937">48.3k</text>
+          <text x="60" y="70" text-anchor="middle" font-size="10" fill="#6B7280">rides</text>
+        </svg>
+        <div class="donut-legend">
+          <div class="donut-legend-item"><div class="donut-dot" style="background:#6366F1"></div>BLS — 40%</div>
+          <div class="donut-legend-item"><div class="donut-dot" style="background:#10B981"></div>ALS — 30%</div>
+          <div class="donut-legend-item"><div class="donut-dot" style="background:#F59E0B"></div>ICU — 18%</div>
+          <div class="donut-legend-item"><div class="donut-dot" style="background:#EF4444"></div>Neonatal — 12%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="section-header"><div class="section-title">Peak Hours</div></div>
+    <div style="display:flex;align-items:flex-end;gap:4px;height:80px">
+      <!-- Hour bars 0-23 -->
+      <svg width="100%" height="80" viewBox="0 0 600 80" xmlns="http://www.w3.org/2000/svg">
+        <!-- bars for 24 hours -->
+        <rect x="0" y="65" width="20" height="15" rx="2" fill="#EEF2FF"/>
+        <rect x="25" y="60" width="20" height="20" rx="2" fill="#EEF2FF"/>
+        <rect x="50" y="70" width="20" height="10" rx="2" fill="#EEF2FF"/>
+        <rect x="75" y="72" width="20" height="8" rx="2" fill="#EEF2FF"/>
+        <rect x="100" y="60" width="20" height="20" rx="2" fill="#EEF2FF"/>
+        <rect x="125" y="45" width="20" height="35" rx="2" fill="#6366F1" opacity=".6"/>
+        <rect x="150" y="30" width="20" height="50" rx="2" fill="#6366F1" opacity=".8"/>
+        <rect x="175" y="20" width="20" height="60" rx="2" fill="#6366F1"/>
+        <rect x="200" y="35" width="20" height="45" rx="2" fill="#6366F1" opacity=".7"/>
+        <rect x="225" y="50" width="20" height="30" rx="2" fill="#6366F1" opacity=".5"/>
+        <rect x="250" y="55" width="20" height="25" rx="2" fill="#EEF2FF"/>
+        <rect x="275" y="45" width="20" height="35" rx="2" fill="#EEF2FF"/>
+        <rect x="300" y="40" width="20" height="40" rx="2" fill="#6366F1" opacity=".4"/>
+        <rect x="325" y="35" width="20" height="45" rx="2" fill="#6366F1" opacity=".6"/>
+        <rect x="350" y="25" width="20" height="55" rx="2" fill="#6366F1" opacity=".9"/>
+        <rect x="375" y="15" width="20" height="65" rx="2" fill="#6366F1"/>
+        <rect x="400" y="20" width="20" height="60" rx="2" fill="#6366F1"/>
+        <rect x="425" y="30" width="20" height="50" rx="2" fill="#6366F1" opacity=".8"/>
+        <rect x="450" y="40" width="20" height="40" rx="2" fill="#6366F1" opacity=".6"/>
+        <rect x="475" y="50" width="20" height="30" rx="2" fill="#6366F1" opacity=".4"/>
+        <rect x="500" y="55" width="20" height="25" rx="2" fill="#EEF2FF"/>
+        <rect x="525" y="60" width="20" height="20" rx="2" fill="#EEF2FF"/>
+        <rect x="550" y="63" width="20" height="17" rx="2" fill="#EEF2FF"/>
+        <rect x="575" y="67" width="20" height="13" rx="2" fill="#EEF2FF"/>
+      </svg>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:4px">
+      <span>12AM</span><span>3AM</span><span>6AM</span><span>9AM</span><span>12PM</span><span>3PM</span><span>6PM</span><span>9PM</span><span>11PM</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: SETTINGS ── -->
+<div class="screen" id="screen-settings">
+  <div style="font-size:22px;font-weight:800;margin-bottom:20px">Platform Settings</div>
+  <div class="tabs" id="settings-tabs">
+    <div class="tab active" onclick="switchTab('commission')">Commission</div>
+    <div class="tab" onclick="switchTab('fare')">Fare Configuration</div>
+    <div class="tab" onclick="switchTab('surge')">Surge Pricing</div>
+    <div class="tab" onclick="switchTab('cities')">City Availability</div>
+    <div class="tab" onclick="switchTab('notifications')">Notifications</div>
+  </div>
+  <div id="settings-commission" class="settings-tab-content">
+    <div class="grid-2">
+      <div class="card">
+        <div class="section-title" style="margin-bottom:16px">Commission Structure</div>
+        <div class="form-group">
+          <label class="label">Platform Commission (%)</label>
+          <input class="input" type="number" value="15" min="0" max="50">
+          <div class="text-sm text-muted mt-4">Applied on all bookings. Current: 15%</div>
+        </div>
+        <div class="form-group">
+          <label class="label">Emergency Booking Commission (%)</label>
+          <input class="input" type="number" value="12">
+        </div>
+        <div class="form-group">
+          <label class="label">Subscription Commission (%)</label>
+          <input class="input" type="number" value="10">
+        </div>
+        <button class="btn btn-primary" onclick="showNotif('Commission rates saved','success')">Save Changes</button>
+      </div>
+      <div class="card">
+        <div class="section-title" style="margin-bottom:16px">Payout Schedule</div>
+        <div class="form-group">
+          <label class="label">Payout Frequency</label>
+          <select class="input"><option>Weekly</option><option>Bi-weekly</option><option>Monthly</option></select>
+        </div>
+        <div class="form-group">
+          <label class="label">Minimum Payout Amount (₹)</label>
+          <input class="input" type="number" value="5000">
+        </div>
+        <div class="form-group">
+          <label class="label">Settlement Day</label>
+          <select class="input"><option>Monday</option><option>Wednesday</option><option>Friday</option></select>
+        </div>
+        <button class="btn btn-primary" onclick="showNotif('Payout settings saved','success')">Save</button>
+      </div>
+    </div>
+  </div>
+  <div id="settings-fare" class="settings-tab-content" style="display:none">
+    <div class="card">
+      <div class="section-title" style="margin-bottom:16px">Ambulance Type Base Fares</div>
+      <div class="fare-row" style="font-weight:700;font-size:12px;color:var(--muted)"><div>Type</div><div>Base Fare (₹)</div><div>Per KM (₹)</div><div></div></div>
+      <div class="fare-row"><input class="input" value="Basic Life Support (BLS)" readonly style="background:#F8FAFC"><input class="input" type="number" value="800"><input class="input" type="number" value="22"><button class="btn btn-outline btn-xs">Save</button></div>
+      <div class="fare-row"><input class="input" value="Advanced Life Support (ALS)" readonly style="background:#F8FAFC"><input class="input" type="number" value="1500"><input class="input" type="number" value="35"><button class="btn btn-outline btn-xs">Save</button></div>
+      <div class="fare-row"><input class="input" value="ICU Ambulance" readonly style="background:#F8FAFC"><input class="input" type="number" value="2800"><input class="input" type="number" value="58"><button class="btn btn-outline btn-xs">Save</button></div>
+      <div class="fare-row"><input class="input" value="Neonatal" readonly style="background:#F8FAFC"><input class="input" type="number" value="3500"><input class="input" type="number" value="72"><button class="btn btn-outline btn-xs">Save</button></div>
+      <div class="fare-row"><input class="input" value="Patient Transport" readonly style="background:#F8FAFC"><input class="input" type="number" value="600"><input class="input" type="number" value="15"><button class="btn btn-outline btn-xs">Save</button></div>
+      <div style="margin-top:16px">
+        <button class="btn btn-primary" onclick="showNotif('Fare slabs updated','success')">Save All Fares</button>
+      </div>
+    </div>
+  </div>
+  <div id="settings-surge" class="settings-tab-content" style="display:none">
+    <div class="card">
+      <div class="section-title" style="margin-bottom:4px">Surge Pricing Rules</div>
+      <div class="section-sub" style="margin-bottom:16px">Automatically applied based on demand</div>
+      <div class="form-group">
+        <label class="label">Enable Surge Pricing</label>
+        <div class="flex items-center gap-8">
+          <label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label>
+          <span class="text-sm">Active</span>
+        </div>
+      </div>
+      <div class="grid-3" style="margin-top:16px">
+        <div class="card card-sm" style="border-color:var(--border)">
+          <div style="font-size:13px;font-weight:700;margin-bottom:12px">1.5x Surge</div>
+          <div class="form-group"><label class="label">Demand Threshold</label><input class="input" value="80%" type="text"></div>
+          <div class="form-group"><label class="label">Min Duration (min)</label><input class="input" type="number" value="15"></div>
+          <label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label>
+        </div>
+        <div class="card card-sm" style="border-color:var(--border)">
+          <div style="font-size:13px;font-weight:700;margin-bottom:12px">2x Surge</div>
+          <div class="form-group"><label class="label">Demand Threshold</label><input class="input" value="90%" type="text"></div>
+          <div class="form-group"><label class="label">Min Duration (min)</label><input class="input" type="number" value="30"></div>
+          <label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label>
+        </div>
+        <div class="card card-sm" style="border-color:var(--border)">
+          <div style="font-size:13px;font-weight:700;margin-bottom:12px">3x Surge (Emergency)</div>
+          <div class="form-group"><label class="label">Demand Threshold</label><input class="input" value="95%" type="text"></div>
+          <div class="form-group"><label class="label">Min Duration (min)</label><input class="input" type="number" value="5"></div>
+          <label class="toggle"><input type="checkbox"><div class="toggle-slider"></div></label>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="margin-top:16px" onclick="showNotif('Surge rules saved','success')">Save Surge Config</button>
+    </div>
+  </div>
+  <div id="settings-cities" class="settings-tab-content" style="display:none">
+    <div class="card">
+      <div class="section-title" style="margin-bottom:16px">City Availability</div>
+      <div id="city-toggle-list"></div>
+      <button class="btn btn-primary" style="margin-top:16px" onclick="showNotif('City settings saved','success')">Save</button>
+    </div>
+  </div>
+  <div id="settings-notifications" class="settings-tab-content" style="display:none">
+    <div class="card">
+      <div class="section-title" style="margin-bottom:16px">Notification Preferences</div>
+      <div class="stat-row"><span class="text-sm" style="font-weight:500">New agency registration alerts</span><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+      <div class="stat-row"><span class="text-sm" style="font-weight:500">Driver verification reminders</span><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+      <div class="stat-row"><span class="text-sm" style="font-weight:500">Revenue milestone alerts</span><label class="toggle"><input type="checkbox"><div class="toggle-slider"></div></label></div>
+      <div class="stat-row"><span class="text-sm" style="font-weight:500">Payout failure alerts</span><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+      <div class="stat-row"><span class="text-sm" style="font-weight:500">Weekly summary email</span><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+      <button class="btn btn-primary" style="margin-top:16px" onclick="showNotif('Notification preferences saved','success')">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: PAYOUTS ── -->
+<div class="screen" id="screen-payouts">
+  <div class="section-header">
+    <div><div style="font-size:22px;font-weight:800">Payout Management</div><div style="font-size:13px;color:var(--muted);margin-top:2px">June 2026 · ₹18.4L pending</div></div>
+    <div class="flex gap-8">
+      <select class="filter-input"><option>June 2026</option><option>May 2026</option></select>
+      <button class="btn btn-primary" onclick="markAllPaid()">Mark All Paid</button>
+    </div>
+  </div>
+  <div class="metric-grid" style="grid-template-columns:repeat(4,1fr)">
+    <div class="metric-card orange"><div class="metric-icon orange"><i data-lucide="clock"></i></div><div class="metric-label">Pending Payouts</div><div class="metric-value">₹18.4L</div></div>
+    <div class="metric-card green"><div class="metric-icon green"><i data-lucide="circle-check"></i></div><div class="metric-label">Processed</div><div class="metric-value">₹2.05Cr</div></div>
+    <div class="metric-card red"><div class="metric-icon red"><i data-lucide="circle-x"></i></div><div class="metric-label">Failed</div><div class="metric-value">₹2.1L</div></div>
+    <div class="metric-card blue"><div class="metric-icon blue"><i data-lucide="landmark"></i></div><div class="metric-label">This Cycle</div><div class="metric-value">142 agencies</div></div>
+  </div>
+  <div class="card">
+    <div class="filter-row">
+      <input class="filter-input" placeholder="Search agency...">
+      <select class="filter-input" id="payout-filter"><option>All Status</option><option>Pending</option><option>Paid</option><option>Failed</option></select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Agency</th><th>City</th><th>Gross Earnings</th><th>Commission (15%)</th><th>Net Payable</th><th>Bank Account</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="payouts-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div><!-- end #main -->
+
+<!-- PANEL: AGENCY DETAIL -->
+<div class="panel" id="agency-panel">
+  <div class="panel-header">
+    <div style="font-size:14px;font-weight:700">Agency Details</div>
+    <button class="modal-x" onclick="closePanel()"><i data-lucide="x"></i></button>
+  </div>
+  <div class="panel-body">
+    <div id="panel-agency-content"></div>
+  </div>
+  <div class="drawer-foot" id="panel-agency-foot"></div>
+</div>
+
+<!-- PANEL: ADD DRIVER -->
+<div class="panel" id="driver-add-panel">
+  <div class="panel-header">
+    <div style="font-size:14px;font-weight:700">Add Driver</div>
+    <button class="modal-x" onclick="closePanel()">✕</button>
+  </div>
+  <div class="panel-body"><div id="driver-add-content"></div></div>
+  <div class="drawer-foot">
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="closePanel()">Cancel</button>
+      <button class="btn btn-primary btn-sm" style="flex:2;justify-content:center" onclick="createDriver()">Create Driver</button>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL: DRIVER DETAIL (overview) -->
+<div class="panel" id="driver-detail-panel">
+  <div class="panel-header">
+    <div style="font-size:14px;font-weight:700">Driver Details</div>
+    <button class="modal-x" onclick="closePanel()">✕</button>
+  </div>
+  <div class="panel-body"><div id="driver-detail-content"></div></div>
+  <div class="drawer-foot" id="driver-detail-foot"></div>
+</div>
+
+<!-- PANEL: CUSTOMER DETAIL -->
+<div class="panel" id="user-panel">
+  <div class="panel-header">
+    <div style="font-size:14px;font-weight:700">Customer Details</div>
+    <button class="modal-x" onclick="closePanel()">✕</button>
+  </div>
+  <div class="panel-body"><div id="user-content"></div></div>
+  <div class="drawer-foot" id="user-foot"></div>
+</div>
+
+<!-- PANEL: REVENUE DETAIL -->
+<div class="panel" id="revenue-panel">
+  <div class="panel-header">
+    <div style="font-size:14px;font-weight:700">Revenue Details</div>
+    <button class="modal-x" onclick="closePanel()">✕</button>
+  </div>
+  <div class="panel-body"><div id="revenue-content"></div></div>
+  <div class="drawer-foot" id="revenue-foot"></div>
+</div>
+
+<!-- PANEL: ONBOARDING REVIEW -->
+<div class="panel" id="review-panel">
+  <div class="panel-header">
+    <div style="font-size:14px;font-weight:700">Review Application</div>
+    <button class="modal-x" onclick="closePanel()"><i data-lucide="x"></i></button>
+  </div>
+  <div class="panel-body"><div id="review-content"></div></div>
+  <div class="drawer-foot" id="review-foot"></div>
+</div>
+
+<!-- PANEL: DRIVER DETAIL -->
+<div class="panel" id="driver-panel">
+  <div class="panel-header">
+    <div style="font-size:14px;font-weight:700">Driver Verification</div>
+    <button class="modal-x" onclick="closePanel()"><i data-lucide="x"></i></button>
+  </div>
+  <div class="panel-body"><div id="panel-driver-content"></div></div>
+  <div class="drawer-foot" id="driver-foot"></div>
+</div>
+
+<!-- MODAL: ADD AGENCY -->
+<div class="modal-overlay" id="add-agency-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="modal-head-title">Add New Agency</div>
+        <div class="modal-head-sub">Register a new ambulance agency on the platform</div>
+      </div>
+      <button class="modal-x" onclick="closeAddAgency()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="label">Agency Name *</label>
+          <input class="input" id="aa-name" placeholder="e.g. LifeLine Ambulance">
+        </div>
+        <div class="form-group">
+          <label class="label">Contact Person *</label>
+          <input class="input" id="aa-contact" placeholder="Full name">
+        </div>
+        <div class="form-group">
+          <label class="label">Phone Number *</label>
+          <input class="input" id="aa-phone" placeholder="9820000000" maxlength="10">
+        </div>
+        <div class="form-group">
+          <label class="label">Email *</label>
+          <input class="input" id="aa-email" type="email" placeholder="agency@email.com">
+        </div>
+        <div class="form-group">
+          <label class="label">City *</label>
+          <select class="input" id="aa-city">
+            <option value="">Select city</option>
+            <option>Mumbai</option><option>Delhi</option><option>Bangalore</option><option>Hyderabad</option><option>Chennai</option><option>Pune</option><option>Kolkata</option><option>Ahmedabad</option><option>Jaipur</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="label">Number of Ambulances</label>
+          <input class="input" id="aa-ambulances" type="number" min="0" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label class="label">Agency Type</label>
+          <select class="input" id="aa-type">
+            <option>Private</option><option>Government</option><option>Hospital-affiliated</option><option>NGO / Charitable</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeAddAgency()">Cancel</button>
+      <button class="btn btn-primary" onclick="createAgency()">Create Agency</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICATION -->
+<div class="notif" id="notif">
+  <span id="notif-icon"><i data-lucide="circle-check"></i></span>
+  <span id="notif-msg">Action successful</span>
+</div>
+
+<script>
+// ── DATA ──
+const agencies = [
+  {id:1,name:'LifeLine Ambulance',city:'Mumbai',status:'active',ambulances:42,drivers:67,revenue:'₹38.4L',rating:'4.8',contact:'Rahul Sharma',phone:'9820011234',email:'rahul@lifeline.com',established:'2019'},
+  {id:2,name:'Metro Medic Services',city:'Delhi',status:'active',ambulances:35,drivers:58,revenue:'₹31.2L',rating:'4.7',contact:'Priya Nair',phone:'9911022345',email:'priya@metromedic.com',established:'2018'},
+  {id:3,name:'RapidCare Emergency',city:'Bangalore',status:'pending',ambulances:18,drivers:24,revenue:'₹14.8L',rating:'4.5',contact:'Vikram Singh',phone:'9845033456',email:'vikram@rapidcare.com',established:'2022'},
+  {id:4,name:'Swift Ambulance Co.',city:'Hyderabad',status:'active',ambulances:27,drivers:41,revenue:'₹22.1L',rating:'4.6',contact:'Anita Reddy',phone:'9848044567',email:'anita@swift.com',established:'2020'},
+  {id:5,name:'CarePlus EMS',city:'Chennai',status:'inactive',ambulances:12,drivers:18,revenue:'₹9.3L',rating:'4.2',contact:'Ravi Kumar',phone:'9791055678',email:'ravi@careplus.com',established:'2021'},
+  {id:6,name:'Falcon Medical',city:'Pune',status:'active',ambulances:22,drivers:33,revenue:'₹18.7L',rating:'4.9',contact:'Sneha Patil',phone:'9820066789',email:'sneha@falcon.com',established:'2019'},
+  {id:7,name:'AidFirst Services',city:'Mumbai',status:'pending',ambulances:8,drivers:12,revenue:'—',rating:'—',contact:'Mohan Desai',phone:'9820077890',email:'mohan@aidfirst.com',established:'2024'},
+  {id:8,name:'NovaCare Ambulances',city:'Delhi',status:'active',ambulances:31,drivers:50,revenue:'₹27.6L',rating:'4.5',contact:'Sanjay Bose',phone:'9911088901',email:'sanjay@novacare.com',established:'2017'},
+  {id:9,name:'CityRescue EMS',city:'Kolkata',status:'rejected',ambulances:0,drivers:0,revenue:'—',rating:'—',contact:'Arif Khan',phone:'9831099012',email:'arif@cityrescue.com',established:'2024'},
+  {id:10,name:'Medivac Pro',city:'Ahmedabad',status:'active',ambulances:19,drivers:28,revenue:'₹16.2L',rating:'4.6',contact:'Bindu Shah',phone:'9979000123',email:'bindu@medivac.com',established:'2020'},
+];
+
+const onboardingApps = [
+  {id:1,name:'SkyMedic Healthcare',city:'Pune',contact:'Arjun Tiwari',phone:'9820112233',docs:['Registration Certificate','GST Certificate','Ambulance RC','NOC Certificate','Director ID'],status:'pending',submitted:'18 Jun 2026'},
+  {id:2,name:'RapidCare Emergency',city:'Bangalore',contact:'Vikram Singh',phone:'9845033456',docs:['Registration Certificate','GST Certificate','Ambulance RC'],status:'pending',submitted:'16 Jun 2026'},
+  {id:3,name:'CareFirst EMS',city:'Jaipur',contact:'Meena Sharma',phone:'9783223344',docs:['Registration Certificate','NOC Certificate'],status:'flagged',submitted:'12 Jun 2026'},
+  {id:4,name:'QuickAid Services',city:'Lucknow',contact:'Dhruv Verma',phone:'9839334455',docs:['Registration Certificate','GST Certificate','Ambulance RC','NOC Certificate','Director ID'],status:'pending',submitted:'10 Jun 2026'},
+  {id:5,name:'AidFirst Services',city:'Mumbai',contact:'Mohan Desai',phone:'9820077890',docs:['Registration Certificate','GST Certificate'],status:'flagged',submitted:'8 Jun 2026'},
+  {id:6,name:'SafeLife Ambulance',city:'Nagpur',contact:'Rekha Joshi',phone:'9822445566',docs:['Registration Certificate','GST Certificate','Ambulance RC','NOC Certificate'],status:'pending',submitted:'6 Jun 2026'},
+  {id:7,name:'MedRush Emergency',city:'Indore',contact:'Rohit Gupta',phone:'9826556677',docs:['Registration Certificate','GST Certificate','Ambulance RC','NOC Certificate','Director ID'],status:'pending',submitted:'4 Jun 2026'},
+];
+
+const driverQueue = [
+  {name:'Ravi Shankar',phone:'9820123456',agency:'LifeLine Ambulance',city:'Mumbai',docs:'4/5',status:'pending',submitted:'20 Jun 2026'},
+  {name:'Suresh Kumar',phone:'9845234567',agency:'Metro Medic',city:'Delhi',docs:'5/5',status:'pending',submitted:'19 Jun 2026'},
+  {name:'Anil Mishra',phone:'9820345678',agency:'Falcon Medical',city:'Pune',docs:'3/5',status:'review',submitted:'18 Jun 2026'},
+  {name:'Mohammed Iqbal',phone:'9848456789',agency:'Swift Ambulance',city:'Hyderabad',docs:'5/5',status:'pending',submitted:'18 Jun 2026'},
+  {name:'Ramesh Patel',phone:'9979567890',agency:'Medivac Pro',city:'Ahmedabad',docs:'2/5',status:'review',submitted:'17 Jun 2026'},
+  {name:'Deepak Nair',phone:'9845678901',agency:'RapidCare',city:'Bangalore',docs:'4/5',status:'pending',submitted:'16 Jun 2026'},
+  {name:'Santosh Yadav',phone:'9911789012',agency:'NovaCare',city:'Delhi',docs:'1/5',status:'review',submitted:'15 Jun 2026'},
+  {name:'Kiran Thakur',phone:'9820890123',agency:'LifeLine Ambulance',city:'Mumbai',docs:'5/5',status:'pending',submitted:'15 Jun 2026'},
+];
+
+const ambulanceQueue = [
+  {reg:'MH01-AB-1234',type:'BLS',agency:'LifeLine Ambulance',city:'Mumbai',year:'2023',equipment:'<i data-lucide="circle-check"></i> Complete',status:'pending'},
+  {reg:'DL02-CD-5678',type:'ALS',agency:'Metro Medic',city:'Delhi',year:'2022',equipment:'<i data-lucide="alert-triangle"></i> Missing O2',status:'review'},
+  {reg:'KA03-EF-9012',type:'ICU',agency:'RapidCare',city:'Bangalore',year:'2024',equipment:'<i data-lucide="circle-check"></i> Complete',status:'pending'},
+  {reg:'TN04-GH-3456',type:'BLS',agency:'CarePlus',city:'Chennai',year:'2021',equipment:'<i data-lucide="alert-triangle"></i> Missing AED',status:'review'},
+  {reg:'GJ05-IJ-7890',type:'Neonatal',agency:'Medivac Pro',city:'Ahmedabad',year:'2023',equipment:'<i data-lucide="circle-check"></i> Complete',status:'pending'},
+];
+
+const revenueData = [
+  {agency:'LifeLine Ambulance',city:'Mumbai',rides:1842,gross:'₹38,42,400',commission:'₹5,76,360',net:'₹32,66,040',status:'paid'},
+  {agency:'Metro Medic Services',city:'Delhi',rides:1520,gross:'₹31,16,800',commission:'₹4,67,520',net:'₹26,49,280',status:'paid'},
+  {agency:'NovaCare Ambulances',city:'Delhi',rides:1102,gross:'₹27,56,200',commission:'₹4,13,430',net:'₹23,42,770',status:'paid'},
+  {agency:'Swift Ambulance',city:'Hyderabad',rides:932,gross:'₹22,12,600',commission:'₹3,31,890',net:'₹18,80,710',status:'processing'},
+  {agency:'Falcon Medical',city:'Pune',rides:812,gross:'₹18,74,400',commission:'₹2,81,160',net:'₹15,93,240',status:'pending'},
+  {agency:'Medivac Pro',city:'Ahmedabad',rides:672,gross:'₹16,22,100',commission:'₹2,43,315',net:'₹13,78,785',status:'pending'},
+  {agency:'CarePlus EMS',city:'Chennai',rides:392,gross:'₹9,31,200',commission:'₹1,39,680',net:'₹7,91,520',status:'paid'},
+];
+
+const driversData = [
+  {name:'Ravi Shankar',phone:'9820123456',agency:'LifeLine',city:'Mumbai',license:'MH0120240012345',rides:284,rating:'4.9',status:'active'},
+  {name:'Suresh Kumar',phone:'9845234567',agency:'Metro Medic',city:'Delhi',license:'DL0120230056789',rides:221,rating:'4.8',status:'active'},
+  {name:'Anil Mishra',phone:'9820345678',agency:'Falcon',city:'Pune',license:'MH1220230098765',rides:178,rating:'4.7',status:'active'},
+  {name:'Mohammed Iqbal',phone:'9848456789',agency:'Swift',city:'Hyderabad',license:'TS0920240023456',rides:312,rating:'4.9',status:'active'},
+  {name:'Ramesh Patel',phone:'9979567890',agency:'Medivac',city:'Ahmedabad',license:'GJ0120240034567',rides:156,rating:'4.5',status:'inactive'},
+  {name:'Deepak Nair',phone:'9845678901',agency:'RapidCare',city:'Bangalore',license:'KA0420230045678',rides:201,rating:'4.6',status:'active'},
+  {name:'Santosh Yadav',phone:'9911789012',agency:'NovaCare',city:'Delhi',license:'DL0820230056789',rides:89,rating:'4.3',status:'inactive'},
+];
+
+const usersData = [
+  {name:'Priya Mehta',phone:'9820111222',city:'Mumbai',rides:12,spent:'₹24,800',last:'Today',status:'active'},
+  {name:'Rahul Gupta',phone:'9911222333',city:'Delhi',rides:8,spent:'₹16,400',last:'Yesterday',status:'active'},
+  {name:'Ananya Iyer',phone:'9845333444',city:'Bangalore',rides:21,spent:'₹48,200',last:'Today',status:'active'},
+  {name:'Karthik Reddy',phone:'9848444555',city:'Hyderabad',rides:5,spent:'₹9,800',last:'3 days ago',status:'active'},
+  {name:'Sunita Sharma',phone:'9820555666',city:'Mumbai',rides:34,spent:'₹72,400',last:'Today',status:'active'},
+  {name:'Vijay Nair',phone:'9791666777',city:'Chennai',rides:2,spent:'₹4,200',last:'2 weeks ago',status:'inactive'},
+  {name:'Monika Das',phone:'9831777888',city:'Kolkata',rides:0,spent:'₹0',last:'1 month ago',status:'blocked'},
+  {name:'Ashok Jain',phone:'9979888999',city:'Ahmedabad',rides:15,spent:'₹32,100',last:'Today',status:'active'},
+];
+
+const payoutsData = [
+  {agency:'LifeLine Ambulance',city:'Mumbai',gross:'₹38,42,400',commission:'₹5,76,360',net:'₹32,66,040',bank:'HDFC ••4521',status:'paid'},
+  {agency:'Metro Medic Services',city:'Delhi',gross:'₹31,16,800',commission:'₹4,67,520',net:'₹26,49,280',bank:'SBI ••8823',status:'paid'},
+  {agency:'NovaCare Ambulances',city:'Delhi',gross:'₹27,56,200',commission:'₹4,13,430',net:'₹23,42,770',bank:'ICICI ••2341',status:'paid'},
+  {agency:'Swift Ambulance',city:'Hyderabad',gross:'₹22,12,600',commission:'₹3,31,890',net:'₹18,80,710',bank:'Axis ••6612',status:'processing'},
+  {agency:'Falcon Medical',city:'Pune',gross:'₹18,74,400',commission:'₹2,81,160',net:'₹15,93,240',bank:'HDFC ••9901',status:'pending'},
+  {agency:'Medivac Pro',city:'Ahmedabad',gross:'₹16,22,100',commission:'₹2,43,315',net:'₹13,78,785',bank:'Kotak ••3344',status:'pending'},
+  {agency:'RapidCare Emergency',city:'Bangalore',gross:'₹14,81,200',commission:'₹2,22,180',net:'₹12,59,020',bank:'SBI ••7788',status:'failed'},
+  {agency:'CarePlus EMS',city:'Chennai',gross:'₹9,31,200',commission:'₹1,39,680',net:'₹7,91,520',bank:'Canara ••5566',status:'paid'},
+];
+
+const cities = ['Mumbai','Delhi','Bangalore','Hyderabad','Chennai','Pune','Kolkata','Ahmedabad','Jaipur','Lucknow','Nagpur','Indore'];
+const cityActive = {Mumbai:true,Delhi:true,Bangalore:true,Hyderabad:true,Chennai:true,Pune:true,Kolkata:false,Ahmedabad:true,Jaipur:false,Lucknow:false,Nagpur:false,Indore:false};
+
+// ── STATUS BADGE ──
+function badge(status){
+  const cls={active:'active',approved:'approved',verified:'verified',paid:'paid',pending:'pending',review:'review',processing:'processing',rejected:'rejected',failed:'failed',inactive:'inactive',flagged:'rejected'};
+  return `<span class="badge ${cls[status]||'inactive'}">${status}</span>`;
+}
+function starRating(r){return r==='—'?'—':`<span class="rating"><i data-lucide="star"></i> ${r}</span>`}
+
+// ── RENDER AGENCIES ──
+function renderAgencies(data){
+  const tbody=document.getElementById('agencies-tbody');
+  if(!data.length){
+    tbody.innerHTML=`<tr><td colspan="8">
+      <div class="empty-state">
+        <div class="empty-icon"><i data-lucide="search-x"></i></div>
+        <div class="empty-state-title">No agencies found</div>
+        <div class="empty-state-sub">Try adjusting your search or filters.</div>
+      </div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML=data.map(a=>{
+    const pending=a.status==='pending';
+    const rowAttr=pending?`class="row-clickable" onclick="goToOnboarding('${a.name.replace(/'/g,"")}')"`:'';
+    return `
+    <tr ${rowAttr}>
+      <td><div style="font-weight:600">${a.name} ${pending?'<span class="row-hint">· Review →</span>':''}</div><div class="text-sm text-muted">${a.contact}</div></td>
+      <td>${a.city}</td>
+      <td>${badge(a.status)}</td>
+      <td>${a.ambulances||'—'}</td>
+      <td>${a.drivers||'—'}</td>
+      <td style="font-weight:600">${a.revenue}</td>
+      <td>${starRating(a.rating)}</td>
+      <td><button class="btn btn-outline btn-xs" onclick="event.stopPropagation();openAgencyPanel(${a.id})">View →</button></td>
+    </tr>`;}).join('');
+}
+
+function showTableLoading(){
+  const tbody=document.getElementById('agencies-tbody');
+  tbody.innerHTML=Array.from({length:5}).map(()=>`
+    <tr>
+      <td><div class="skeleton" style="width:60%"></div><div class="skeleton" style="width:40%;margin-top:6px;height:10px"></div></td>
+      <td><div class="skeleton" style="width:50px"></div></td>
+      <td><div class="skeleton" style="width:64px"></div></td>
+      <td><div class="skeleton" style="width:30px"></div></td>
+      <td><div class="skeleton" style="width:30px"></div></td>
+      <td><div class="skeleton" style="width:70px"></div></td>
+      <td><div class="skeleton" style="width:40px"></div></td>
+      <td><div class="skeleton" style="width:50px"></div></td>
+    </tr>`).join('');
+}
+
+let agencyFilterTimer;
+function filterAgencies(q=''){
+  showTableLoading();
+  clearTimeout(agencyFilterTimer);
+  agencyFilterTimer=setTimeout(()=>{
+    const qv=typeof q==='string'?q:'';
+    const s=document.getElementById('agency-status-filter').value.toLowerCase();
+    const filtered=agencies.filter(a=>{
+      const matchQ=!qv||a.name.toLowerCase().includes(qv.toLowerCase())||a.city.toLowerCase().includes(qv.toLowerCase());
+      const matchS=s==='all status'||a.status===s;
+      return matchQ&&matchS;
+    });
+    renderAgencies(filtered);
+  },450);
+}
+
+function goToOnboarding(name){
+  // switch to onboarding screen + highlight sidebar
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-onboarding').classList.add('active');
+  const sbItems=document.querySelectorAll('.sb-item');
+  sbItems.forEach(it=>{if(it.textContent.includes('Onboarding'))it.classList.add('active')});
+  document.getElementById('page-title').textContent='Onboarding Review';
+  showNotif('Opening onboarding review for '+name,'success');
+  // scroll to matching card if present
+  const match=onboardingApps.find(o=>o.name===name);
+  if(match){setTimeout(()=>{const el=document.getElementById('onboard-'+match.id);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.boxShadow='0 0 0 2px var(--primary)';setTimeout(()=>el.style.boxShadow='',1600);}},100);}
+}
+
+// ── RENDER ONBOARDING ──
+const ALL_DOCS=['Registration Certificate','GST Certificate','Ambulance RC','NOC Certificate','Director ID'];
+
+function waitDays(submitted){
+  // all dates in June 2026; today = 22 Jun
+  const day=parseInt(submitted);
+  return Math.max(0,22-day);
+}
+// display status: missing if docs incomplete & not flagged
+function onbDisplayStatus(app){
+  if(app.status==='flagged')return 'flagged';
+  if(app.docs.length<5)return 'missing';
+  return 'pending';
+}
+function onbStatusLabel(s){return s==='missing'?'Missing Docs':s==='flagged'?'Flagged':s==='pending'?'Pending':s}
+
+function renderOnboarding(){
+  const container=document.getElementById('onboarding-list');
+  container.innerHTML=onboardingApps.map(app=>{
+    if(app.status==='approved'||app.status==='rejected'){
+      return `<div class="onb-card" id="onboard-${app.id}" style="opacity:.6">
+        <div class="onb-card-avatar" style="background:${app.status==='approved'?'#10B981':'#EF4444'}">${app.name.charAt(0)}</div>
+        <div style="flex:1"><div style="font-weight:700;font-size:15px">${app.name}</div><div class="text-sm text-muted">${app.city} · ${app.contact}</div></div>
+        ${badge(app.status)}
+      </div>`;
+    }
+    const ds=onbDisplayStatus(app);
+    const wd=waitDays(app.submitted);
+    const waitCls=wd>=10?'urgent':wd<=4?'fresh':'';
+    return `
+    <div class="onb-card ${ds}" id="onboard-${app.id}">
+      <div class="onb-card-avatar">${app.name.charAt(0)}</div>
+      <div style="flex:1;min-width:0">
+        <div class="flex items-center gap-8" style="flex-wrap:wrap">
+          <span style="font-weight:700;font-size:15px">${app.name}</span>
+          ${onbBadge(ds)}
+          <span class="onb-wait ${waitCls}">Waiting ${wd} day${wd===1?'':'s'}</span>
+        </div>
+        <div class="onb-meta">
+          <span class="onb-meta-item"><b>${app.city}</b></span>
+          <span class="onb-meta-item">${app.contact}</span>
+          <span class="onb-meta-item">${app.phone}</span>
+          <span class="onb-meta-item">Submitted ${app.submitted}</span>
+        </div>
+        <div class="onb-doc-prog">
+          <div class="progress" style="width:90px"><div class="progress-fill" style="width:${app.docs.length*20}%;${app.docs.length<5?'background:var(--warning)':''}"></div></div>
+          ${app.docs.length}/5 documents submitted
+        </div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="openReviewDrawer(${app.id})" style="flex-shrink:0">Review Application →</button>
+    </div>`;}).join('');
+}
+
+// badge() needs to map 'missing' → amber + label
+function onbBadge(ds){
+  const map={pending:'pending',flagged:'rejected',missing:'review'};
+  return `<span class="badge ${map[ds]||'pending'}">${onbStatusLabel(ds)}</span>`;
+}
+
+// ── ONBOARDING REVIEW DRAWER ──
+function openReviewDrawer(id){
+  const app=onboardingApps.find(a=>a.id===id);
+  const ds=onbDisplayStatus(app);
+  const wd=waitDays(app.submitted);
+  const docStatus=name=>{
+    if(!app.docs.includes(name))return 'missing';
+    // flagged app: first doc needs review
+    if(app.status==='flagged'&&name===app.docs[0])return 'review';
+    return 'verified';
+  };
+  const stLabel={verified:'Verified',missing:'Missing',review:'Needs Review'};
+  const stIcon={verified:'<i data-lucide="check"></i>',missing:'<i data-lucide="x"></i>',review:'!'};
+
+  document.getElementById('review-content').innerHTML=`
+    <div class="drawer-head">
+      <div class="drawer-avatar">${app.name.charAt(0)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:16px;font-weight:700;letter-spacing:-.3px">${app.name}</div>
+        <div class="text-sm text-muted">${app.city}</div>
+      </div>
+      ${onbBadge(ds)}
+    </div>
+    <div style="padding:0 22px 18px">
+      <div class="section-title" style="margin:6px 0 10px;font-size:13px">Application Details</div>
+      <div class="stat-row"><span class="text-sm text-muted">Contact Person</span><span style="font-weight:600">${app.contact}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Phone</span><span style="font-weight:600">${app.phone}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">City</span><span style="font-weight:600">${app.city}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Submitted</span><span style="font-weight:600">${app.submitted}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Waiting Time</span><span class="onb-wait ${wd>=10?'urgent':wd<=4?'fresh':''}">${wd} day${wd===1?'':'s'}</span></div>
+
+      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Documents Checklist</div>
+      ${ALL_DOCS.map(doc=>{
+        const st=docStatus(doc);
+        return `<div class="chk-row">
+          <div class="chk-icon ${st}">${stIcon[st]}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:600;font-size:13px">${doc}</div>
+            <div class="text-sm" style="color:${st==='verified'?'var(--success)':st==='missing'?'var(--danger)':'var(--warning)'}">${stLabel[st]}</div>
+          </div>
+          ${st!=='missing'?`<button class="drawer-doc-act" title="View" onclick="showNotif('Opening ${doc}','success')"><i data-lucide="eye"></i></button>
+                <button class="drawer-doc-act" title="Download" onclick="showNotif('Downloading ${doc}','success')"><i data-lucide="download"></i></button>`
+              :`<button class="drawer-doc-act" title="Request" onclick="showNotif('Requested ${doc}','warning')"><i data-lucide="rotate-cw"></i></button>`}
+        </div>`;}).join('')}
+
+      <div class="section-title" style="margin:18px 0 8px;font-size:13px">Internal Review Notes</div>
+      <textarea class="notes-area" id="review-notes-${id}" placeholder="Add internal notes for the review team (not visible to agency)..."></textarea>
+    </div>`;
+
+  document.getElementById('review-foot').innerHTML=`
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-success btn-sm" style="flex:1;justify-content:center" onclick="decideApp(${id},'approve')">Approve</button>
+      <button class="btn btn-danger btn-sm" style="flex:1;justify-content:center" onclick="decideApp(${id},'reject')">Reject</button>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-warning btn-sm" style="flex:1;justify-content:center" onclick="decideApp(${id},'request')">Request More Docs</button>
+      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="decideApp(${id},'flag')">Flag</button>
+    </div>`;
+
+  document.getElementById('review-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+}
+
+function decideApp(id,action){
+  const app=onboardingApps.find(a=>a.id===id);
+  if(action==='approve'){
+    app.status='approved';
+    renderOnboarding();closePanel();
+    showNotif('"'+app.name+'" approved','success');
+  }else if(action==='reject'){
+    const reason=prompt('Reason for rejection (shared with agency):');
+    if(reason===null)return;
+    app.status='rejected';app.rejectReason=reason;
+    renderOnboarding();closePanel();
+    showNotif('"'+app.name+'" rejected'+(reason?': '+reason:''),'danger');
+  }else if(action==='request'){
+    const missing=ALL_DOCS.filter(d=>!app.docs.includes(d));
+    const which=prompt('Which documents are needed?',missing.join(', ')||'Specify documents');
+    if(which===null)return;
+    app.status='pending';
+    showNotif('Requested from "'+app.name+'": '+which,'warning');
+  }else if(action==='flag'){
+    const note=prompt('Internal flag note:');
+    if(note===null)return;
+    app.status='flagged';app.flagNote=note;
+    renderOnboarding();closePanel();
+    showNotif('"'+app.name+'" flagged'+(note?': '+note:''),'warning');
+  }
+}
+
+// ── RENDER DRIVER QUEUE ──
+function renderDriverQueue(){
+  const tbody=document.getElementById('driver-queue-tbody');
+  tbody.innerHTML=driverQueue.map((d,i)=>`
+    <tr>
+      <td><div style="font-weight:600">${d.name}</div></td>
+      <td>${d.phone}</td>
+      <td>${d.agency}</td>
+      <td>${d.city}</td>
+      <td><div style="display:flex;align-items:center;gap:6px"><div class="progress" style="width:60px"><div class="progress-fill" style="width:${parseInt(d.docs)*20}%"></div></div><span class="text-sm">${d.docs}</span></div></td>
+      <td id="dq-status-${i}">${badge(d.status)}</td>
+      <td class="text-sm text-muted">${d.submitted}</td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-success btn-xs" onclick="updateQueueStatus('dq',${i},'verified')"><i data-lucide="check"></i></button>
+          <button class="btn btn-danger btn-xs" onclick="updateQueueStatus('dq',${i},'rejected')"><i data-lucide="x"></i></button>
+          <button class="btn btn-outline btn-xs" onclick="openDriverPanel(${i})">View</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+// ── RENDER AMBULANCE QUEUE ──
+function renderAmbulanceQueue(){
+  const tbody=document.getElementById('ambulance-queue-tbody');
+  tbody.innerHTML=ambulanceQueue.map((a,i)=>`
+    <tr>
+      <td style="font-weight:600;font-family:monospace">${a.reg}</td>
+      <td>${badge(a.type==='BLS'?'active':a.type==='ALS'?'processing':'inactive')} ${a.type}</td>
+      <td>${a.agency}</td>
+      <td>${a.city}</td>
+      <td>${a.year}</td>
+      <td class="text-sm">${a.equipment}</td>
+      <td id="aq-status-${i}">${badge(a.status)}</td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-success btn-xs" onclick="updateQueueStatus('aq',${i},'verified')"><i data-lucide="check"></i> Verify</button>
+          <button class="btn btn-danger btn-xs" onclick="updateQueueStatus('aq',${i},'rejected')"><i data-lucide="x"></i></button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function updateQueueStatus(prefix,i,status){
+  document.getElementById(`${prefix}-status-${i}`).innerHTML=badge(status);
+  showNotif(status==='verified'?'Verified successfully!':'Rejected.',status==='verified'?'success':'danger');
+}
+
+// ── RENDER REVENUE ──
+let revenueView='all';
+function parseAmt(s){return parseInt(String(s).replace(/[^0-9]/g,''))||0}
+
+function renderRevenue(){
+  const tbody=document.getElementById('revenue-tbody');
+  let list=revenueData.map((r,i)=>({...r,_i:i}));
+  if(revenueView==='pending')list=list.filter(r=>r.status==='pending'||r.status==='processing');
+  else if(revenueView==='settled')list=list.filter(r=>r.status==='paid');
+  else if(revenueView==='commission')list=list.sort((a,b)=>parseAmt(b.commission)-parseAmt(a.commission));
+  // highlight active KPI card
+  ['rev-kpi-commission','rev-kpi-payouts','rev-kpi-pending'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.outline='';});
+  const map={commission:'rev-kpi-commission',settled:'rev-kpi-payouts',pending:'rev-kpi-pending'};
+  if(map[revenueView]){const el=document.getElementById(map[revenueView]);if(el)el.style.outline='2px solid var(--primary)';}
+
+  if(!list.length){
+    tbody.innerHTML=`<tr><td colspan="8"><div class="empty-state"><div class="empty-icon"><i data-lucide="search-x"></i></div><div class="empty-state-title">No matching agencies</div><div class="empty-state-sub">Try a different filter.</div></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML=list.map(r=>`
+    <tr>
+      <td style="font-weight:600">${r.agency}</td>
+      <td>${r.city}</td>
+      <td>${r.rides.toLocaleString()}</td>
+      <td style="font-weight:600">${r.gross}</td>
+      <td style="color:var(--primary);font-weight:600">${r.commission}</td>
+      <td style="font-weight:700;color:var(--success)">${r.net}</td>
+      <td>${badge(r.status)}</td>
+      <td><button class="btn btn-outline btn-xs" onclick="openRevenueDrawer(${r._i})">Details</button></td>
+    </tr>`).join('');
+}
+
+function revenueFilter(view){
+  revenueView=(revenueView===view)?'all':view; // toggle off if re-clicked
+  renderRevenue();
+  const labels={pending:'Showing pending settlements',settled:'Showing settled agencies',commission:'Sorted by highest commission'};
+  if(revenueView!=='all')showNotif(labels[view],'success');
+}
+
+function openRevenueDrawer(i){
+  const r=revenueData[i];
+  const gross=parseAmt(r.gross),comm=parseAmt(r.commission),net=parseAmt(r.net);
+  const completed=Math.round(r.rides*0.95),cancelled=r.rides-completed;
+  const avgFare=Math.round(gross/r.rides).toLocaleString('en-IN');
+  const months=['Jun 2026','May 2026','Apr 2026','Mar 2026'];
+  const settle=[
+    {m:'Jun 2026',s:r.status,d:r.status==='paid'?'18 Jun 2026':'—'},
+    {m:'May 2026',s:'paid',d:'15 May 2026'},
+    {m:'Apr 2026',s:'paid',d:'16 Apr 2026'},
+    {m:'Mar 2026',s:'paid',d:'15 Mar 2026'},
+  ];
+  const fmt=n=>'₹'+n.toLocaleString('en-IN');
+  const commHist=[
+    {m:'Jun 2026',rev:gross,c:comm,n:net},
+    {m:'May 2026',rev:Math.round(gross*0.92),c:Math.round(comm*0.92),n:Math.round(net*0.92)},
+    {m:'Apr 2026',rev:Math.round(gross*0.85),c:Math.round(comm*0.85),n:Math.round(net*0.85)},
+  ];
+  // trend bars (relative heights)
+  const trend=[62,70,78,85,92,100];
+
+  document.getElementById('revenue-content').innerHTML=`
+    <div class="drawer-head">
+      <div class="drawer-avatar">${r.agency.charAt(0)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:16px;font-weight:700;letter-spacing:-.3px">${r.agency}</div>
+        <div class="text-sm text-muted">${r.city}</div>
+      </div>
+      ${badge(r.status)}
+    </div>
+    <!-- metrics row -->
+    <div class="drawer-metrics">
+      <div class="drawer-metric"><div class="drawer-metric-val">${r.gross}</div><div class="drawer-metric-label">Gross</div></div>
+      <div class="drawer-metric"><div class="drawer-metric-val">${r.commission}</div><div class="drawer-metric-label">Commission</div></div>
+      <div class="drawer-metric"><div class="drawer-metric-val">${r.net}</div><div class="drawer-metric-label">Net Payout</div></div>
+    </div>
+
+    <div style="padding:2px 22px 18px">
+      <!-- 1. agency summary -->
+      <div class="section-title" style="margin:10px 0 6px;font-size:13px">Agency Summary</div>
+      <div class="stat-row"><span class="text-sm text-muted">Agency Name</span><span style="font-weight:600">${r.agency}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">City</span><span style="font-weight:600">${r.city}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Settlement Status</span>${badge(r.status)}</div>
+      <div class="stat-row"><span class="text-sm text-muted">Commission Rate</span><span style="font-weight:600">15%</span></div>
+
+      <!-- 2. revenue breakdown -->
+      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Revenue Breakdown</div>
+      <div class="stat-row"><span class="text-sm text-muted">Gross Revenue</span><span style="font-weight:700">${r.gross}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Platform Commission</span><span style="font-weight:600;color:var(--primary)">− ${r.commission}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Net Payout</span><span style="font-weight:700;color:var(--success)">${r.net}</span></div>
+
+      <!-- 3. ride analytics -->
+      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Ride Analytics</div>
+      <div class="prof-grid">
+        <div class="prof-cell"><div class="k">Total Rides</div><div class="v">${r.rides.toLocaleString()}</div></div>
+        <div class="prof-cell"><div class="k">Completed</div><div class="v">${completed.toLocaleString()}</div></div>
+        <div class="prof-cell"><div class="k">Cancelled</div><div class="v">${cancelled.toLocaleString()}</div></div>
+        <div class="prof-cell"><div class="k">Average Fare</div><div class="v">₹${avgFare}</div></div>
+      </div>
+
+      <!-- 4. revenue trend -->
+      <div class="section-title" style="margin:18px 0 8px;font-size:13px">Revenue Trend</div>
+      <div style="display:flex;align-items:flex-end;gap:8px;height:64px">
+        ${trend.map((h,k)=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+          <div style="width:100%;height:${h*0.5}px;background:${k===trend.length-1?'var(--primary)':'#C7D2FE'};border-radius:4px 4px 0 0"></div>
+        </div>`).join('')}
+      </div>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        ${['Jan','Feb','Mar','Apr','May','Jun'].map(m=>`<div style="flex:1;text-align:center;font-size:10px;color:var(--muted)">${m}</div>`).join('')}
+      </div>
+
+      <!-- 5. settlement history -->
+      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Settlement History</div>
+      <table style="font-size:12.5px">
+        <thead><tr><th style="padding:6px 0">Month</th><th style="padding:6px 0">Status</th><th style="padding:6px 0;text-align:right">Paid Date</th></tr></thead>
+        <tbody>${settle.map(s=>`<tr><td style="padding:8px 0;border-bottom:1px solid #F1F5F9">${s.m}</td><td style="padding:8px 0;border-bottom:1px solid #F1F5F9">${badge(s.s)}</td><td style="padding:8px 0;border-bottom:1px solid #F1F5F9;text-align:right">${s.d}</td></tr>`).join('')}</tbody>
+      </table>
+
+      <!-- 6. commission history -->
+      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Commission History</div>
+      <table style="font-size:12.5px">
+        <thead><tr><th style="padding:6px 0">Revenue</th><th style="padding:6px 0;text-align:right">Commission</th><th style="padding:6px 0;text-align:right">Net Payout</th></tr></thead>
+        <tbody>${commHist.map(h=>`<tr><td style="padding:8px 0;border-bottom:1px solid #F1F5F9">${fmt(h.rev)}</td><td style="padding:8px 0;border-bottom:1px solid #F1F5F9;text-align:right;color:var(--primary)">${fmt(h.c)}</td><td style="padding:8px 0;border-bottom:1px solid #F1F5F9;text-align:right;color:var(--success);font-weight:600">${fmt(h.n)}</td></tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+
+  const pending=(r.status==='pending'||r.status==='processing');
+  document.getElementById('revenue-foot').innerHTML=`
+    ${pending?`<button class="btn btn-primary" style="width:100%;justify-content:center" onclick="markPaidRevenue(${i})"><i data-lucide="check"></i> Mark as Paid</button>`:''}
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="showNotif('Downloading report','success')"><i data-lucide="download"></i> Report</button>
+      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="showNotif('Opening invoices','success')"><i data-lucide="file-text"></i> Invoices</button>
+    </div>
+    <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center" onclick="showNotif('Opening payout history','success')"><i data-lucide="history"></i> View Payout History</button>`;
+
+  document.getElementById('revenue-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+  IC();
+}
+
+function markPaidRevenue(i){
+  revenueData[i].status='paid';
+  renderRevenue();
+  openRevenueDrawer(i);
+  showNotif('"'+revenueData[i].agency+'" marked as paid','success');
+}
+
+// ── RENDER DRIVERS ──
+function renderDrivers(){
+  const tbody=document.getElementById('drivers-tbody');
+  tbody.innerHTML=driversData.map((d,i)=>`
+    <tr>
+      <td><div style="font-weight:600">${d.name}</div></td>
+      <td>${d.phone}</td>
+      <td>${d.agency}</td>
+      <td>${d.city}</td>
+      <td class="text-sm" style="font-family:monospace">${d.license}</td>
+      <td>${d.rides}</td>
+      <td>${starRating(d.rating)}</td>
+      <td>${badge(d.status)}</td>
+      <td><button class="btn btn-outline btn-xs" onclick="openDriverDetail(${i})">View</button></td>
+    </tr>`).join('');
+}
+
+// ── ADD DRIVER (drawer form) ──
+const AGENCY_NAMES=['LifeLine','Metro Medic','NovaCare','Swift','Falcon','Medivac','RapidCare','CarePlus'];
+function openAddDriver(){
+  document.getElementById('driver-add-content').innerHTML=`
+    <div style="padding:18px 22px">
+      <div class="section-title" style="margin-bottom:12px;font-size:13px">Basic Information</div>
+      <div class="form-group"><label class="label">Full Name *</label><input class="input" id="ad-name" placeholder="Full name"></div>
+      <div class="grid-2" style="gap:12px">
+        <div class="form-group"><label class="label">Phone Number *</label><input class="input" id="ad-phone" maxlength="10" placeholder="9820000000"></div>
+        <div class="form-group"><label class="label">Email</label><input class="input" id="ad-email" placeholder="driver@email.com"></div>
+        <div class="form-group" style="grid-column:1/-1"><label class="label">City *</label>
+          <select class="input" id="ad-city"><option value="">Select city</option><option>Mumbai</option><option>Delhi</option><option>Bangalore</option><option>Hyderabad</option><option>Chennai</option><option>Pune</option><option>Ahmedabad</option></select>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin:8px 0 12px;font-size:13px">Agency Assignment</div>
+      <div class="form-group"><label class="label">Select Agency *</label>
+        <select class="input" id="ad-agency"><option value="">Select agency</option>${AGENCY_NAMES.map(a=>`<option>${a}</option>`).join('')}</select>
+      </div>
+
+      <div class="section-title" style="margin:8px 0 12px;font-size:13px">License Information</div>
+      <div class="form-group"><label class="label">License Number *</label><input class="input" id="ad-license" placeholder="MH01-2026-0000000"></div>
+      <div class="grid-2" style="gap:12px">
+        <div class="form-group"><label class="label">License Expiry Date</label><input class="input" id="ad-expiry" type="date"></div>
+        <div class="form-group"><label class="label">Years of Experience</label><input class="input" id="ad-exp" placeholder="e.g. 5 years"></div>
+      </div>
+
+      <div class="section-title" style="margin:8px 0 10px;font-size:13px">Documents</div>
+      ${DRIVER_DOCS.map((doc,di)=>`
+        <label class="chk-row" style="cursor:pointer">
+          <input type="checkbox" id="ad-doc-${di}" style="width:16px;height:16px;accent-color:var(--primary)">
+          <div class="drawer-doc-icon"><i data-lucide="file-text"></i></div>
+          <div style="flex:1;font-weight:600;font-size:13px">${doc}</div>
+          <span class="text-sm text-muted">Upload</span>
+        </label>`).join('')}
+    </div>`;
+  document.getElementById('driver-detail-panel').classList.remove('open');
+  document.getElementById('driver-add-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+  IC();
+}
+
+function createDriver(){
+  const g=id=>document.getElementById(id).value.trim();
+  const name=g('ad-name'),phone=g('ad-phone'),city=document.getElementById('ad-city').value,
+        agency=document.getElementById('ad-agency').value,license=g('ad-license');
+  if(!name||!phone||!city||!agency||!license){showNotif('Fill all required fields','warning');return;}
+  driversData.unshift({name,phone,agency,city,license,rides:0,rating:'—',status:'inactive',
+    email:g('ad-email'),experience:g('ad-exp')||'0 years',expiry:g('ad-expiry')||'—',joined:'22 Jun 2026'});
+  renderDrivers();closePanel();
+  showNotif('Driver "'+name+'" added — pending activation','success');
+}
+
+// ── DRIVER DETAIL (overview drawer) ──
+function openDriverDetail(i){
+  const d=driversData[i];
+  const completed=Math.round(d.rides*0.94),cancelled=d.rides-completed;
+  const revenue='₹'+(d.rides*1850).toLocaleString('en-IN');
+  const exp=d.experience||DRIVER_EXP[i%DRIVER_EXP.length];
+  const joined=d.joined||['12 Mar 2023','08 Jan 2022','15 Jun 2023','20 Feb 2024','03 Nov 2021','19 Sep 2023','27 Apr 2023'][i%7];
+  const submitted=4+(i%2); // 4 or 5 docs
+
+  document.getElementById('driver-detail-content').innerHTML=`
+    <div class="drawer-head">
+      <div class="drawer-avatar">${d.name.charAt(0)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:16px;font-weight:700;letter-spacing:-.3px">${d.name}</div>
+        <div class="text-sm text-muted">${d.agency} · ${d.city}</div>
+      </div>
+      ${badge(d.status)}
+    </div>
+    <div class="drawer-metrics">
+      <div class="drawer-metric"><div class="drawer-metric-val">${d.rides}</div><div class="drawer-metric-label">Rides</div></div>
+      <div class="drawer-metric"><div class="drawer-metric-val">${d.rating!=='—'?'★'+d.rating:'—'}</div><div class="drawer-metric-label">Rating</div></div>
+      <div class="drawer-metric"><div class="drawer-metric-val">${revenue}</div><div class="drawer-metric-label">Revenue</div></div>
+    </div>
+
+    <div style="padding:2px 22px 18px">
+      <!-- A. profile -->
+      <div class="section-title" style="margin:10px 0 6px;font-size:13px">Driver Profile</div>
+      <div class="stat-row"><span class="text-sm text-muted">Name</span><span style="font-weight:600">${d.name}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Status</span>${badge(d.status)}</div>
+      <div class="stat-row"><span class="text-sm text-muted">Agency</span><span style="font-weight:600">${d.agency}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">City</span><span style="font-weight:600">${d.city}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Rating</span><span style="font-weight:600">${d.rating!=='—'?'★ '+d.rating:'—'}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Total Rides</span><span style="font-weight:600">${d.rides}</span></div>
+
+      <!-- B. information -->
+      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Driver Information</div>
+      <div class="prof-grid">
+        <div class="prof-cell"><div class="k">Phone</div><div class="v">${d.phone}</div></div>
+        <div class="prof-cell"><div class="k">Experience</div><div class="v">${exp}</div></div>
+        <div class="prof-cell"><div class="k">License Number</div><div class="v" style="font-family:monospace;font-size:12px">${d.license}</div></div>
+        <div class="prof-cell"><div class="k">Join Date</div><div class="v">${joined}</div></div>
+      </div>
+
+      <!-- C. performance -->
+      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Performance Summary</div>
+      <div class="prof-grid">
+        <div class="prof-cell"><div class="k">Total Rides</div><div class="v">${d.rides.toLocaleString()}</div></div>
+        <div class="prof-cell"><div class="k">Completed</div><div class="v">${completed.toLocaleString()}</div></div>
+        <div class="prof-cell"><div class="k">Cancelled</div><div class="v">${cancelled.toLocaleString()}</div></div>
+        <div class="prof-cell"><div class="k">Revenue Generated</div><div class="v">${revenue}</div></div>
+        <div class="prof-cell" style="grid-column:1/-1"><div class="k">Average Rating</div><div class="v">${d.rating!=='—'?'★ '+d.rating+' / 5.0':'Not rated'}</div></div>
+      </div>
+
+      <!-- D. documents -->
+      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Documents</div>
+      ${DRIVER_DOCS.map((doc,di)=>{
+        const ok=di<submitted;
+        return `<div class="chk-row">
+          <div class="chk-icon ${ok?'verified':'missing'}"><i data-lucide="${ok?'check':'x'}"></i></div>
+          <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px">${doc}</div><div class="text-sm" style="color:${ok?'var(--success)':'var(--danger)'}">${ok?'Verified':'Not submitted'}</div></div>
+          ${ok?`<button class="drawer-doc-act" title="View" onclick="showNotif('Opening ${doc}','success')"><i data-lucide="eye"></i></button>
+                <button class="drawer-doc-act" title="Download" onclick="showNotif('Downloading ${doc}','success')"><i data-lucide="download"></i></button>`
+              :`<button class="drawer-doc-act" title="Request" onclick="showNotif('Requested ${doc}','warning')"><i data-lucide="rotate-cw"></i></button>`}
+        </div>`;}).join('')}
+
+      <!-- E. recent activity -->
+      <div class="section-title" style="margin:18px 0 10px;font-size:13px">Recent Activity</div>
+      <div class="timeline">
+        <div class="tl-item done"><div class="tl-dot"></div><div class="tl-title">Completed ride · ${d.city}</div><div class="tl-sub">₹1,840 · 2 hours ago</div></div>
+        <div class="tl-item done"><div class="tl-dot"></div><div class="tl-title">Completed ride · ${d.city}</div><div class="tl-sub">₹2,260 · 5 hours ago</div></div>
+        <div class="tl-item active"><div class="tl-dot"></div><div class="tl-title">Status changed to ${d.status}</div><div class="tl-sub">Today</div></div>
+        ${d.rides>=200?`<div class="tl-item done"><div class="tl-dot"></div><div class="tl-title">Milestone · ${Math.floor(d.rides/100)*100}+ rides completed</div><div class="tl-sub">This month</div></div>`:''}
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-title">Cancelled ride · passenger no-show</div><div class="tl-sub">Yesterday</div></div>
+      </div>
+    </div>`;
+
+  document.getElementById('driver-detail-foot').innerHTML=`
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="showNotif('Edit mode','success')"><i data-lucide="pencil"></i> Edit Driver</button>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-warning btn-sm" style="flex:1;justify-content:center" onclick="suspendDriver(${i})"><i data-lucide="ban"></i> Suspend</button>
+      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="showNotif('Loading ride history','success')"><i data-lucide="history"></i> Ride History</button>
+    </div>`;
+
+  document.getElementById('driver-add-panel').classList.remove('open');
+  document.getElementById('driver-detail-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+  IC();
+}
+
+function suspendDriver(i){
+  driversData[i].status=driversData[i].status==='active'?'inactive':'active';
+  renderDrivers();openDriverDetail(i);
+  showNotif('Driver '+(driversData[i].status==='inactive'?'suspended':'reactivated'),'warning');
+}
+
+// ── RENDER USERS ──
+function renderUsers(){
+  const tbody=document.getElementById('users-tbody');
+  tbody.innerHTML=usersData.map((u,i)=>`
+    <tr>
+      <td><div style="font-weight:600">${u.name}</div></td>
+      <td>${u.phone}</td>
+      <td>${u.city}</td>
+      <td>${u.rides}</td>
+      <td style="font-weight:600">${u.spent}</td>
+      <td class="text-sm text-muted">${u.last}</td>
+      <td>${badge(u.status)}</td>
+      <td><button class="btn btn-outline btn-xs" onclick="openUserDetail(${i})">View</button></td>
+    </tr>`).join('');
+}
+
+// ── CUSTOMER DETAIL DRAWER ──
+const AMB_TYPES=['BLS','ALS','ICU','Patient Transport','BLS','ALS','BLS','ICU'];
+function openUserDetail(i){
+  const u=usersData[i];
+  const spent=parseAmt(u.spent);
+  const completed=Math.max(0,Math.round(u.rides*0.92)),cancelled=u.rides-completed;
+  const avgFare=u.rides?'₹'+Math.round(spent/u.rides).toLocaleString('en-IN'):'—';
+  const regDates=['12 Jan 2024','03 Aug 2023','21 Nov 2023','17 Feb 2024','09 May 2023','28 Jun 2024','14 Sep 2023','02 Apr 2024'];
+  const email=(u.name.toLowerCase().replace(/[^a-z]/g,'.'))+'@gmail.com';
+  const trend=[55,68,72,80,88,100];
+  const fmt=n=>'₹'+n.toLocaleString('en-IN');
+  // recent rides
+  const rides=[
+    {d:'20 Jun 2026',t:AMB_TYPES[i%AMB_TYPES.length],f:avgFare,s:'paid'},
+    {d:'11 Jun 2026',t:'BLS',f:'₹1,640',s:'paid'},
+    {d:'02 Jun 2026',t:'ALS',f:'₹3,120',s:'paid'},
+    {d:'24 May 2026',t:'BLS',f:'₹980',s:'failed'},
+  ];
+
+  document.getElementById('user-content').innerHTML=`
+    <div class="drawer-head">
+      <div class="drawer-avatar">${u.name.charAt(0)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:16px;font-weight:700;letter-spacing:-.3px">${u.name}</div>
+        <div class="text-sm text-muted">${u.city}</div>
+      </div>
+      ${badge(u.status)}
+    </div>
+    <div class="drawer-metrics">
+      <div class="drawer-metric"><div class="drawer-metric-val">${u.rides}</div><div class="drawer-metric-label">Rides</div></div>
+      <div class="drawer-metric"><div class="drawer-metric-val">${u.spent}</div><div class="drawer-metric-label">Spent</div></div>
+      <div class="drawer-metric"><div class="drawer-metric-val">${avgFare}</div><div class="drawer-metric-label">Avg Fare</div></div>
+    </div>
+
+    <div style="padding:2px 22px 18px">
+      <!-- 1. profile -->
+      <div class="section-title" style="margin:10px 0 6px;font-size:13px">Customer Profile</div>
+      <div class="stat-row"><span class="text-sm text-muted">Customer Name</span><span style="font-weight:600">${u.name}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Status</span>${badge(u.status)}</div>
+      <div class="stat-row"><span class="text-sm text-muted">City</span><span style="font-weight:600">${u.city}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Registration Date</span><span style="font-weight:600">${regDates[i%regDates.length]}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Last Active</span><span style="font-weight:600">${u.last}</span></div>
+
+      <!-- 2. contact -->
+      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Contact Information</div>
+      <div class="stat-row"><span class="text-sm text-muted">Phone Number</span><span style="font-weight:600">${u.phone}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Email Address</span><span style="font-weight:600">${email}</span></div>
+
+      <!-- 3. ride summary -->
+      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Ride Summary</div>
+      <div class="prof-grid">
+        <div class="prof-cell"><div class="k">Total Rides</div><div class="v">${u.rides.toLocaleString()}</div></div>
+        <div class="prof-cell"><div class="k">Completed</div><div class="v">${completed.toLocaleString()}</div></div>
+        <div class="prof-cell"><div class="k">Cancelled</div><div class="v">${cancelled.toLocaleString()}</div></div>
+        <div class="prof-cell"><div class="k">Average Fare</div><div class="v">${avgFare}</div></div>
+        <div class="prof-cell" style="grid-column:1/-1"><div class="k">Preferred Ambulance Type</div><div class="v">${AMB_TYPES[i%AMB_TYPES.length]}</div></div>
+      </div>
+
+      <!-- 4. spending -->
+      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Spending Summary</div>
+      <div class="stat-row"><span class="text-sm text-muted">Lifetime Spend</span><span style="font-weight:700">${u.spent}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Avg Spend / Ride</span><span style="font-weight:600">${avgFare}</span></div>
+      <div class="text-sm text-muted" style="margin:12px 0 8px">Monthly Spending Trend</div>
+      <div style="display:flex;align-items:flex-end;gap:8px;height:60px">
+        ${trend.map((h,k)=>`<div style="flex:1;height:${h*0.5}px;background:${k===trend.length-1?'var(--primary)':'#C7D2FE'};border-radius:4px 4px 0 0"></div>`).join('')}
+      </div>
+      <div style="display:flex;gap:8px;margin-top:4px">${['Jan','Feb','Mar','Apr','May','Jun'].map(m=>`<div style="flex:1;text-align:center;font-size:10px;color:var(--muted)">${m}</div>`).join('')}</div>
+
+      <!-- 5. recent rides -->
+      <div class="section-title" style="margin:18px 0 6px;font-size:13px">Recent Rides</div>
+      <table style="font-size:12.5px">
+        <thead><tr><th style="padding:6px 0">Date</th><th style="padding:6px 0">Type</th><th style="padding:6px 0;text-align:right">Fare</th><th style="padding:6px 0;text-align:right">Status</th></tr></thead>
+        <tbody>${u.rides?rides.map(r=>`<tr><td style="padding:8px 0;border-bottom:1px solid #F1F5F9">${r.d}</td><td style="padding:8px 0;border-bottom:1px solid #F1F5F9">${r.t}</td><td style="padding:8px 0;border-bottom:1px solid #F1F5F9;text-align:right">${r.f}</td><td style="padding:8px 0;border-bottom:1px solid #F1F5F9;text-align:right">${badge(r.s)}</td></tr>`).join(''):'<tr><td colspan="4" style="padding:14px 0;text-align:center;color:var(--muted)">No rides yet</td></tr>'}</tbody>
+      </table>
+
+      <!-- 6. activity timeline -->
+      <div class="section-title" style="margin:18px 0 10px;font-size:13px">Activity Timeline</div>
+      <div class="timeline">
+        <div class="tl-item done"><div class="tl-dot"></div><div class="tl-title">Account created</div><div class="tl-sub">${regDates[i%regDates.length]}</div></div>
+        <div class="tl-item done"><div class="tl-dot"></div><div class="tl-title">First ride booked</div><div class="tl-sub">${u.rides?u.city+' · BLS':'—'}</div></div>
+        <div class="tl-item done"><div class="tl-dot"></div><div class="tl-title">Recent ride completed</div><div class="tl-sub">${u.rides?rides[0].d+' · '+rides[0].f:'—'}</div></div>
+        <div class="tl-item active"><div class="tl-dot"></div><div class="tl-title">Last active</div><div class="tl-sub">${u.last}</div></div>
+      </div>
+    </div>`;
+
+  const blocked=u.status==='blocked';
+  document.getElementById('user-foot').innerHTML=`
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="showNotif('Loading ride history','success')"><i data-lucide="history"></i> Ride History</button>
+      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="showNotif('Downloading user report','success')"><i data-lucide="download"></i> Report</button>
+    </div>
+    ${blocked
+      ?`<button class="btn btn-success" style="width:100%;justify-content:center" onclick="toggleBlockUser(${i})"><i data-lucide="circle-check"></i> Unblock User</button>`
+      :`<button class="btn btn-danger" style="width:100%;justify-content:center" onclick="toggleBlockUser(${i})"><i data-lucide="ban"></i> Block User</button>`}`;
+
+  document.getElementById('user-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+  IC();
+}
+
+function toggleBlockUser(i){
+  usersData[i].status=usersData[i].status==='blocked'?'active':'blocked';
+  renderUsers();openUserDetail(i);
+  showNotif('User '+(usersData[i].status==='blocked'?'blocked':'unblocked'),usersData[i].status==='blocked'?'danger':'success');
+}
+
+// ── RENDER PAYOUTS ──
+function renderPayouts(){
+  const tbody=document.getElementById('payouts-tbody');
+  tbody.innerHTML=payoutsData.map((p,i)=>`
+    <tr id="payout-row-${i}">
+      <td style="font-weight:600">${p.agency}</td>
+      <td>${p.city}</td>
+      <td>${p.gross}</td>
+      <td style="color:var(--primary);font-weight:600">${p.commission}</td>
+      <td style="font-weight:700;color:var(--success)">${p.net}</td>
+      <td class="text-sm text-muted">${p.bank}</td>
+      <td id="payout-status-${i}">${badge(p.status)}</td>
+      <td>
+        ${p.status==='pending'||p.status==='failed'?`<button class="btn btn-primary btn-xs" onclick="markPaid(${i})">Mark Paid</button>`:
+          p.status==='processing'?`<button class="btn btn-outline btn-xs" onclick="markPaid(${i})">Complete</button>`:
+          `<button class="btn btn-outline btn-xs">Receipt</button>`}
+      </td>
+    </tr>`).join('');
+}
+
+function markPaid(i){
+  document.getElementById(`payout-status-${i}`).innerHTML=badge('paid');
+  const td=document.querySelector(`#payout-row-${i} td:last-child`);
+  td.innerHTML=`<button class="btn btn-outline btn-xs">Receipt</button>`;
+  payoutsData[i].status='paid';
+  showNotif('Payout marked as paid','success');
+}
+
+function markAllPaid(){
+  payoutsData.forEach((_,i)=>{
+    if(payoutsData[i].status==='pending'||payoutsData[i].status==='failed'){payoutsData[i].status='paid'}
+  });
+  renderPayouts();
+  showNotif('All pending payouts marked as paid','success');
+}
+
+// ── RENDER CITY TOGGLES ──
+function renderCityToggles(){
+  const container=document.getElementById('city-toggle-list');
+  container.innerHTML=cities.map(city=>`
+    <div class="stat-row">
+      <div>
+        <div style="font-size:13.5px;font-weight:600">${city}</div>
+        <div class="text-sm text-muted">${cityActive[city]?'Currently active':'Not yet launched'}</div>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" ${cityActive[city]?'checked':''} onchange="cityActive['${city}']=this.checked">
+        <div class="toggle-slider"></div>
+      </label>
+    </div>`).join('');
+}
+
+// ── ADD AGENCY MODAL ──
+function openAddAgency(){
+  ['aa-name','aa-contact','aa-phone','aa-email','aa-ambulances'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('aa-city').value='';
+  document.getElementById('add-agency-modal').classList.add('show');
+}
+function closeAddAgency(){document.getElementById('add-agency-modal').classList.remove('show')}
+
+function createAgency(){
+  const name=document.getElementById('aa-name').value.trim();
+  const contact=document.getElementById('aa-contact').value.trim();
+  const phone=document.getElementById('aa-phone').value.trim();
+  const email=document.getElementById('aa-email').value.trim();
+  const city=document.getElementById('aa-city').value;
+  const ambulances=parseInt(document.getElementById('aa-ambulances').value)||0;
+  if(!name||!contact||!phone||!email||!city){
+    showNotif('Fill all required fields','warning');return;
+  }
+  const newAgency={
+    id:Math.max(...agencies.map(a=>a.id))+1,
+    name,city,status:'pending',ambulances,drivers:0,revenue:'—',rating:'—',
+    contact,phone,email,established:'2026'
+  };
+  agencies.unshift(newAgency);
+  renderAgencies(agencies);
+  closeAddAgency();
+  showNotif('Agency "'+name+'" created — pending review','success');
+}
+
+// ── PANELS ──
+function openAgencyPanel(id){
+  const a=agencies.find(x=>x.id===id);
+  const docs=['Registration Certificate','GST Certificate','Ambulance RC','NOC Certificate','Director ID'];
+  const sampleDrivers=driversData.slice(0,Math.min(4,Math.max(1,Math.round(a.drivers/12)||3)));
+  const sampleAmb=ambulanceQueue.map(x=>x.type);
+  const ambTypes=[['BLS',Math.round(a.ambulances*0.4)],['ALS',Math.round(a.ambulances*0.3)],['ICU',Math.round(a.ambulances*0.18)],['Neonatal',Math.round(a.ambulances*0.12)]];
+
+  document.getElementById('panel-agency-content').innerHTML=`
+    <!-- compact header -->
+    <div class="drawer-head">
+      <div class="drawer-avatar">${a.name.charAt(0)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:16px;font-weight:700;letter-spacing:-.3px">${a.name}</div>
+        <div class="text-sm text-muted">${a.city} · Est. ${a.established}</div>
+      </div>
+      ${badge(a.status)}
+    </div>
+    <!-- compact metrics row -->
+    <div class="drawer-metrics">
+      <div class="drawer-metric"><div class="drawer-metric-val">${a.ambulances}</div><div class="drawer-metric-label">Ambulances</div></div>
+      <div class="drawer-metric"><div class="drawer-metric-val">${a.drivers}</div><div class="drawer-metric-label">Drivers</div></div>
+      <div class="drawer-metric"><div class="drawer-metric-val">${a.revenue}</div><div class="drawer-metric-label">Revenue</div></div>
+      <div class="drawer-metric"><div class="drawer-metric-val">${a.rating!=='—'?'<i data-lucide="star"></i>'+a.rating:'—'}</div><div class="drawer-metric-label">Rating</div></div>
+    </div>
+    <!-- tabs -->
+    <div class="drawer-tabs">
+      <div class="drawer-tab active" onclick="agencyTab(event,'overview')">Overview</div>
+      <div class="drawer-tab" onclick="agencyTab(event,'documents')">Documents</div>
+      <div class="drawer-tab" onclick="agencyTab(event,'drivers')">Drivers</div>
+      <div class="drawer-tab" onclick="agencyTab(event,'ambulances')">Ambulances</div>
+      <div class="drawer-tab" onclick="agencyTab(event,'activity')">Activity</div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div class="drawer-tabpane active" data-pane="overview">
+      <div class="section-title" style="margin-bottom:10px;font-size:13px">Contact Details</div>
+      <div class="stat-row"><span class="text-sm text-muted">Contact</span><span style="font-weight:600">${a.contact}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Phone</span><span style="font-weight:600">${a.phone}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Email</span><span style="font-weight:600">${a.email}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Type</span><span style="font-weight:600">Private</span></div>
+      <div class="section-title" style="margin:18px 0 10px;font-size:13px">Verification</div>
+      <div class="stat-row"><span class="text-sm text-muted">Documents</span><span style="font-weight:600">${a.status==='active'?'5/5 verified':'3/5 verified'}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">KYC Status</span>${badge(a.status==='active'?'verified':'pending')}</div>
+    </div>
+
+    <!-- DOCUMENTS -->
+    <div class="drawer-tabpane" data-pane="documents">
+      ${docs.map((doc,di)=>{
+        const ok=a.status==='active'||di<3;
+        return `<div class="drawer-doc">
+          <div class="drawer-doc-icon"><i data-lucide="file-text"></i></div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:600;font-size:13px">${doc}</div>
+            <div style="margin-top:3px">${ok?'<span class="badge verified">verified</span>':'<span class="badge pending">awaiting</span>'}</div>
+          </div>
+          ${ok?`<button class="drawer-doc-act" title="View" onclick="showNotif('Opening ${doc}','success')"><i data-lucide="eye"></i></button>
+                <button class="drawer-doc-act" title="Download" onclick="showNotif('Downloading ${doc}','success')"><i data-lucide="download"></i></button>`
+              :`<button class="drawer-doc-act" title="Request" onclick="showNotif('Requested ${doc}','warning')"><i data-lucide="rotate-cw"></i></button>`}
+        </div>`;}).join('')}
+    </div>
+
+    <!-- DRIVERS -->
+    <div class="drawer-tabpane" data-pane="drivers">
+      ${sampleDrivers.map(d=>`
+        <div class="mini-list-row">
+          <div class="avatar" style="width:32px;height:32px;background:var(--primary);font-size:12px">${d.name.charAt(0)}</div>
+          <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px">${d.name}</div><div class="text-sm text-muted">${d.rides} rides · ${d.phone}</div></div>
+          ${starRating(d.rating)}
+        </div>`).join('')}
+      <div class="text-sm text-muted" style="text-align:center;padding-top:12px">Showing ${sampleDrivers.length} of ${a.drivers} drivers</div>
+    </div>
+
+    <!-- AMBULANCES -->
+    <div class="drawer-tabpane" data-pane="ambulances">
+      ${ambTypes.filter(t=>t[1]>0).map(t=>`
+        <div class="mini-list-row">
+          <div class="drawer-doc-icon" style="background:var(--primary-light)"><i data-lucide="ambulance"></i></div>
+          <div style="flex:1"><div style="font-weight:600;font-size:13px">${t[0]} Units</div><div class="text-sm text-muted">${t[0]==='ICU'?'Critical care equipped':t[0]==='BLS'?'Basic life support':t[0]==='ALS'?'Advanced life support':'Specialized'}</div></div>
+          <span style="font-weight:700;font-size:15px">${t[1]}</span>
+        </div>`).join('')||'<div class="empty-state-sub" style="text-align:center;padding:20px">No ambulances registered yet.</div>'}
+      <div class="text-sm text-muted" style="text-align:center;padding-top:12px">${a.ambulances} ambulances total</div>
+    </div>
+
+    <!-- ACTIVITY -->
+    <div class="drawer-tabpane" data-pane="activity">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;gap:10px"><div class="avatar" style="width:28px;height:28px;background:var(--success);font-size:11px">₹</div><div><div style="font-size:12.5px;font-weight:600">Payout ${a.revenue!=='—'?a.revenue:'pending'} settled</div><div class="text-sm text-muted">2 days ago</div></div></div>
+        <div style="display:flex;gap:10px"><div class="avatar" style="width:28px;height:28px;background:var(--primary);font-size:11px"><i data-lucide="ambulance"></i></div><div><div style="font-size:12.5px;font-weight:600">${a.ambulances} ambulances active</div><div class="text-sm text-muted">5 days ago</div></div></div>
+        <div style="display:flex;gap:10px"><div class="avatar" style="width:28px;height:28px;background:var(--info);font-size:11px"><i data-lucide="user"></i></div><div><div style="font-size:12.5px;font-weight:600">${a.drivers} drivers onboarded</div><div class="text-sm text-muted">1 week ago</div></div></div>
+        <div style="display:flex;gap:10px"><div class="avatar" style="width:28px;height:28px;background:#94A3B8;font-size:11px">+</div><div><div style="font-size:12.5px;font-weight:600">Agency registered</div><div class="text-sm text-muted">Est. ${a.established}</div></div></div>
+      </div>
+    </div>`;
+
+  // footer actions — hierarchy
+  document.getElementById('panel-agency-foot').innerHTML=`
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="showNotif('Edit mode','success')">Edit Agency</button>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="showNotif('Loading rides','success')">View Rides</button>
+      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="showNotif('Loading invoices','success')">View Invoices</button>
+    </div>
+    <div class="danger-zone">
+      <div class="danger-zone-title">Danger Zone</div>
+      <div style="display:flex;gap:8px">
+        ${a.status==='active'
+          ?`<button class="btn btn-warning btn-sm" style="flex:1;justify-content:center" onclick="suspendAgency(${a.id})">Suspend</button>`
+          :`<button class="btn btn-success btn-sm" style="flex:1;justify-content:center" onclick="activateAgency(${a.id})">Activate</button>`}
+        <button class="btn btn-danger btn-sm" style="flex:1;justify-content:center" onclick="closePanel();showNotif('Agency removed','danger')">Remove</button>
+      </div>
+    </div>`;
+
+  document.getElementById('agency-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+}
+
+function agencyTab(e,pane){
+  const root=document.getElementById('panel-agency-content');
+  root.querySelectorAll('.drawer-tab').forEach(t=>t.classList.remove('active'));
+  root.querySelectorAll('.drawer-tabpane').forEach(p=>p.classList.remove('active'));
+  e.target.classList.add('active');
+  root.querySelector(`[data-pane="${pane}"]`).classList.add('active');
+}
+
+function activateAgency(id){
+  agencies.find(a=>a.id===id).status='active';
+  renderAgencies(agencies);
+  showNotif('Agency activated','success');
+}
+function suspendAgency(id){
+  agencies.find(a=>a.id===id).status='inactive';
+  renderAgencies(agencies);
+  showNotif('Agency suspended','warning');
+}
+
+const DRIVER_DOCS=['Driving License','Aadhaar Card','PAN Card','Medical Certificate','Police Verification'];
+const DRIVER_EXP=['6 years','4 years','9 years','3 years','11 years','7 years','2 years','8 years'];
+const DRIVER_LIC=['MH01-2024-0012345','DL01-2023-0056789','MH12-2023-0098765','TS09-2024-0023456','GJ01-2024-0034567','KA04-2023-0045678','DL08-2023-0056789','MH01-2024-0067890'];
+
+function openDriverPanel(i){
+  const d=driverQueue[i];
+  const submitted=parseInt(d.docs);
+  const missing=DRIVER_DOCS.slice(submitted);
+
+  document.getElementById('panel-driver-content').innerHTML=`
+    <!-- header -->
+    <div class="drawer-head">
+      <div class="drawer-avatar">${d.name.charAt(0)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:16px;font-weight:700;letter-spacing:-.3px">${d.name}</div>
+        <div class="text-sm text-muted">${d.agency}</div>
+      </div>
+      ${badge(d.status)}
+    </div>
+
+    <div style="padding:2px 22px 18px">
+      <!-- profile -->
+      <div class="section-title" style="margin:8px 0 6px;font-size:13px">Driver Profile</div>
+      <div class="prof-grid">
+        <div class="prof-cell"><div class="k">Agency</div><div class="v">${d.agency}</div></div>
+        <div class="prof-cell"><div class="k">City</div><div class="v">${d.city}</div></div>
+        <div class="prof-cell"><div class="k">Phone</div><div class="v">${d.phone}</div></div>
+        <div class="prof-cell"><div class="k">Experience</div><div class="v">${DRIVER_EXP[i%DRIVER_EXP.length]}</div></div>
+        <div class="prof-cell"><div class="k">License Number</div><div class="v" style="font-family:monospace;font-size:12px">${DRIVER_LIC[i%DRIVER_LIC.length]}</div></div>
+        <div class="prof-cell"><div class="k">Join Date</div><div class="v">${d.submitted}</div></div>
+      </div>
+
+      <!-- doc summary -->
+      <div class="section-title" style="margin:18px 0 8px;font-size:13px">Documents</div>
+      <div class="doc-summary">
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:14px">${submitted}/5 Documents Submitted</div>
+          <div class="text-sm" style="color:${missing.length?'var(--danger)':'var(--success)'};margin-top:2px">${missing.length?'Missing: '+missing.join(', '):'All documents received'}</div>
+        </div>
+        <div class="progress" style="width:64px"><div class="progress-fill" style="width:${submitted*20}%;${missing.length?'background:var(--warning)':''}"></div></div>
+      </div>
+
+      <!-- checklist -->
+      <div style="margin-top:6px">
+      ${DRIVER_DOCS.map((doc,di)=>{
+        const ok=di<submitted;
+        return `<div class="chk-row">
+          <div class="chk-icon ${ok?'verified':'missing'}">${ok?'<i data-lucide="check"></i>':'<i data-lucide="x"></i>'}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:600;font-size:13px">${doc}</div>
+            <div class="text-sm" style="color:${ok?'var(--success)':'var(--danger)'}">${ok?'Verified':'Not submitted'}</div>
+          </div>
+          ${ok?`<button class="drawer-doc-act" title="View" onclick="showNotif('Opening ${doc}','success')"><i data-lucide="eye"></i></button>
+                <button class="drawer-doc-act" title="Download" onclick="showNotif('Downloading ${doc}','success')"><i data-lucide="download"></i></button>`
+              :`<button class="drawer-doc-act" title="Request" onclick="showNotif('Requested ${doc}','warning')"><i data-lucide="rotate-cw"></i></button>`}
+        </div>`;}).join('')}
+      </div>
+
+      <!-- timeline -->
+      <div class="section-title" style="margin:18px 0 10px;font-size:13px">Verification Timeline</div>
+      <div class="timeline">
+        <div class="tl-item done"><div class="tl-dot"></div><div class="tl-title">Submitted by Agency</div><div class="tl-sub">${d.agency} · ${d.submitted}</div></div>
+        <div class="tl-item ${missing.length?'active':'done'}"><div class="tl-dot"></div><div class="tl-title">Documents Reviewed</div><div class="tl-sub">${submitted}/5 verified${missing.length?' · awaiting remaining docs':''}</div></div>
+        <div class="tl-item ${missing.length?'pending':'active'}"><div class="tl-dot"></div><div class="tl-title">Waiting for Approval</div><div class="tl-sub">${missing.length?'Blocked until docs complete':'Ready for final decision'}</div></div>
+      </div>
+
+      <!-- notes -->
+      <div class="section-title" style="margin:18px 0 8px;font-size:13px">Internal Verification Notes</div>
+      <textarea class="notes-area" id="driver-notes-${i}" placeholder="Add internal notes (not visible to driver or agency)..."></textarea>
+    </div>`;
+
+  document.getElementById('driver-foot').innerHTML=`
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-danger btn-sm" style="flex:1;justify-content:center" onclick="updateQueueStatus('dq',${i},'rejected');closePanel()">Reject</button>
+      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="showNotif('Documents requested from '+'${d.name.replace(/'/g,"")}','warning')">Request Documents</button>
+    </div>
+    <button class="btn btn-success" style="width:100%;justify-content:center" onclick="updateQueueStatus('dq',${i},'verified');closePanel()">Verify Driver</button>`;
+
+  document.getElementById('driver-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+}
+
+function closePanel(){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('open'));
+  document.getElementById('overlay').classList.remove('show');
+}
+
+// ── SETTINGS TABS ──
+function switchTab(name){
+  document.querySelectorAll('.settings-tab-content').forEach(el=>el.style.display='none');
+  document.getElementById('settings-'+name).style.display='block';
+  document.querySelectorAll('#settings-tabs .tab').forEach(t=>t.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// ── NOTIFICATION ──
+function showNotif(msg,type='success'){
+  const n=document.getElementById('notif');
+  const icons={success:'circle-check',danger:'circle-x',warning:'alert-triangle'};
+  document.getElementById('notif-icon').innerHTML='<i data-lucide="'+(icons[type]||'circle-check')+'"></i>';
+  document.getElementById('notif-msg').textContent=msg;
+  n.className='notif '+type+' show';
+  IC();
+  setTimeout(()=>n.classList.remove('show'),3000);
+}
+
+// ── NAVIGATION ──
+const pageTitles={dashboard:'Dashboard',agencies:'Agency Management',onboarding:'Onboarding Review','drivers-q':'Driver Verification Queue','ambulance-q':'Ambulance Queue',revenue:'Revenue & Commission',drivers:'Driver Overview',users:'Users / Customers',analytics:'Platform Analytics',settings:'Platform Settings',payouts:'Payout Management'};
+
+function navigate(screen,el){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+screen).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('page-title').textContent=pageTitles[screen]||screen;
+}
+
+// ── LOGIN ──
+function showOTP(){
+  document.getElementById('login-step-1').style.display='none';
+  document.getElementById('login-step-2').style.display='block';
+}
+
+function moveOTP(input,idx){
+  const inputs=document.querySelectorAll('.otp-input');
+  if(input.value.length===1&&idx<5)inputs[idx+1].focus();
+}
+
+function loginSuccess(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('sidebar').style.display='flex';
+  document.getElementById('header').style.display='flex';
+  document.getElementById('main').style.display='block';
+  initAll();
+}
+
+function logout(){
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('sidebar').style.display='none';
+  document.getElementById('header').style.display='none';
+  document.getElementById('main').style.display='none';
+  document.getElementById('login-step-1').style.display='block';
+  document.getElementById('login-step-2').style.display='none';
+}
+
+// ── SWAP EMOJI METRIC ICONS → LUCIDE ──
+const ICON_NAME={
+  '<i data-lucide="indian-rupee"></i>':'indian-rupee','<i data-lucide="credit-card"></i>':'credit-card','<i data-lucide="landmark"></i>':'landmark','<i data-lucide="clock"></i>':'clock','<i data-lucide="circle-check"></i>':'circle-check',
+  '<i data-lucide="activity"></i>':'activity','<i data-lucide="moon"></i>':'moon','<i data-lucide="users"></i>':'users','<i data-lucide="circle-dot"></i>':'circle-dot','<i data-lucide="smartphone"></i>':'smartphone','<i data-lucide="ban"></i>':'ban',
+  '<i data-lucide="car"></i>':'car','<i data-lucide="timer"></i>':'timer','<i data-lucide="circle-x"></i>':'circle-x','<i data-lucide="star"></i>':'star',
+};
+function swapMetricIcons(){
+  document.querySelectorAll('.metric-icon').forEach(el=>{
+    const t=el.textContent.trim();
+    if(ICON_NAME[t]){el.innerHTML=`<i data-lucide="${ICON_NAME[t]}"></i>`;}
+  });
+}
+
+// ── LUCIDE RENDER ──
+function IC(){if(window.lucide)lucide.createIcons({attrs:{'stroke-width':1.5}});}
+// auto-render any dynamically injected <i data-lucide> icons
+let _icQueued=false;
+function scheduleIC(){
+  if(_icQueued)return;_icQueued=true;
+  requestAnimationFrame(()=>{_icQueued=false;if(document.querySelector('i[data-lucide]'))IC();});
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  IC();
+  new MutationObserver(scheduleIC).observe(document.body,{childList:true,subtree:true});
+});
+
+function initAll(){
+  swapMetricIcons();
+  renderAgencies(agencies);
+  renderOnboarding();
+  renderDriverQueue();
+  renderAmbulanceQueue();
+  renderRevenue();
+  renderDrivers();
+  renderUsers();
+  renderPayouts();
+  renderCityToggles();
+  IC();
+}
+</script>
+</body>
+</html>
