@@ -733,6 +733,19 @@ tr.row-clickable:hover .row-hint{opacity:1}
     </div>
   </div>
   <div class="card" style="padding:0">
+    <div class="filter-row" style="padding:14px 16px 0">
+      <input class="filter-input" id="onb-search" placeholder="Search applications..." style="min-width:240px" oninput="renderOnboarding()">
+      <select class="filter-input" id="onb-status" onchange="renderOnboarding()">
+        <option>All Status</option><option>Pending</option><option>Missing Docs</option><option>Flagged</option><option>Approved</option>
+      </select>
+      <select class="filter-input" id="onb-city" onchange="renderOnboarding()">
+        <option>All Cities</option><option>Pune</option><option>Bangalore</option><option>Jaipur</option><option>Lucknow</option><option>Mumbai</option><option>Nagpur</option><option>Indore</option>
+      </select>
+      <select class="filter-input" id="onb-docs" onchange="renderOnboarding()">
+        <option>All Documents</option><option>Complete</option><option>Missing Documents</option><option>Under Review</option>
+      </select>
+      <button class="btn btn-outline btn-sm" style="margin-left:auto" onclick="showNotif('Exporting applications to CSV','success')"><i data-lucide="download"></i> Export CSV</button>
+    </div>
     <div class="table-wrap">
       <table>
         <thead><tr>
@@ -1603,9 +1616,21 @@ function onbStatusLabel(s){return s==='missing'?'Missing Docs':s==='flagged'?'Fl
 
 function renderOnboarding(){
   const tbody=document.getElementById('onboarding-tbody');
-  const queue=onboardingApps.filter(a=>a.status!=='approved'&&a.status!=='rejected');
+  const q=(document.getElementById('onb-search')?.value||'').toLowerCase().trim();
+  const fStatus=document.getElementById('onb-status')?.value||'All Status';
+  const fCity=document.getElementById('onb-city')?.value||'All Cities';
+  const fDocs=document.getElementById('onb-docs')?.value||'All Documents';
+  let queue=onboardingApps.filter(a=>fStatus==='Approved'?a.status==='approved':(a.status!=='approved'&&a.status!=='rejected'));
+  queue=queue.filter(app=>{
+    const ds=onbDisplayStatus(app);
+    const matchQ=!q||app.name.toLowerCase().includes(q)||app.contact.toLowerCase().includes(q)||app.phone.includes(q);
+    const matchStatus=fStatus==='All Status'||(fStatus==='Pending'&&ds==='pending')||(fStatus==='Missing Docs'&&ds==='missing')||(fStatus==='Flagged'&&ds==='flagged')||(fStatus==='Approved'&&app.status==='approved');
+    const matchCity=fCity==='All Cities'||app.city===fCity;
+    const matchDocs=fDocs==='All Documents'||(fDocs==='Complete'&&app.docs.length===5)||(fDocs==='Missing Documents'&&app.docs.length<5)||(fDocs==='Under Review'&&app.status==='flagged');
+    return matchQ&&matchStatus&&matchCity&&matchDocs;
+  });
   if(!queue.length){
-    tbody.innerHTML=`<tr><td colspan="9"><div class="empty-state"><div class="empty-icon"><i data-lucide="clipboard-check"></i></div><div class="empty-state-title">Queue is clear</div><div class="empty-state-sub">No applications awaiting review.</div></div></td></tr>`;
+    tbody.innerHTML=`<tr><td colspan="9"><div class="empty-state"><div class="empty-icon"><i data-lucide="${q||fStatus!=='All Status'||fCity!=='All Cities'||fDocs!=='All Documents'?'search-x':'clipboard-check'}"></i></div><div class="empty-state-title">${q||fStatus!=='All Status'||fCity!=='All Cities'||fDocs!=='All Documents'?'No matching applications':'Queue is clear'}</div><div class="empty-state-sub">${q||fStatus!=='All Status'||fCity!=='All Cities'||fDocs!=='All Documents'?'Try adjusting your filters.':'No applications awaiting review.'}</div></div></td></tr>`;
     IC();return;
   }
   tbody.innerHTML=queue.map(app=>{
