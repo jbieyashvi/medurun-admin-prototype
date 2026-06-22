@@ -342,8 +342,18 @@ tr:hover td{background:#FAFAFA}
 .equip-chip.warn{color:#B45309}
 /* photo tiles (ambulance drawer) */
 .photo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.photo-tile{border:1px solid var(--border);border-radius:10px;background:#FAFBFC;height:74px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#94A3B8;font-size:11px}
+.photo-tile{border:1px solid var(--border);border-radius:10px;background:#FAFBFC;height:74px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#94A3B8;font-size:11px;cursor:pointer;transition:.12s}
+.photo-tile:hover{border-color:#C7D2FE;color:#6B7280;background:#fff}
 .photo-tile svg{width:20px;height:20px;stroke-width:1.4}
+/* photo preview modal */
+.photo-preview{position:relative;border:1px solid var(--border);border-radius:12px;background:#FAFBFC;height:260px;display:flex;align-items:center;justify-content:center;margin:14px 0 4px}
+.photo-preview-inner{text-align:center;color:#94A3B8}
+.photo-preview-inner svg{width:48px;height:48px;stroke-width:1.3}
+.photo-preview-label{font-size:13px;font-weight:600;color:#475569;margin-top:10px}
+.photo-nav{position:absolute;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;color:#64748B;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-sm)}
+.photo-nav:hover{color:var(--primary);border-color:#C7D2FE}
+.photo-nav.left{left:12px}.photo-nav.right{right:12px}
+.photo-nav svg{width:16px;height:16px}
 .notes-area{width:100%;min-height:72px;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit;color:var(--text);outline:none;resize:vertical}
 .notes-area:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,91,255,.1)}
 /* ── TIMELINE ── */
@@ -1342,6 +1352,28 @@ tr.row-clickable:hover .row-hint{opacity:1}
   </div>
 </div>
 
+<!-- MODAL: PHOTO PREVIEW -->
+<div class="modal-overlay" id="photo-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head">
+      <div><div class="modal-head-title" id="ph-title">Photo</div><div class="modal-head-sub" id="ph-sub">Preview</div></div>
+      <button class="modal-x" onclick="closePhotoPreview()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="photo-preview">
+        <button class="photo-nav left" onclick="photoNav(-1)"><i data-lucide="chevron-left"></i></button>
+        <div class="photo-preview-inner"><i data-lucide="image"></i><div class="photo-preview-label" id="ph-label">Front View</div></div>
+        <button class="photo-nav right" onclick="photoNav(1)"><i data-lucide="chevron-right"></i></button>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline btn-sm" onclick="photoNav(-1)"><i data-lucide="chevron-left"></i> Previous</button>
+      <button class="btn btn-outline btn-sm" onclick="photoNav(1)">Next <i data-lucide="chevron-right"></i></button>
+      <button class="btn btn-primary btn-sm" onclick="showNotif('Photo downloaded','success')"><i data-lucide="download"></i> Download</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL: DOCUMENT PREVIEW & REVIEW -->
 <div class="modal-overlay" id="doc-preview-modal">
   <div class="modal modal-narrow">
@@ -1746,6 +1778,9 @@ function saveDocReview(){
   if(currentDoc.mode==='driver'){
     getDqState(currentDoc.i)[currentDoc.doc]=val;
     renderDriverReview(currentDoc.i);
+  }else if(currentDoc.mode==='ambulance'){
+    getAmbDocState(currentDoc.i)[currentDoc.doc]=val;
+    renderAmbulanceReview(currentDoc.i);
   }else{
     getDocState(onboardingApps.find(a=>a.id===currentDoc.id))[currentDoc.doc]=val;
     renderReview(currentDoc.id);
@@ -1994,23 +2029,44 @@ function updateQueueStatus(prefix,i,status){
 }
 
 // ── AMBULANCE REVIEW DRAWER ──
+const AMB_DOCS=['Registration Certificate (RC)','Insurance','Fitness Certificate'];
+const AMB_PHOTOS=['Front View','Rear View','Interior View'];
+const ambDocState={};
+function getAmbDocState(i){
+  if(!ambDocState[i]){const s={};AMB_DOCS.forEach(d=>s[d]={st:'verified',reason:''});ambDocState[i]=s;}
+  return ambDocState[i];
+}
+
 function openAmbulanceDrawer(i){
+  renderAmbulanceReview(i);
+  document.getElementById('ambulance-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+}
+function renderAmbulanceReview(i){
   const a=ambulanceQueue[i];
   const missing=ambMissing(a);
+  const dstate=getAmbDocState(i);
   const checkRow=(label,ok)=>`
     <div class="chk-row">
       <div class="chk-icon ${ok?'verified':'missing'}"><i data-lucide="${ok?'check':'x'}"></i></div>
       <div style="flex:1"><div style="font-weight:600;font-size:13px">${label}</div>
         <div class="text-sm" style="color:${ok?'var(--success)':'var(--danger)'}">${ok?'Present':'Missing'}</div></div>
     </div>`;
-  const docRow=name=>`
-    <div class="rev-doc">
+  const docRow=name=>{
+    const s=dstate[name];const m=DOC_ST_META[s.st];const dq=name.replace(/'/g,"");
+    return `<div class="rev-doc">
       <div class="rev-doc-ic"><i data-lucide="file-text"></i></div>
-      <div style="flex:1;min-width:0"><div class="rev-doc-name">${name}</div><div class="rev-doc-status verified"><i data-lucide="check"></i> Verified</div></div>
-      <div class="rev-doc-acts"><button class="drawer-doc-act" title="View" onclick="showNotif('Opening ${name}','success')"><i data-lucide="eye"></i></button><button class="drawer-doc-act" title="Download" onclick="showNotif('Downloading ${name}','success')"><i data-lucide="download"></i></button></div>
-    </div>`;
-  const photoTile=label=>`
-    <div class="photo-tile"><i data-lucide="image"></i><span>${label}</span></div>`;
+      <div style="flex:1;min-width:0"><div class="rev-doc-name">${name}</div>
+        <div class="rev-doc-status ${s.st}"><i data-lucide="${m.icon}"></i> ${m.label}</div>
+        ${s.reason?`<div class="rev-doc-reason">Reason: ${s.reason}</div>`:''}
+      </div>
+      <div class="rev-doc-acts">
+        <button class="drawer-doc-act" title="Review document" onclick="openAmbDocPreview(${i},'${dq}')"><i data-lucide="eye"></i></button>
+        <button class="drawer-doc-act" title="Download" onclick="showNotif('Document downloaded','success')"><i data-lucide="download"></i></button>
+      </div>
+    </div>`;};
+  const photoTile=(label,k)=>`
+    <div class="photo-tile" onclick="openPhotoPreview(${i},${k})"><i data-lucide="image"></i><span>${label}</span></div>`;
 
   document.getElementById('ambulance-content').innerHTML=`
     <div class="drawer-head">
@@ -2038,15 +2094,11 @@ function openAmbulanceDrawer(i){
       ${checkRow('Monitor',a.equip.monitor)}
 
       <div class="section-title">Documents</div>
-      ${docRow('Registration Certificate (RC)')}
-      ${docRow('Insurance')}
-      ${docRow('Fitness Certificate')}
+      ${AMB_DOCS.map(docRow).join('')}
 
       <div class="section-title">Photos</div>
       <div class="photo-grid">
-        ${photoTile('Front View')}
-        ${photoTile('Rear View')}
-        ${photoTile('Interior View')}
+        ${AMB_PHOTOS.map((p,k)=>photoTile(p,k)).join('')}
       </div>
     </div>`;
 
@@ -2057,11 +2109,34 @@ function openAmbulanceDrawer(i){
       <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" ${missing.length?'':'disabled'} onclick="decideAmbulance(${i},'request')">Request Missing Equipment</button>
       <button class="btn btn-danger-soft btn-sm" style="flex:1;justify-content:center" onclick="decideAmbulance(${i},'reject')">Reject Ambulance</button>
     </div>`;
-
-  document.getElementById('ambulance-panel').classList.add('open');
-  document.getElementById('overlay').classList.add('show');
   IC();
 }
+function openAmbDocPreview(i,doc){
+  const d=getAmbDocState(i)[doc];
+  currentDoc={mode:'ambulance',i,doc};
+  fillDocPreview(doc,d);
+}
+
+// ── PHOTO PREVIEW MODAL ──
+let currentPhoto=null;
+function openPhotoPreview(i,k){
+  currentPhoto={i,k};
+  renderPhotoPreview();
+  document.getElementById('photo-modal').classList.add('show');
+  document.body.style.overflow='hidden';IC();
+}
+function renderPhotoPreview(){
+  const{i,k}=currentPhoto;const a=ambulanceQueue[i];
+  document.getElementById('ph-title').textContent=AMB_PHOTOS[k];
+  document.getElementById('ph-sub').textContent=a.reg+' · photo '+(k+1)+' of '+AMB_PHOTOS.length;
+  document.getElementById('ph-label').textContent=AMB_PHOTOS[k];
+  IC();
+}
+function photoNav(dir){
+  currentPhoto.k=(currentPhoto.k+dir+AMB_PHOTOS.length)%AMB_PHOTOS.length;
+  renderPhotoPreview();
+}
+function closePhotoPreview(){document.getElementById('photo-modal').classList.remove('show');document.body.style.overflow='';}
 
 function decideAmbulance(i,action){
   const a=ambulanceQueue[i];
