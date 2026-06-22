@@ -339,17 +339,38 @@ tr:hover td{background:#FAFAFA}
 /* ── MODAL ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(17,24,39,.4);z-index:300;display:none;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(2px)}
 .modal-overlay.show{display:flex}
-.modal{background:#fff;border-radius:18px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;border:1px solid var(--border);box-shadow:0 24px 64px rgba(17,24,39,.18);animation:modalIn .2s ease}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;border:1px solid var(--border);box-shadow:0 16px 48px rgba(17,24,39,.12);animation:modalIn .2s ease}
+.modal.modal-narrow{max-width:480px}
 @keyframes modalIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
-.modal-head{padding:22px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.modal-head-title{font-size:17px;font-weight:700;color:var(--text)}
+.modal-head{padding:20px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-head-title{font-size:16px;font-weight:700;color:var(--text)}
 .modal-head-sub{font-size:12.5px;color:var(--muted);margin-top:2px}
 .modal-x{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:#fff;cursor:pointer;color:#64748B;display:flex;align-items:center;justify-content:center;font-size:15px}
 .modal-x:hover{background:var(--bg)}
-.modal-body{padding:24px}
-.modal-foot{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.modal-body{padding:4px 22px}
+.modal-foot{padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .form-grid .full{grid-column:1/-1}
+/* ── FORM SECTIONS (Add Agency) ── */
+.form-sec{padding:18px 0;border-bottom:1px solid var(--border)}
+.form-sec .form-group{margin-bottom:12px}
+.form-sec .form-group:last-child{margin-bottom:0}
+.form-sec .form-grid .form-group{margin-bottom:0}
+.form-sec-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:#9CA3AF;margin-bottom:12px}
+.form-sec .label{font-size:12px;font-weight:500;color:#475569}
+.fleet-total{display:flex;align-items:center;justify-content:space-between;background:#FAFBFC;border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-top:12px}
+.fleet-total-label{font-size:13px;font-weight:600;color:var(--text)}
+.fleet-total-sub{font-size:11.5px;color:var(--muted);margin-top:1px}
+.fleet-total-val{font-size:22px;font-weight:700;letter-spacing:-.5px;color:var(--primary)}
+.upload-row{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid #F4F6F9}
+.upload-row:last-child{border-bottom:none}
+.upload-ic{width:32px;height:32px;border-radius:8px;background:#F1F5F9;color:#475569;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.upload-ic svg{width:15px;height:15px}
+.upload-name{font-size:13px;font-weight:600;color:var(--text)}
+.upload-hint{font-size:11.5px;color:#9CA3AF;margin-top:1px}
+.status-card{background:#FAFBFC;border:1px solid var(--border);border-radius:10px;padding:13px 14px}
+.status-card-note{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);margin-top:9px}
+.status-card-note svg{width:14px;height:14px;color:#9CA3AF;flex-shrink:0}
 /* ── EMPTY STATE ── */
 .empty-state{text-align:center;padding:48px 24px;color:var(--muted)}
 .empty-state .empty-icon{width:56px;height:56px;border-radius:14px;background:var(--bg);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;color:#94A3B8}
@@ -1073,54 +1094,77 @@ tr.row-clickable:hover .row-hint{opacity:1}
 
 <!-- MODAL: ADD AGENCY -->
 <div class="modal-overlay" id="add-agency-modal">
-  <div class="modal">
+  <div class="modal modal-narrow">
     <div class="modal-head">
       <div>
         <div class="modal-head-title">Add New Agency</div>
-        <div class="modal-head-sub">Register a new ambulance agency on the platform</div>
+        <div class="modal-head-sub">Onboard a new ambulance agency to the platform</div>
       </div>
       <button class="modal-x" onclick="closeAddAgency()"><i data-lucide="x"></i></button>
     </div>
     <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-group full">
-          <label class="label">Agency Name *</label>
-          <input class="input" id="aa-name" placeholder="e.g. LifeLine Ambulance">
+      <!-- 1. agency information -->
+      <div class="form-sec">
+        <div class="form-sec-title">Agency Information</div>
+        <div class="form-group"><label class="label">Agency Name *</label><input class="input" id="aa-name" placeholder="e.g. LifeLine Ambulance"></div>
+        <div class="form-grid">
+          <div class="form-group"><label class="label">Agency Type *</label>
+            <select class="input" id="aa-type"><option>Private</option><option>Government</option><option>NGO</option><option>Hospital-Owned</option></select>
+          </div>
+          <div class="form-group"><label class="label">City *</label>
+            <select class="input" id="aa-city"><option value="">Select city</option><option>Mumbai</option><option>Delhi</option><option>Bangalore</option><option>Hyderabad</option><option>Chennai</option><option>Pune</option><option>Kolkata</option><option>Ahmedabad</option><option>Jaipur</option></select>
+          </div>
         </div>
-        <div class="form-group">
-          <label class="label">Contact Person *</label>
-          <input class="input" id="aa-contact" placeholder="Full name">
+      </div>
+
+      <!-- 2. primary contact -->
+      <div class="form-sec">
+        <div class="form-sec-title">Primary Contact</div>
+        <div class="form-group"><label class="label">Contact Person *</label><input class="input" id="aa-contact" placeholder="Full name"></div>
+        <div class="form-grid">
+          <div class="form-group"><label class="label">Phone Number *</label><input class="input" id="aa-phone" placeholder="9820000000" maxlength="10"></div>
+          <div class="form-group"><label class="label">Email Address *</label><input class="input" id="aa-email" type="email" placeholder="agency@email.com"></div>
         </div>
-        <div class="form-group">
-          <label class="label">Phone Number *</label>
-          <input class="input" id="aa-phone" placeholder="9820000000" maxlength="10">
+      </div>
+
+      <!-- 3. fleet information -->
+      <div class="form-sec">
+        <div class="form-sec-title">Fleet Information</div>
+        <div class="form-grid">
+          <div class="form-group"><label class="label">BLS Ambulances</label><input class="input fleet-in" id="aa-bls" type="number" min="0" value="0" oninput="updateFleetTotal()"></div>
+          <div class="form-group"><label class="label">ALS Ambulances</label><input class="input fleet-in" id="aa-als" type="number" min="0" value="0" oninput="updateFleetTotal()"></div>
+          <div class="form-group"><label class="label">ICU Ambulances</label><input class="input fleet-in" id="aa-icu" type="number" min="0" value="0" oninput="updateFleetTotal()"></div>
+          <div class="form-group"><label class="label">Neonatal Ambulances</label><input class="input fleet-in" id="aa-neo" type="number" min="0" value="0" oninput="updateFleetTotal()"></div>
         </div>
-        <div class="form-group">
-          <label class="label">Email *</label>
-          <input class="input" id="aa-email" type="email" placeholder="agency@email.com">
+        <div class="fleet-total">
+          <div><div class="fleet-total-label">Total Ambulances</div><div class="fleet-total-sub">Auto-calculated from fleet types</div></div>
+          <div class="fleet-total-val" id="aa-fleet-total">0</div>
         </div>
-        <div class="form-group">
-          <label class="label">City *</label>
-          <select class="input" id="aa-city">
-            <option value="">Select city</option>
-            <option>Mumbai</option><option>Delhi</option><option>Bangalore</option><option>Hyderabad</option><option>Chennai</option><option>Pune</option><option>Kolkata</option><option>Ahmedabad</option><option>Jaipur</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="label">Number of Ambulances</label>
-          <input class="input" id="aa-ambulances" type="number" min="0" placeholder="0">
-        </div>
-        <div class="form-group">
-          <label class="label">Agency Type</label>
-          <select class="input" id="aa-type">
-            <option>Private</option><option>Government</option><option>Hospital-affiliated</option><option>NGO / Charitable</option>
-          </select>
+      </div>
+
+      <!-- 4. documents -->
+      <div class="form-sec">
+        <div class="form-sec-title">Documents</div>
+        <div class="upload-row"><span class="upload-ic"><i data-lucide="file-text"></i></span><div style="flex:1"><div class="upload-name">Registration Certificate</div><div class="upload-hint">PDF or JPG · up to 5 MB</div></div><button class="btn btn-outline btn-xs"><i data-lucide="upload"></i> Upload</button></div>
+        <div class="upload-row"><span class="upload-ic"><i data-lucide="file-text"></i></span><div style="flex:1"><div class="upload-name">GST Certificate</div><div class="upload-hint">PDF or JPG · up to 5 MB</div></div><button class="btn btn-outline btn-xs"><i data-lucide="upload"></i> Upload</button></div>
+        <div class="upload-row"><span class="upload-ic"><i data-lucide="file-text"></i></span><div style="flex:1"><div class="upload-name">Ambulance RC</div><div class="upload-hint">PDF or JPG · up to 5 MB</div></div><button class="btn btn-outline btn-xs"><i data-lucide="upload"></i> Upload</button></div>
+        <div class="upload-row"><span class="upload-ic"><i data-lucide="file-text"></i></span><div style="flex:1"><div class="upload-name">NOC Certificate</div><div class="upload-hint">PDF or JPG · up to 5 MB</div></div><button class="btn btn-outline btn-xs"><i data-lucide="upload"></i> Upload</button></div>
+        <div class="upload-row"><span class="upload-ic"><i data-lucide="file-text"></i></span><div style="flex:1"><div class="upload-name">Director ID</div><div class="upload-hint">Aadhaar / PAN / Passport</div></div><button class="btn btn-outline btn-xs"><i data-lucide="upload"></i> Upload</button></div>
+      </div>
+
+      <!-- 5. status -->
+      <div class="form-sec" style="border-bottom:none">
+        <div class="form-sec-title">Status</div>
+        <div class="status-card">
+          <div class="flex items-center gap-8"><span class="badge pending">Pending Review</span></div>
+          <div class="status-card-note"><i data-lucide="info"></i> Will be sent to Onboarding Review Queue after submission</div>
         </div>
       </div>
     </div>
     <div class="modal-foot">
       <button class="btn btn-outline" onclick="closeAddAgency()">Cancel</button>
-      <button class="btn btn-primary" onclick="createAgency()">Create Agency</button>
+      <button class="btn btn-outline" onclick="saveDraftAgency()">Save Draft</button>
+      <button class="btn btn-primary" onclick="createAgency()">Submit for Review</button>
     </div>
   </div>
 </div>
@@ -1988,31 +2032,55 @@ function renderCityToggles(){
 
 // ── ADD AGENCY MODAL ──
 function openAddAgency(){
-  ['aa-name','aa-contact','aa-phone','aa-email','aa-ambulances'].forEach(id=>document.getElementById(id).value='');
+  ['aa-name','aa-contact','aa-phone','aa-email'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('aa-city').value='';
+  document.getElementById('aa-type').value='Private';
+  ['aa-bls','aa-als','aa-icu','aa-neo'].forEach(id=>document.getElementById(id).value='0');
+  updateFleetTotal();
   document.getElementById('add-agency-modal').classList.add('show');
+  IC();
 }
 function closeAddAgency(){document.getElementById('add-agency-modal').classList.remove('show')}
 
+function fleetTotal(){
+  return ['aa-bls','aa-als','aa-icu','aa-neo'].reduce((s,id)=>s+(parseInt(document.getElementById(id).value)||0),0);
+}
+function updateFleetTotal(){
+  document.getElementById('aa-fleet-total').textContent=fleetTotal();
+}
+
+function collectAgency(){
+  return {
+    name:document.getElementById('aa-name').value.trim(),
+    type:document.getElementById('aa-type').value,
+    city:document.getElementById('aa-city').value,
+    contact:document.getElementById('aa-contact').value.trim(),
+    phone:document.getElementById('aa-phone').value.trim(),
+    email:document.getElementById('aa-email').value.trim(),
+    ambulances:fleetTotal(),
+  };
+}
+
 function createAgency(){
-  const name=document.getElementById('aa-name').value.trim();
-  const contact=document.getElementById('aa-contact').value.trim();
-  const phone=document.getElementById('aa-phone').value.trim();
-  const email=document.getElementById('aa-email').value.trim();
-  const city=document.getElementById('aa-city').value;
-  const ambulances=parseInt(document.getElementById('aa-ambulances').value)||0;
-  if(!name||!contact||!phone||!email||!city){
+  const d=collectAgency();
+  if(!d.name||!d.contact||!d.phone||!d.email||!d.city){
     showNotif('Fill all required fields','warning');return;
   }
-  const newAgency={
+  agencies.unshift({
     id:Math.max(...agencies.map(a=>a.id))+1,
-    name,city,status:'pending',ambulances,drivers:0,revenue:'—',rating:'—',
-    contact,phone,email,established:'2026'
-  };
-  agencies.unshift(newAgency);
+    name:d.name,city:d.city,status:'pending',ambulances:d.ambulances,drivers:0,
+    revenue:'—',rating:'—',contact:d.contact,phone:d.phone,email:d.email,established:'2026'
+  });
   renderAgencies(agencies);
   closeAddAgency();
-  showNotif('Agency "'+name+'" created — pending review','success');
+  showNotif('"'+d.name+'" submitted — sent to Onboarding Review Queue','success');
+}
+
+function saveDraftAgency(){
+  const name=document.getElementById('aa-name').value.trim();
+  if(!name){showNotif('Add an agency name to save a draft','warning');return;}
+  closeAddAgency();
+  showNotif('Draft saved for "'+name+'"','success');
 }
 
 // ── PANELS ──
