@@ -170,6 +170,7 @@ tr:hover td{background:#FAFAFA}
 .drawer-foot{flex-shrink:0;border-top:1px solid var(--border);padding:14px 22px;background:#fff;display:flex;flex-direction:column;gap:10px}
 .danger-zone{border:1px solid #FECACA;background:#FEF2F2;border-radius:10px;padding:12px 14px}
 .danger-zone-title{font-size:11px;font-weight:700;color:#DC2626;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.foot-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:#9CA3AF;margin:4px 0 2px}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:199;display:none}
 .overlay.show{display:block}
 /* ── DOC REVIEW CARDS ── */
@@ -325,6 +326,20 @@ tr:hover td{background:#FAFAFA}
 .rev-summary{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin-bottom:12px}
 .rev-summary svg{width:14px;height:14px}
 .rev-gate-hint{font-size:11.5px;color:#9CA3AF;text-align:center;margin-top:2px}
+/* per-document action bar (driver review) */
+.doc-actbar{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.docbtn{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:500;color:#475569;background:#fff;border:1px solid var(--border);border-radius:7px;padding:4px 9px;cursor:pointer;transition:.12s}
+.docbtn:hover{background:var(--bg);color:var(--text);border-color:#D8DCE3}
+.docbtn svg{width:12px;height:12px}
+/* equipment chip (table) */
+.equip-chip{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:500}
+.equip-chip svg{width:13px;height:13px}
+.equip-chip.ok{color:#475569}
+.equip-chip.warn{color:#B45309}
+/* photo tiles (ambulance drawer) */
+.photo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.photo-tile{border:1px solid var(--border);border-radius:10px;background:#FAFBFC;height:74px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#94A3B8;font-size:11px}
+.photo-tile svg{width:20px;height:20px;stroke-width:1.4}
 .notes-area{width:100%;min-height:72px;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit;color:var(--text);outline:none;resize:vertical}
 .notes-area:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,91,255,.1)}
 /* ── TIMELINE ── */
@@ -679,23 +694,38 @@ tr.row-clickable:hover .row-hint{opacity:1}
       <div><div class="onb-stat-val">4</div><div class="onb-stat-label">Approved Today</div></div>
     </div>
   </div>
-  <div id="onboarding-list"></div>
+  <div class="card" style="padding:0">
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Agency</th><th>City</th><th>Contact Person</th><th>Phone</th><th>Submitted</th><th>Waiting</th><th>Documents</th><th>Status</th><th></th>
+        </tr></thead>
+        <tbody id="onboarding-tbody"></tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 <!-- ── SCREEN: DRIVER QUEUE ── -->
 <div class="screen" id="screen-drivers-q">
   <div class="section-header">
-    <div><div style="font-size:22px;font-weight:800">Driver Verification Queue</div><div style="font-size:13px;color:var(--muted);margin-top:2px">12 drivers pending verification</div></div>
+    <div><div style="font-size:22px;font-weight:800">Driver Verification Queue</div><div style="font-size:13px;color:var(--muted);margin-top:2px">Review and verify driver registrations</div></div>
   </div>
-  <div class="card">
-    <div class="filter-row">
+  <div class="onb-summary">
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="clock"></i></div><div><div class="onb-stat-val" id="dq-sum-pending">0</div><div class="onb-stat-label">Pending Verification</div></div></div>
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="file-warning"></i></div><div><div class="onb-stat-val" id="dq-sum-missing">0</div><div class="onb-stat-label">Missing Documents</div></div></div>
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="circle-check"></i></div><div><div class="onb-stat-val" id="dq-sum-approved">0</div><div class="onb-stat-label">Approved Today</div></div></div>
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="circle-x"></i></div><div><div class="onb-stat-val" id="dq-sum-rejected">0</div><div class="onb-stat-label">Rejected</div></div></div>
+  </div>
+  <div class="card" style="padding:0">
+    <div class="filter-row" style="padding:14px 16px 0">
       <input class="filter-input" placeholder="Search driver...">
       <select class="filter-input"><option>All Status</option><option>Pending</option><option>Under Review</option><option>Flagged</option></select>
       <select class="filter-input"><option>All Cities</option><option>Mumbai</option><option>Delhi</option><option>Bangalore</option></select>
     </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Driver</th><th>Phone</th><th>Agency</th><th>City</th><th>Documents</th><th>Status</th><th>Submitted</th><th>Action</th></tr></thead>
+        <thead><tr><th>Driver</th><th>Phone</th><th>Agency</th><th>City</th><th>Documents</th><th>Status</th><th>Submitted</th><th></th></tr></thead>
         <tbody id="driver-queue-tbody"></tbody>
       </table>
     </div>
@@ -705,16 +735,22 @@ tr.row-clickable:hover .row-hint{opacity:1}
 <!-- ── SCREEN: AMBULANCE QUEUE ── -->
 <div class="screen" id="screen-ambulance-q">
   <div class="section-header">
-    <div><div style="font-size:22px;font-weight:800">Ambulance Verification Queue</div><div style="font-size:13px;color:var(--muted);margin-top:2px">5 ambulances pending verification</div></div>
+    <div><div style="font-size:22px;font-weight:800">Ambulance Verification Queue</div><div style="font-size:13px;color:var(--muted);margin-top:2px">Review and verify ambulance registrations</div></div>
   </div>
-  <div class="card">
-    <div class="filter-row">
+  <div class="onb-summary">
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="clock"></i></div><div><div class="onb-stat-val" id="amb-sum-pending">0</div><div class="onb-stat-label">Pending Verification</div></div></div>
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="alert-triangle"></i></div><div><div class="onb-stat-val" id="amb-sum-missing">0</div><div class="onb-stat-label">Missing Equipment</div></div></div>
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="circle-check"></i></div><div><div class="onb-stat-val" id="amb-sum-approved">0</div><div class="onb-stat-label">Approved Today</div></div></div>
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="circle-x"></i></div><div><div class="onb-stat-val" id="amb-sum-rejected">0</div><div class="onb-stat-label">Rejected</div></div></div>
+  </div>
+  <div class="card" style="padding:0">
+    <div class="filter-row" style="padding:14px 16px 0">
       <input class="filter-input" placeholder="Search registration...">
-      <select class="filter-input"><option>All Types</option><option>BLS</option><option>ALS</option><option>Neonatal</option><option>Patient Transport</option></select>
+      <select class="filter-input"><option>All Types</option><option>BLS</option><option>ALS</option><option>ICU</option><option>Neonatal</option><option>Patient Transport</option></select>
     </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Registration</th><th>Type</th><th>Agency</th><th>City</th><th>Year</th><th>Equipment</th><th>Status</th><th>Action</th></tr></thead>
+        <thead><tr><th>Registration</th><th>Type</th><th>Agency</th><th>City</th><th>Year</th><th>Equipment</th><th>Verification Status</th><th></th></tr></thead>
         <tbody id="ambulance-queue-tbody"></tbody>
       </table>
     </div>
@@ -1084,6 +1120,16 @@ tr.row-clickable:hover .row-hint{opacity:1}
   <div class="drawer-foot" id="driver-detail-foot"></div>
 </div>
 
+<!-- PANEL: AMBULANCE REVIEW -->
+<div class="panel" id="ambulance-panel">
+  <div class="panel-header">
+    <div style="font-size:14px;font-weight:700">Ambulance Review</div>
+    <button class="modal-x" onclick="closePanel()"><i data-lucide="x"></i></button>
+  </div>
+  <div class="panel-body"><div id="ambulance-content"></div></div>
+  <div class="drawer-foot" id="ambulance-foot"></div>
+</div>
+
 <!-- PANEL: CUSTOMER DETAIL -->
 <div class="panel" id="user-panel">
   <div class="panel-header">
@@ -1201,6 +1247,73 @@ tr.row-clickable:hover .row-hint{opacity:1}
   </div>
 </div>
 
+<!-- MODAL: DOCUMENT VIEW (preview only) -->
+<div class="modal-overlay" id="doc-view-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head">
+      <div><div class="modal-head-title" id="dv-title">Document</div><div class="modal-head-sub" id="dv-sub">Preview</div></div>
+      <button class="modal-x" onclick="closeDocView()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="dp-preview" id="dv-preview">
+        <div class="dp-preview-inner"><i data-lucide="file-text"></i><div class="dp-preview-name" id="dv-filename">document.pdf</div><div class="dp-preview-meta">PDF · 1 page · 2.4 MB</div></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline btn-sm" onclick="document.getElementById('dv-preview').requestFullscreen&&document.getElementById('dv-preview').requestFullscreen();showNotif('Opening full screen','success')"><i data-lucide="maximize"></i> Full Screen</button>
+      <button class="btn btn-primary btn-sm" onclick="showNotif('Downloading '+document.getElementById('dv-title').textContent,'success')"><i data-lucide="download"></i> Download</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: EDIT AGENCY -->
+<div class="modal-overlay" id="edit-agency-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head">
+      <div><div class="modal-head-title">Edit Agency</div><div class="modal-head-sub">Update agency administration details</div></div>
+      <button class="modal-x" onclick="closeEditAgency()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-sec" style="border-bottom:none">
+        <div class="form-group"><label class="label">Agency Name</label><input class="input" id="ea-name"></div>
+        <div class="form-group"><label class="label">Contact Person</label><input class="input" id="ea-contact"></div>
+        <div class="form-grid">
+          <div class="form-group"><label class="label">Phone</label><input class="input" id="ea-phone" maxlength="10"></div>
+          <div class="form-group"><label class="label">Email</label><input class="input" id="ea-email"></div>
+          <div class="form-group"><label class="label">City</label>
+            <select class="input" id="ea-city"><option>Mumbai</option><option>Delhi</option><option>Bangalore</option><option>Hyderabad</option><option>Chennai</option><option>Pune</option><option>Kolkata</option><option>Ahmedabad</option><option>Jaipur</option></select>
+          </div>
+          <div class="form-group"><label class="label">Agency Type</label>
+            <select class="input" id="ea-type"><option>Private</option><option>Government</option><option>NGO</option><option>Hospital-Owned</option></select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline btn-sm" onclick="closeEditAgency()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="saveEditAgency()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: INVOICES -->
+<div class="modal-overlay" id="invoices-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div><div class="modal-head-title">Invoice History</div><div class="modal-head-sub" id="inv-sub">All invoices</div></div>
+      <button class="modal-x" onclick="closeInvoices()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body" style="padding:8px 22px 16px">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Invoice</th><th>Date</th><th>Amount</th><th>Status</th><th></th></tr></thead>
+          <tbody id="inv-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL: DOCUMENT PREVIEW & REVIEW -->
 <div class="modal-overlay" id="doc-preview-modal">
   <div class="modal modal-narrow">
@@ -1279,11 +1392,12 @@ const driverQueue = [
 ];
 
 const ambulanceQueue = [
-  {reg:'MH01-AB-1234',type:'BLS',agency:'LifeLine Ambulance',city:'Mumbai',year:'2023',equipment:'<i data-lucide="circle-check"></i> Complete',status:'pending'},
-  {reg:'DL02-CD-5678',type:'ALS',agency:'Metro Medic',city:'Delhi',year:'2022',equipment:'<i data-lucide="alert-triangle"></i> Missing O2',status:'review'},
-  {reg:'KA03-EF-9012',type:'ICU',agency:'RapidCare',city:'Bangalore',year:'2024',equipment:'<i data-lucide="circle-check"></i> Complete',status:'pending'},
-  {reg:'TN04-GH-3456',type:'BLS',agency:'CarePlus',city:'Chennai',year:'2021',equipment:'<i data-lucide="alert-triangle"></i> Missing AED',status:'review'},
-  {reg:'GJ05-IJ-7890',type:'Neonatal',agency:'Medivac Pro',city:'Ahmedabad',year:'2023',equipment:'<i data-lucide="circle-check"></i> Complete',status:'pending'},
+  {reg:'MH01-AB-1234',type:'BLS',agency:'LifeLine Ambulance',city:'Mumbai',year:'2023',equip:{oxygen:true,aed:true,stretcher:true,monitor:true},status:'pending'},
+  {reg:'DL02-CD-5678',type:'ALS',agency:'Metro Medic',city:'Delhi',year:'2022',equip:{oxygen:false,aed:true,stretcher:true,monitor:true},status:'pending'},
+  {reg:'KA03-EF-9012',type:'ICU',agency:'RapidCare',city:'Bangalore',year:'2024',equip:{oxygen:true,aed:true,stretcher:true,monitor:true},status:'pending'},
+  {reg:'TN04-GH-3456',type:'BLS',agency:'CarePlus',city:'Chennai',year:'2021',equip:{oxygen:true,aed:false,stretcher:true,monitor:true},status:'pending'},
+  {reg:'GJ05-IJ-7890',type:'Neonatal',agency:'Medivac Pro',city:'Ahmedabad',year:'2023',equip:{oxygen:true,aed:true,stretcher:true,monitor:true},status:'pending'},
+  {reg:'MH02-KL-2468',type:'ALS',agency:'Falcon Medical',city:'Pune',year:'2020',equip:{oxygen:false,aed:false,stretcher:true,monitor:false},status:'pending'},
 ];
 
 const revenueData = [
@@ -1428,40 +1542,35 @@ function onbDisplayStatus(app){
 function onbStatusLabel(s){return s==='missing'?'Missing Docs':s==='flagged'?'Flagged':s==='pending'?'Pending':s}
 
 function renderOnboarding(){
-  const container=document.getElementById('onboarding-list');
-  container.innerHTML=onboardingApps.map(app=>{
-    if(app.status==='approved'||app.status==='rejected'){
-      return `<div class="onb-card" id="onboard-${app.id}" style="opacity:.6">
-        <div class="onb-card-avatar" style="background:${app.status==='approved'?'#10B981':'#EF4444'}">${app.name.charAt(0)}</div>
-        <div style="flex:1"><div style="font-weight:700;font-size:15px">${app.name}</div><div class="text-sm text-muted">${app.city} · ${app.contact}</div></div>
-        ${badge(app.status)}
-      </div>`;
-    }
+  const tbody=document.getElementById('onboarding-tbody');
+  const queue=onboardingApps.filter(a=>a.status!=='approved'&&a.status!=='rejected');
+  if(!queue.length){
+    tbody.innerHTML=`<tr><td colspan="9"><div class="empty-state"><div class="empty-icon"><i data-lucide="clipboard-check"></i></div><div class="empty-state-title">Queue is clear</div><div class="empty-state-sub">No applications awaiting review.</div></div></td></tr>`;
+    IC();return;
+  }
+  tbody.innerHTML=queue.map(app=>{
     const ds=onbDisplayStatus(app);
     const wd=waitDays(app.submitted);
     const waitCls=wd>=10?'urgent':wd<=4?'fresh':'';
+    const n=app.docs.length;
     return `
-    <div class="onb-card ${ds}" id="onboard-${app.id}">
-      <div class="onb-card-avatar">${app.name.charAt(0)}</div>
-      <div style="flex:1;min-width:0">
-        <div class="flex items-center gap-8" style="flex-wrap:wrap">
-          <span style="font-weight:700;font-size:15px">${app.name}</span>
-          ${onbBadge(ds)}
-          <span class="onb-wait ${waitCls}">Waiting ${wd} day${wd===1?'':'s'}</span>
+    <tr id="onboard-${app.id}">
+      <td style="font-weight:600">${app.name}</td>
+      <td>${app.city}</td>
+      <td>${app.contact}</td>
+      <td class="text-sm">${app.phone}</td>
+      <td class="text-sm text-muted">${app.submitted}</td>
+      <td><span class="onb-wait ${waitCls}">${wd} day${wd===1?'':'s'}</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="progress" style="width:64px"><div class="progress-fill" style="width:${n*20}%;${n<5?'background:var(--warning)':''}"></div></div>
+          <span class="text-sm text-muted">${n}/5</span>
         </div>
-        <div class="onb-meta">
-          <span class="onb-meta-item"><b>${app.city}</b></span>
-          <span class="onb-meta-item">${app.contact}</span>
-          <span class="onb-meta-item">${app.phone}</span>
-          <span class="onb-meta-item">Submitted ${app.submitted}</span>
-        </div>
-        <div class="onb-doc-prog">
-          <div class="progress" style="width:90px"><div class="progress-fill" style="width:${app.docs.length*20}%;${app.docs.length<5?'background:var(--warning)':''}"></div></div>
-          ${app.docs.length}/5 documents submitted
-        </div>
-      </div>
-      <button class="btn btn-primary btn-sm" onclick="openReviewDrawer(${app.id})" style="flex-shrink:0">Review Application →</button>
-    </div>`;}).join('');
+      </td>
+      <td>${onbBadge(ds)}</td>
+      <td><button class="btn btn-outline btn-xs" onclick="openReviewDrawer(${app.id})">Review&nbsp;→</button></td>
+    </tr>`;}).join('');
+  IC();
 }
 
 // badge() needs to map 'missing' → amber + label
@@ -1571,23 +1680,28 @@ function renderReview(id){
   IC();
 }
 
-// ── DOCUMENT PREVIEW & REVIEW MODAL ──
+// ── DOCUMENT PREVIEW & REVIEW MODAL (shared: onboarding + driver) ──
 let currentDoc=null;
-function openDocPreview(id,doc){
-  currentDoc={id,doc};
-  const state=getDocState(onboardingApps.find(a=>a.id===id));
-  const d=state[doc];
+function fillDocPreview(doc,d){
   document.getElementById('dp-title').textContent=doc;
   document.getElementById('dp-sub').textContent='Review uploaded document';
   document.getElementById('dp-filename').textContent=doc.toLowerCase().replace(/[^a-z]+/g,'-')+'.pdf';
-  // preselect current status
   document.querySelectorAll('input[name="dp-status"]').forEach(r=>r.checked=(r.value===d.st));
-  const noteWrap=document.getElementById('dp-note-wrap');
   document.getElementById('dp-note').value=d.reason||'';
-  noteWrap.style.display=d.st==='reupload'?'block':'none';
+  document.getElementById('dp-note-wrap').style.display=d.st==='reupload'?'block':'none';
   document.getElementById('doc-preview-modal').classList.add('show');
   document.body.style.overflow='hidden';
   IC();
+}
+function openDocPreview(id,doc){ // onboarding
+  const d=getDocState(onboardingApps.find(a=>a.id===id))[doc];
+  currentDoc={mode:'onboarding',id,doc};
+  fillDocPreview(doc,d);
+}
+function openDqDocPreview(i,doc){ // driver
+  const d=getDqState(i)[doc];
+  currentDoc={mode:'driver',i,doc};
+  fillDocPreview(doc,d);
 }
 function closeDocPreview(){
   document.getElementById('doc-preview-modal').classList.remove('show');
@@ -1598,11 +1712,16 @@ function saveDocReview(){
   const sel=document.querySelector('input[name="dp-status"]:checked');
   if(!sel){showNotif('Select a review status','warning');return;}
   const note=document.getElementById('dp-note').value.trim();
-  const state=getDocState(onboardingApps.find(a=>a.id===currentDoc.id));
-  state[currentDoc.doc]={st:sel.value,reason:sel.value==='reupload'?(note||'Correction required'):''};
+  const val={st:sel.value,reason:sel.value==='reupload'?(note||'Correction required'):''};
   document.getElementById('doc-preview-modal').classList.remove('show');
   document.body.style.overflow='';
-  renderReview(currentDoc.id);
+  if(currentDoc.mode==='driver'){
+    getDqState(currentDoc.i)[currentDoc.doc]=val;
+    renderDriverReview(currentDoc.i);
+  }else{
+    getDocState(onboardingApps.find(a=>a.id===currentDoc.id))[currentDoc.doc]=val;
+    renderReview(currentDoc.id);
+  }
   showNotif('"'+currentDoc.doc+'" marked '+DOC_ST_META[sel.value].label,sel.value==='verified'?'success':'warning');
   currentDoc=null;
 }
@@ -1643,51 +1762,300 @@ function decideApp(id,action){
 }
 
 // ── RENDER DRIVER QUEUE ──
+// ── DRIVER VERIFICATION QUEUE ──
+const DQ_DOCS=['Driving License','Aadhaar Card','PAN Card','Medical Certificate','Police Verification','Profile Photo'];
+const dqDocState={};
+let dqStats={approved:0,rejected:0};
+function getDqState(i){
+  if(!dqDocState[i]){
+    const d=driverQueue[i];const seed=parseInt(d.docs);const s={};
+    DQ_DOCS.forEach((doc,idx)=>{
+      if(idx<seed)s[doc]={st:'verified',reason:''};
+      else if(d.status==='review'&&idx===seed)s[doc]={st:'reupload',reason:'Document unclear'};
+      else s[doc]={st:'pending',reason:''};
+    });
+    dqDocState[i]=s;
+  }
+  return dqDocState[i];
+}
+function dqVerifiedCount(i){return Object.values(getDqState(i)).filter(d=>d.st==='verified').length;}
+function dqPill(i){
+  const d=driverQueue[i];
+  if(d.status==='review')return `<span class="badge review">Under Review</span>`;
+  return `<span class="badge pending">Pending</span>`;
+}
+
 function renderDriverQueue(){
   const tbody=document.getElementById('driver-queue-tbody');
-  tbody.innerHTML=driverQueue.map((d,i)=>`
+  const queue=driverQueue.filter(d=>d.status!=='approved'&&d.status!=='rejected');
+  document.getElementById('dq-sum-pending').textContent=queue.length;
+  document.getElementById('dq-sum-missing').textContent=queue.filter(d=>dqVerifiedCount(driverQueue.indexOf(d))<DQ_DOCS.length).length;
+  document.getElementById('dq-sum-approved').textContent=dqStats.approved;
+  document.getElementById('dq-sum-rejected').textContent=dqStats.rejected;
+  if(!queue.length){
+    tbody.innerHTML=`<tr><td colspan="8"><div class="empty-state"><div class="empty-icon"><i data-lucide="user-check"></i></div><div class="empty-state-title">Queue is clear</div><div class="empty-state-sub">No drivers awaiting verification.</div></div></td></tr>`;
+    IC();return;
+  }
+  tbody.innerHTML=queue.map(d=>{
+    const i=driverQueue.indexOf(d);
+    const v=dqVerifiedCount(i),total=DQ_DOCS.length;
+    return `
     <tr>
-      <td><div style="font-weight:600">${d.name}</div></td>
-      <td>${d.phone}</td>
+      <td style="font-weight:600">${d.name}</td>
+      <td class="text-sm">${d.phone}</td>
       <td>${d.agency}</td>
       <td>${d.city}</td>
-      <td><div style="display:flex;align-items:center;gap:6px"><div class="progress" style="width:60px"><div class="progress-fill" style="width:${parseInt(d.docs)*20}%"></div></div><span class="text-sm">${d.docs}</span></div></td>
-      <td id="dq-status-${i}">${badge(d.status)}</td>
-      <td class="text-sm text-muted">${d.submitted}</td>
       <td>
-        <div style="display:flex;gap:4px">
-          <button class="btn btn-success btn-xs" onclick="updateQueueStatus('dq',${i},'verified')"><i data-lucide="check"></i></button>
-          <button class="btn btn-danger btn-xs" onclick="updateQueueStatus('dq',${i},'rejected')"><i data-lucide="x"></i></button>
-          <button class="btn btn-outline btn-xs" onclick="openDriverPanel(${i})">View</button>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="progress" style="width:60px"><div class="progress-fill" style="width:${v/total*100}%;${v<total?'background:var(--warning)':''}"></div></div>
+          <span class="text-sm text-muted">${v}/${total}</span>
         </div>
       </td>
-    </tr>`).join('');
+      <td>${dqPill(i)}</td>
+      <td class="text-sm text-muted">${d.submitted}</td>
+      <td><button class="btn btn-outline btn-xs" onclick="openDriverReview(${i})">Review&nbsp;→</button></td>
+    </tr>`;}).join('');
+  IC();
+}
+
+// ── DRIVER REVIEW DRAWER ──
+const DQ_ST_META={verified:{label:'Verified',icon:'check'},reupload:{label:'Re-upload Required',icon:'alert-triangle'},pending:{label:'Pending Review',icon:'clock'}};
+function openDriverReview(i){
+  renderDriverReview(i);
+  document.getElementById('driver-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+}
+function renderDriverReview(i){
+  const d=driverQueue[i];
+  const state=getDqState(i);
+  const vals=Object.values(state);
+  const verified=vals.filter(x=>x.st==='verified').length;
+  const anyPending=vals.some(x=>x.st==='pending');
+  const anyReupload=vals.some(x=>x.st==='reupload');
+  const allVerified=verified===DQ_DOCS.length;
+  const exp=DRIVER_EXP[i%DRIVER_EXP.length];
+
+  document.getElementById('panel-driver-content').innerHTML=`
+    <div class="drawer-head">
+      <div class="drawer-avatar">${d.name.charAt(0)}</div>
+      <div style="flex:1;min-width:0">
+        <div class="dh-title">${d.name}</div>
+        <div class="text-sm text-muted">${d.agency} · Submitted ${d.submitted}</div>
+      </div>
+      ${dqPill(i)}
+    </div>
+    <div style="padding:2px 22px 18px">
+      <div class="section-title">Driver Information</div>
+      <div class="prof-grid">
+        <div class="prof-cell"><div class="k">Name</div><div class="v">${d.name}</div></div>
+        <div class="prof-cell"><div class="k">Phone</div><div class="v">${d.phone}</div></div>
+        <div class="prof-cell"><div class="k">Agency</div><div class="v">${d.agency}</div></div>
+        <div class="prof-cell"><div class="k">City</div><div class="v">${d.city}</div></div>
+        <div class="prof-cell" style="grid-column:1/-1"><div class="k">Experience</div><div class="v">${exp}</div></div>
+      </div>
+
+      <div class="section-title">Document Review</div>
+      <div class="rev-summary"><i data-lucide="${allVerified?'shield-check':'shield'}"></i> ${verified} of ${DQ_DOCS.length} documents verified</div>
+      ${DQ_DOCS.map(doc=>{
+        const s=state[doc];const m=DQ_ST_META[s.st];const dq=doc.replace(/'/g,"");
+        return `<div class="rev-doc">
+          <div class="rev-doc-ic"><i data-lucide="file-text"></i></div>
+          <div style="flex:1;min-width:0">
+            <div class="rev-doc-name">${doc}</div>
+            <div class="rev-doc-status ${s.st}"><i data-lucide="${m.icon}"></i> ${m.label}</div>
+            ${s.reason?`<div class="rev-doc-reason">Reason: ${s.reason}</div>`:''}
+          </div>
+          <div class="rev-doc-acts">
+            <button class="drawer-doc-act" title="Review document" onclick="openDqDocPreview(${i},'${dq}')"><i data-lucide="eye"></i></button>
+            <button class="drawer-doc-act" title="Download" onclick="showNotif('Document downloaded','success')"><i data-lucide="download"></i></button>
+          </div>
+        </div>`;}).join('')}
+
+      <div class="section-title">Internal Review Notes</div>
+      <textarea class="notes-area" id="dq-notes-${i}" placeholder="Add notes for internal reviewers...">${d._notes||''}</textarea>
+    </div>`;
+
+  document.getElementById('driver-foot').innerHTML=`
+    <button class="btn btn-primary" style="width:100%;justify-content:center" ${allVerified?'':'disabled'} onclick="decideDriver(${i},'approve')">Approve Driver</button>
+    ${!allVerified?`<div class="rev-gate-hint">${anyPending?'Review all documents before approving':'Resolve documents needing re-upload before approving'}</div>`:''}
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" ${anyReupload?'':'disabled'} onclick="decideDriver(${i},'request')">Request Corrections</button>
+      <button class="btn btn-danger-soft btn-sm" style="flex:1;justify-content:center" onclick="decideDriver(${i},'reject')">Reject Driver</button>
+    </div>`;
+  IC();
+}
+function setDqDoc(i,doc,st){
+  const state=getDqState(i);
+  let reason='';
+  if(st==='reupload'){const r=prompt('Re-upload reason (optional):','Document unclear');if(r===null)return;reason=r||'Re-upload required';}
+  state[doc]={st,reason};
+  renderDriverReview(i);
+  showNotif('"'+doc+'" marked '+DQ_ST_META[st].label,st==='verified'?'success':'warning');
+}
+function decideDriver(i,action){
+  const d=driverQueue[i];const state=getDqState(i);
+  const notes=document.getElementById('dq-notes-'+i);if(notes)d._notes=notes.value;
+  if(action==='approve'){
+    if(Object.values(state).some(x=>x.st!=='verified')){showNotif('All documents must be verified first','warning');return;}
+    d.status='approved';dqStats.approved++;
+    renderDriverQueue();closePanel();
+    showNotif(d.name+' approved','success');
+  }else if(action==='request'){
+    let needs=DQ_DOCS.filter(doc=>state[doc].st==='reupload').map(doc=>({doc,reason:state[doc].reason}));
+    if(!needs.length)needs=DQ_DOCS.filter(doc=>state[doc].st==='pending').map(doc=>({doc,reason:'Not reviewed / not submitted'}));
+    if(!needs.length){showNotif('No documents need correction','warning');return;}
+    if(!confirm('Documents requiring attention:\n\n'+needs.map(x=>'• '+x.doc+' – '+x.reason).join('\n')+'\n\nDriver will be asked to re-upload only these documents.'))return;
+    d.status='review';
+    renderDriverQueue();closePanel();
+    showNotif('Corrections requested from '+d.name+' ('+needs.length+' document'+(needs.length===1?'':'s')+')','warning');
+  }else if(action==='reject'){
+    const reason=prompt('Reason for rejection:');if(reason===null)return;
+    d.status='rejected';dqStats.rejected++;
+    renderDriverQueue();closePanel();
+    showNotif(d.name+' rejected','danger');
+  }
 }
 
 // ── RENDER AMBULANCE QUEUE ──
-function renderAmbulanceQueue(){
-  const tbody=document.getElementById('ambulance-queue-tbody');
-  tbody.innerHTML=ambulanceQueue.map((a,i)=>`
-    <tr>
-      <td style="font-weight:600;font-family:monospace">${a.reg}</td>
-      <td>${badge(a.type==='BLS'?'active':a.type==='ALS'?'processing':'inactive')} ${a.type}</td>
-      <td>${a.agency}</td>
-      <td>${a.city}</td>
-      <td>${a.year}</td>
-      <td class="text-sm">${a.equipment}</td>
-      <td id="aq-status-${i}">${badge(a.status)}</td>
-      <td>
-        <div style="display:flex;gap:4px">
-          <button class="btn btn-success btn-xs" onclick="updateQueueStatus('aq',${i},'verified')"><i data-lucide="check"></i> Verify</button>
-          <button class="btn btn-danger btn-xs" onclick="updateQueueStatus('aq',${i},'rejected')"><i data-lucide="x"></i></button>
-        </div>
-      </td>
-    </tr>`).join('');
+const EQUIP_LABELS={oxygen:'Oxygen',aed:'AED',stretcher:'Stretcher',monitor:'Monitor'};
+const EQUIP_SHORT={oxygen:'O2',aed:'AED',stretcher:'Stretcher',monitor:'Monitor'};
+let ambStats={approved:0,rejected:0};
+function ambMissing(a){return Object.keys(EQUIP_SHORT).filter(k=>!a.equip[k]).map(k=>EQUIP_SHORT[k]);}
+function equipChip(a){
+  const m=ambMissing(a);
+  if(!m.length)return `<span class="equip-chip ok"><i data-lucide="check"></i> Complete</span>`;
+  return `<span class="equip-chip warn"><i data-lucide="alert-triangle"></i> ${m.length===1?'Missing '+m[0]:'Missing Equipment'}</span>`;
+}
+function ambPill(a){
+  if(a.status==='flagged')return `<span class="badge review">Equipment Requested</span>`;
+  return `<span class="badge pending">Pending</span>`;
 }
 
+function renderAmbulanceQueue(){
+  const tbody=document.getElementById('ambulance-queue-tbody');
+  const queue=ambulanceQueue.filter(a=>a.status!=='approved'&&a.status!=='rejected');
+  // summary
+  document.getElementById('amb-sum-pending').textContent=queue.length;
+  document.getElementById('amb-sum-missing').textContent=queue.filter(a=>ambMissing(a).length).length;
+  document.getElementById('amb-sum-approved').textContent=ambStats.approved;
+  document.getElementById('amb-sum-rejected').textContent=ambStats.rejected;
+  if(!queue.length){
+    tbody.innerHTML=`<tr><td colspan="8"><div class="empty-state"><div class="empty-icon"><i data-lucide="ambulance"></i></div><div class="empty-state-title">Queue is clear</div><div class="empty-state-sub">No ambulances awaiting verification.</div></div></td></tr>`;
+    IC();return;
+  }
+  tbody.innerHTML=queue.map(a=>{
+    const idx=ambulanceQueue.indexOf(a);
+    return `
+    <tr>
+      <td style="font-weight:600;font-family:monospace">${a.reg}</td>
+      <td>${a.type}</td>
+      <td>${a.agency}</td>
+      <td>${a.city}</td>
+      <td class="text-muted">${a.year}</td>
+      <td>${equipChip(a)}</td>
+      <td>${ambPill(a)}</td>
+      <td><button class="btn btn-outline btn-xs" onclick="openAmbulanceDrawer(${idx})">Review&nbsp;→</button></td>
+    </tr>`;}).join('');
+  IC();
+}
+
+// shared by driver queue (dq)
 function updateQueueStatus(prefix,i,status){
   document.getElementById(`${prefix}-status-${i}`).innerHTML=badge(status);
   showNotif(status==='verified'?'Verified successfully!':'Rejected.',status==='verified'?'success':'danger');
+}
+
+// ── AMBULANCE REVIEW DRAWER ──
+function openAmbulanceDrawer(i){
+  const a=ambulanceQueue[i];
+  const missing=ambMissing(a);
+  const checkRow=(label,ok)=>`
+    <div class="chk-row">
+      <div class="chk-icon ${ok?'verified':'missing'}"><i data-lucide="${ok?'check':'x'}"></i></div>
+      <div style="flex:1"><div style="font-weight:600;font-size:13px">${label}</div>
+        <div class="text-sm" style="color:${ok?'var(--success)':'var(--danger)'}">${ok?'Present':'Missing'}</div></div>
+    </div>`;
+  const docRow=name=>`
+    <div class="rev-doc">
+      <div class="rev-doc-ic"><i data-lucide="file-text"></i></div>
+      <div style="flex:1;min-width:0"><div class="rev-doc-name">${name}</div><div class="rev-doc-status verified"><i data-lucide="check"></i> Verified</div></div>
+      <div class="rev-doc-acts"><button class="drawer-doc-act" title="View" onclick="showNotif('Opening ${name}','success')"><i data-lucide="eye"></i></button><button class="drawer-doc-act" title="Download" onclick="showNotif('Downloading ${name}','success')"><i data-lucide="download"></i></button></div>
+    </div>`;
+  const photoTile=label=>`
+    <div class="photo-tile"><i data-lucide="image"></i><span>${label}</span></div>`;
+
+  document.getElementById('ambulance-content').innerHTML=`
+    <div class="drawer-head">
+      <div class="drawer-avatar"><i data-lucide="ambulance"></i></div>
+      <div style="flex:1;min-width:0">
+        <div class="dh-title" style="font-family:monospace">${a.reg}</div>
+        <div class="text-sm text-muted">${a.agency}</div>
+      </div>
+      ${ambPill(a)}
+    </div>
+    <div style="padding:2px 22px 18px">
+      <div class="section-title">Ambulance Details</div>
+      <div class="prof-grid">
+        <div class="prof-cell"><div class="k">Registration Number</div><div class="v" style="font-family:monospace">${a.reg}</div></div>
+        <div class="prof-cell"><div class="k">Agency</div><div class="v">${a.agency}</div></div>
+        <div class="prof-cell"><div class="k">Type</div><div class="v">${a.type}</div></div>
+        <div class="prof-cell"><div class="k">City</div><div class="v">${a.city}</div></div>
+        <div class="prof-cell" style="grid-column:1/-1"><div class="k">Year</div><div class="v">${a.year}</div></div>
+      </div>
+
+      <div class="section-title">Equipment Checklist</div>
+      ${checkRow('Oxygen',a.equip.oxygen)}
+      ${checkRow('AED',a.equip.aed)}
+      ${checkRow('Stretcher',a.equip.stretcher)}
+      ${checkRow('Monitor',a.equip.monitor)}
+
+      <div class="section-title">Documents</div>
+      ${docRow('Registration Certificate (RC)')}
+      ${docRow('Insurance')}
+      ${docRow('Fitness Certificate')}
+
+      <div class="section-title">Photos</div>
+      <div class="photo-grid">
+        ${photoTile('Front View')}
+        ${photoTile('Rear View')}
+        ${photoTile('Interior View')}
+      </div>
+    </div>`;
+
+  document.getElementById('ambulance-foot').innerHTML=`
+    <button class="btn btn-primary" style="width:100%;justify-content:center" ${missing.length?'disabled':''} onclick="decideAmbulance(${i},'approve')">Approve Ambulance</button>
+    ${missing.length?`<div class="rev-gate-hint">Missing equipment must be resolved before approval</div>`:''}
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" ${missing.length?'':'disabled'} onclick="decideAmbulance(${i},'request')">Request Missing Equipment</button>
+      <button class="btn btn-danger-soft btn-sm" style="flex:1;justify-content:center" onclick="decideAmbulance(${i},'reject')">Reject Ambulance</button>
+    </div>`;
+
+  document.getElementById('ambulance-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+  IC();
+}
+
+function decideAmbulance(i,action){
+  const a=ambulanceQueue[i];
+  if(action==='approve'){
+    if(ambMissing(a).length){showNotif('Resolve missing equipment first','warning');return;}
+    a.status='approved';ambStats.approved++;
+    renderAmbulanceQueue();closePanel();
+    showNotif(a.reg+' approved','success');
+  }else if(action==='request'){
+    const m=ambMissing(a);
+    if(!m.length){showNotif('No missing equipment','warning');return;}
+    if(!confirm('Missing equipment:\n\n'+m.map(x=>'• '+x).join('\n')+'\n\nAgency will be asked to add this equipment.'))return;
+    a.status='flagged';
+    renderAmbulanceQueue();closePanel();
+    showNotif('Equipment requested for '+a.reg+' ('+m.length+' item'+(m.length===1?'':'s')+')','warning');
+  }else if(action==='reject'){
+    const reason=prompt('Reason for rejection:');
+    if(reason===null)return;
+    a.status='rejected';ambStats.rejected++;
+    renderAmbulanceQueue();closePanel();
+    showNotif(a.reg+' rejected','danger');
+  }
 }
 
 // ── RENDER REVENUE ──
@@ -2291,7 +2659,7 @@ function openAgencyPanel(id){
             <div style="font-weight:600;font-size:13px">${doc}</div>
             <div style="margin-top:3px">${ok?'<span class="badge verified">verified</span>':'<span class="badge pending">awaiting</span>'}</div>
           </div>
-          ${ok?`<button class="drawer-doc-act" title="View" onclick="showNotif('Opening ${doc}','success')"><i data-lucide="eye"></i></button>
+          ${ok?`<button class="drawer-doc-act" title="View" onclick="openDocView('${doc.replace(/'/g,"")}')"><i data-lucide="eye"></i></button>
                 <button class="drawer-doc-act" title="Download" onclick="showNotif('Downloading ${doc}','success')"><i data-lucide="download"></i></button>`
               :`<button class="drawer-doc-act" title="Request" onclick="showNotif('Requested ${doc}','warning')"><i data-lucide="rotate-cw"></i></button>`}
         </div>`;}).join('')}
@@ -2331,23 +2699,20 @@ function openAgencyPanel(id){
 
   // footer actions — hierarchy
   document.getElementById('panel-agency-foot').innerHTML=`
-    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="showNotif('Edit mode','success')">Edit Agency</button>
+    <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center" onclick="openEditAgency(${a.id})">Edit Agency</button>
+    <div class="foot-label">Quick Actions</div>
+    <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center" onclick="openInvoices(${a.id})"><i data-lucide="file-text"></i> View Invoices</button>
+    <div class="foot-label" style="color:#DC2626">Danger Zone</div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="showNotif('Loading rides','success')">View Rides</button>
-      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="showNotif('Loading invoices','success')">View Invoices</button>
-    </div>
-    <div class="danger-zone">
-      <div class="danger-zone-title">Danger Zone</div>
-      <div style="display:flex;gap:8px">
-        ${a.status==='active'
-          ?`<button class="btn btn-warning btn-sm" style="flex:1;justify-content:center" onclick="suspendAgency(${a.id})">Suspend</button>`
-          :`<button class="btn btn-success btn-sm" style="flex:1;justify-content:center" onclick="activateAgency(${a.id})">Activate</button>`}
-        <button class="btn btn-danger btn-sm" style="flex:1;justify-content:center" onclick="closePanel();showNotif('Agency removed','danger')">Remove</button>
-      </div>
+      ${a.status==='active'
+        ?`<button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="suspendAgency(${a.id})">Suspend Agency</button>`
+        :`<button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="activateAgency(${a.id})">Activate Agency</button>`}
+      <button class="btn btn-danger-soft btn-sm" style="flex:1;justify-content:center" onclick="removeAgency(${a.id})">Remove Agency</button>
     </div>`;
 
   document.getElementById('agency-panel').classList.add('open');
   document.getElementById('overlay').classList.add('show');
+  IC();
 }
 
 function agencyTab(e,pane){
@@ -2360,14 +2725,75 @@ function agencyTab(e,pane){
 
 function activateAgency(id){
   agencies.find(a=>a.id===id).status='active';
-  renderAgencies(agencies);
+  renderAgencies(agencies);openAgencyPanel(id);
   showNotif('Agency activated','success');
 }
 function suspendAgency(id){
   agencies.find(a=>a.id===id).status='inactive';
-  renderAgencies(agencies);
+  renderAgencies(agencies);openAgencyPanel(id);
   showNotif('Agency suspended','warning');
 }
+function removeAgency(id){
+  const a=agencies.find(x=>x.id===id);
+  if(!confirm('Remove "'+a.name+'"? This cannot be undone.'))return;
+  const idx=agencies.indexOf(a);agencies.splice(idx,1);
+  renderAgencies(agencies);closePanel();
+  showNotif('Agency removed','danger');
+}
+
+// ── DOCUMENT VIEW (preview only) ──
+function openDocView(doc){
+  document.getElementById('dv-title').textContent=doc;
+  document.getElementById('dv-filename').textContent=doc.toLowerCase().replace(/[^a-z]+/g,'-')+'.pdf';
+  document.getElementById('doc-view-modal').classList.add('show');
+  document.body.style.overflow='hidden';IC();
+}
+function closeDocView(){document.getElementById('doc-view-modal').classList.remove('show');document.body.style.overflow='';}
+
+// ── EDIT AGENCY ──
+let editAgencyId=null;
+function openEditAgency(id){
+  const a=agencies.find(x=>x.id===id);editAgencyId=id;
+  document.getElementById('ea-name').value=a.name;
+  document.getElementById('ea-contact').value=a.contact;
+  document.getElementById('ea-phone').value=a.phone;
+  document.getElementById('ea-email').value=a.email;
+  document.getElementById('ea-city').value=a.city;
+  document.getElementById('ea-type').value=a.type||'Private';
+  document.getElementById('edit-agency-modal').classList.add('show');
+  document.body.style.overflow='hidden';IC();
+}
+function closeEditAgency(){document.getElementById('edit-agency-modal').classList.remove('show');document.body.style.overflow='';}
+function saveEditAgency(){
+  const a=agencies.find(x=>x.id===editAgencyId);if(!a)return;
+  const g=id=>document.getElementById(id).value.trim();
+  if(!g('ea-name')||!g('ea-contact')){showNotif('Name and contact required','warning');return;}
+  a.name=g('ea-name');a.contact=g('ea-contact');a.phone=g('ea-phone');a.email=g('ea-email');
+  a.city=document.getElementById('ea-city').value;a.type=document.getElementById('ea-type').value;
+  closeEditAgency();renderAgencies(agencies);openAgencyPanel(editAgencyId);
+  showNotif('Agency details updated','success');
+}
+
+// ── INVOICES ──
+function openInvoices(id){
+  const a=agencies.find(x=>x.id===id);
+  document.getElementById('inv-sub').textContent=a.name+' · invoice history';
+  const base=(parseAmt(a.revenue)||120)*1000;
+  const months=['Jun 2026','May 2026','Apr 2026','Mar 2026','Feb 2026'];
+  const sts=['paid','paid','paid','pending','paid'];
+  document.getElementById('inv-tbody').innerHTML=months.map((m,k)=>{
+    const amt=Math.round(base*(0.9+k*0.03));
+    return `<tr>
+      <td style="font-weight:600;font-family:monospace">INV-${2026}${String(6-k).padStart(2,'0')}-${(a.id*7+k).toString().padStart(3,'0')}</td>
+      <td class="text-sm text-muted">${m}</td>
+      <td style="font-weight:600">₹${amt.toLocaleString('en-IN')}</td>
+      <td>${badge(sts[k])}</td>
+      <td><button class="btn btn-outline btn-xs" onclick="showNotif('Downloading invoice PDF','success')"><i data-lucide="download"></i> PDF</button></td>
+    </tr>`;}).join('');
+  document.getElementById('invoices-modal').classList.add('show');
+  document.body.style.overflow='hidden';IC();
+}
+function closeInvoices(){document.getElementById('invoices-modal').classList.remove('show');document.body.style.overflow='';}
 
 const DRIVER_DOCS=['Driving License','Aadhaar Card','PAN Card','Medical Certificate','Police Verification'];
 const DRIVER_EXP=['6 years','4 years','9 years','3 years','11 years','7 years','2 years','8 years'];
