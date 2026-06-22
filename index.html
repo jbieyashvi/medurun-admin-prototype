@@ -293,6 +293,38 @@ tr:hover td{background:#FAFAFA}
 .chk-icon.verified{background:#ECFDF5;color:var(--success)}
 .chk-icon.missing{background:#FEF2F2;color:var(--danger)}
 .chk-icon.review{background:#FFFBEB;color:var(--warning)}
+/* ── REVIEW DOC ROWS (clean, bordered, no fill) ── */
+.rev-doc{display:flex;align-items:center;gap:12px;border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:8px}
+.rev-doc-ic{width:32px;height:32px;border-radius:7px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;color:#64748B;flex-shrink:0}
+.rev-doc-ic svg{width:15px;height:15px}
+.rev-doc-name{font-size:13px;font-weight:600;color:var(--text)}
+.rev-doc-status{display:inline-flex;align-items:center;gap:5px;font-size:12px;margin-top:3px;font-weight:500}
+.rev-doc-status svg{width:13px;height:13px}
+.rev-doc-status.verified{color:#059669}
+.rev-doc-status.reupload{color:#B45309}
+.rev-doc-status.pending{color:#9CA3AF}
+.rev-doc-reason{font-size:11.5px;color:#9CA3AF;margin-top:3px}
+.rev-doc-acts{display:flex;gap:6px;margin-left:auto;flex-shrink:0}
+.btn-ghost{background:transparent;border:none;color:var(--muted);font-weight:500}
+.btn-ghost:hover{background:var(--bg);color:var(--text)}
+.btn-danger-soft{background:#fff;border:1px solid var(--border);color:#DC2626}
+.btn-danger-soft:hover{background:#FEF2F2;border-color:#FECACA}
+.btn:disabled{opacity:.5;cursor:not-allowed;pointer-events:none}
+/* ── DOC PREVIEW MODAL ── */
+.dp-preview{border:1px solid var(--border);border-radius:12px;background:#FAFBFC;height:220px;display:flex;align-items:center;justify-content:center;margin:14px 0 4px}
+.dp-preview-inner{text-align:center;color:#94A3B8}
+.dp-preview-inner svg{width:40px;height:40px;stroke-width:1.4}
+.dp-preview-name{font-size:13px;font-weight:600;color:#475569;margin-top:10px}
+.dp-preview-meta{font-size:11.5px;color:#9CA3AF;margin-top:2px}
+.radio-row{display:flex;align-items:center;gap:10px;padding:10px 0;font-size:13.5px;color:var(--text);cursor:pointer}
+.radio-row input{position:absolute;opacity:0}
+.radio-dot{width:18px;height:18px;border:1.5px solid #CBD5E1;border-radius:50%;flex-shrink:0;position:relative;transition:.12s}
+.radio-row input:checked+.radio-dot{border-color:var(--primary)}
+.radio-row input:checked+.radio-dot::after{content:'';position:absolute;inset:3px;border-radius:50%;background:var(--primary)}
+/* review status summary */
+.rev-summary{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin-bottom:12px}
+.rev-summary svg{width:14px;height:14px}
+.rev-gate-hint{font-size:11.5px;color:#9CA3AF;text-align:center;margin-top:2px}
 .notes-area{width:100%;min-height:72px;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit;color:var(--text);outline:none;resize:vertical}
 .notes-area:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,91,255,.1)}
 /* ── TIMELINE ── */
@@ -1169,6 +1201,41 @@ tr.row-clickable:hover .row-hint{opacity:1}
   </div>
 </div>
 
+<!-- MODAL: DOCUMENT PREVIEW & REVIEW -->
+<div class="modal-overlay" id="doc-preview-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head">
+      <div>
+        <div class="modal-head-title" id="dp-title">Document</div>
+        <div class="modal-head-sub" id="dp-sub">Review uploaded document</div>
+      </div>
+      <button class="modal-x" onclick="closeDocPreview()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="dp-preview">
+        <div class="dp-preview-inner">
+          <i data-lucide="file-text"></i>
+          <div class="dp-preview-name" id="dp-filename">document.pdf</div>
+          <div class="dp-preview-meta">PDF · 1 page · 2.4 MB</div>
+        </div>
+      </div>
+      <div class="form-sec" style="border-bottom:none;padding-bottom:0">
+        <div class="form-sec-title">Document Status</div>
+        <label class="radio-row"><input type="radio" name="dp-status" value="verified"><span class="radio-dot"></span><span>Verified</span></label>
+        <label class="radio-row"><input type="radio" name="dp-status" value="reupload" onchange="document.getElementById('dp-note-wrap').style.display='block'"><span class="radio-dot"></span><span>Needs Correction</span></label>
+        <div id="dp-note-wrap" style="margin-top:12px;display:none">
+          <label class="label" style="font-size:12px;color:#475569">Correction Note (optional)</label>
+          <textarea class="notes-area" id="dp-note" placeholder="Describe what needs to be corrected..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeDocPreview()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveDocReview()">Save Review</button>
+    </div>
+  </div>
+</div>
+
 <!-- NOTIFICATION -->
 <div class="notif" id="notif">
   <span id="notif-icon"><i data-lucide="circle-check"></i></span>
@@ -1404,71 +1471,149 @@ function onbBadge(ds){
 }
 
 // ── ONBOARDING REVIEW DRAWER ──
+// per-document review status — seeded once per app, then mutable via review modal
+const DOC_REASONS={'Ambulance RC':'Image not readable','NOC Certificate':'Expired document'};
+const docReviewState={};
+function getDocState(app){
+  if(!docReviewState[app.id]){
+    const s={};
+    ALL_DOCS.forEach(doc=>{
+      if(app.status==='flagged'&&DOC_REASONS[doc])s[doc]={st:'reupload',reason:DOC_REASONS[doc]};
+      else if(app.docs.includes(doc))s[doc]={st:'verified',reason:''};
+      else s[doc]={st:'pending',reason:''};
+    });
+    docReviewState[app.id]=s;
+  }
+  return docReviewState[app.id];
+}
+function onbPill(app){
+  const map={flagged:['Corrections Requested','review'],missing:['Under Review','review'],review:['Under Review','review'],pending:['Pending','pending']};
+  const [label,cls]=map[onbDisplayStatus(app)]||['Pending','pending'];
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+
+const DOC_ST_META={
+  verified:{label:'Verified',icon:'check'},
+  reupload:{label:'Needs Correction',icon:'alert-triangle'},
+  pending:{label:'Pending Review',icon:'clock'},
+};
+
+let currentReviewId=null;
 function openReviewDrawer(id){
+  currentReviewId=id;
+  getDocState(onboardingApps.find(a=>a.id===id)); // seed
+  renderReview(id);
+  document.getElementById('review-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+}
+
+function renderReview(id){
   const app=onboardingApps.find(a=>a.id===id);
-  const ds=onbDisplayStatus(app);
   const wd=waitDays(app.submitted);
-  const docStatus=name=>{
-    if(!app.docs.includes(name))return 'missing';
-    // flagged app: first doc needs review
-    if(app.status==='flagged'&&name===app.docs[0])return 'review';
-    return 'verified';
-  };
-  const stLabel={verified:'Verified',missing:'Missing',review:'Needs Review'};
-  const stIcon={verified:'<i data-lucide="check"></i>',missing:'<i data-lucide="x"></i>',review:'!'};
+  const state=getDocState(app);
+  const vals=Object.values(state);
+  const verifiedCount=vals.filter(d=>d.st==='verified').length;
+  const anyPending=vals.some(d=>d.st==='pending');
+  const anyReupload=vals.some(d=>d.st==='reupload');
+  const allVerified=verifiedCount===ALL_DOCS.length;
 
   document.getElementById('review-content').innerHTML=`
     <div class="drawer-head">
       <div class="drawer-avatar">${app.name.charAt(0)}</div>
       <div style="flex:1;min-width:0">
         <div class="dh-title">${app.name}</div>
-        <div class="text-sm text-muted">${app.city}</div>
+        <div class="text-sm text-muted">${app.city} · Submitted ${app.submitted}</div>
       </div>
-      ${onbBadge(ds)}
+      ${onbPill(app)}
     </div>
-    <div style="padding:0 22px 18px">
-      <div class="section-title" style="margin:6px 0 10px">Application Details</div>
-      <div class="stat-row"><span class="text-sm text-muted">Contact Person</span><span style="font-weight:600">${app.contact}</span></div>
-      <div class="stat-row"><span class="text-sm text-muted">Phone</span><span style="font-weight:600">${app.phone}</span></div>
-      <div class="stat-row"><span class="text-sm text-muted">City</span><span style="font-weight:600">${app.city}</span></div>
-      <div class="stat-row"><span class="text-sm text-muted">Submitted</span><span style="font-weight:600">${app.submitted}</span></div>
-      <div class="stat-row"><span class="text-sm text-muted">Waiting Time</span><span class="onb-wait ${wd>=10?'urgent':wd<=4?'fresh':''}">${wd} day${wd===1?'':'s'}</span></div>
+    <div style="padding:2px 22px 18px">
+      <div class="section-title">Application Details</div>
+      <div class="prof-grid">
+        <div class="prof-cell"><div class="k">Contact Person</div><div class="v">${app.contact}</div></div>
+        <div class="prof-cell"><div class="k">Phone</div><div class="v">${app.phone}</div></div>
+        <div class="prof-cell"><div class="k">City</div><div class="v">${app.city}</div></div>
+        <div class="prof-cell"><div class="k">Submitted Date</div><div class="v">${app.submitted}</div></div>
+        <div class="prof-cell" style="grid-column:1/-1"><div class="k">Waiting Time</div><div class="v">${wd} day${wd===1?'':'s'}</div></div>
+      </div>
 
-      <div class="section-title" style="margin:18px 0 6px">Documents Checklist</div>
+      <div class="section-title">Document Review</div>
+      <div class="rev-summary"><i data-lucide="${allVerified?'shield-check':'shield'}"></i> ${verifiedCount} of ${ALL_DOCS.length} documents verified</div>
       ${ALL_DOCS.map(doc=>{
-        const st=docStatus(doc);
-        return `<div class="chk-row">
-          <div class="chk-icon ${st}">${stIcon[st]}</div>
+        const d=state[doc];const m=DOC_ST_META[d.st];
+        return `<div class="rev-doc">
+          <div class="rev-doc-ic"><i data-lucide="file-text"></i></div>
           <div style="flex:1;min-width:0">
-            <div style="font-weight:600;font-size:13px">${doc}</div>
-            <div class="text-sm" style="color:${st==='verified'?'var(--success)':st==='missing'?'var(--danger)':'var(--warning)'}">${stLabel[st]}</div>
+            <div class="rev-doc-name">${doc}</div>
+            <div class="rev-doc-status ${d.st}"><i data-lucide="${m.icon}"></i> ${m.label}</div>
+            ${d.reason?`<div class="rev-doc-reason">Reason: ${d.reason}</div>`:''}
           </div>
-          ${st!=='missing'?`<button class="drawer-doc-act" title="View" onclick="showNotif('Opening ${doc}','success')"><i data-lucide="eye"></i></button>
-                <button class="drawer-doc-act" title="Download" onclick="showNotif('Downloading ${doc}','success')"><i data-lucide="download"></i></button>`
-              :`<button class="drawer-doc-act" title="Request" onclick="showNotif('Requested ${doc}','warning')"><i data-lucide="rotate-cw"></i></button>`}
+          <div class="rev-doc-acts">
+            <button class="drawer-doc-act" title="Review document" onclick="openDocPreview(${id},'${doc.replace(/'/g,"")}')"><i data-lucide="eye"></i></button>
+            <button class="drawer-doc-act" title="Download" onclick="showNotif('Downloading ${doc}','success')"><i data-lucide="download"></i></button>
+          </div>
         </div>`;}).join('')}
 
-      <div class="section-title" style="margin:18px 0 8px">Internal Review Notes</div>
-      <textarea class="notes-area" id="review-notes-${id}" placeholder="Add internal notes for the review team (not visible to agency)..."></textarea>
+      <div class="section-title">Internal Review Notes</div>
+      <textarea class="notes-area" id="review-notes-${id}" placeholder="Add notes for internal reviewers...">${app._notes||''}</textarea>
     </div>`;
 
+  const approveDisabled=!allVerified;
+  const hint=anyPending?'Review all documents before approving'
+           :anyReupload?'Resolve documents needing correction before approving':'';
   document.getElementById('review-foot').innerHTML=`
+    <button class="btn btn-primary" style="width:100%;justify-content:center" ${approveDisabled?'disabled':''} onclick="decideApp(${id},'approve')">Approve Agency</button>
+    ${hint?`<div class="rev-gate-hint">${hint}</div>`:''}
     <div style="display:flex;gap:8px">
-      <button class="btn btn-success btn-sm" style="flex:1;justify-content:center" onclick="decideApp(${id},'approve')">Approve</button>
-      <button class="btn btn-danger btn-sm" style="flex:1;justify-content:center" onclick="decideApp(${id},'reject')">Reject</button>
+      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" ${anyReupload?'':'disabled'} onclick="decideApp(${id},'request')">Request Corrections</button>
+      <button class="btn btn-danger-soft btn-sm" style="flex:1;justify-content:center" onclick="decideApp(${id},'reject')">Reject Application</button>
     </div>
-    <div style="display:flex;gap:8px">
-      <button class="btn btn-warning btn-sm" style="flex:1;justify-content:center" onclick="decideApp(${id},'request')">Request More Docs</button>
-      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="decideApp(${id},'flag')">Flag</button>
-    </div>`;
+    <button class="btn btn-ghost btn-sm" style="width:100%;justify-content:center" onclick="decideApp(${id},'flag')">Flag for Manual Review</button>`;
+  IC();
+}
 
-  document.getElementById('review-panel').classList.add('open');
-  document.getElementById('overlay').classList.add('show');
+// ── DOCUMENT PREVIEW & REVIEW MODAL ──
+let currentDoc=null;
+function openDocPreview(id,doc){
+  currentDoc={id,doc};
+  const state=getDocState(onboardingApps.find(a=>a.id===id));
+  const d=state[doc];
+  document.getElementById('dp-title').textContent=doc;
+  document.getElementById('dp-sub').textContent='Review uploaded document';
+  document.getElementById('dp-filename').textContent=doc.toLowerCase().replace(/[^a-z]+/g,'-')+'.pdf';
+  // preselect current status
+  document.querySelectorAll('input[name="dp-status"]').forEach(r=>r.checked=(r.value===d.st));
+  const noteWrap=document.getElementById('dp-note-wrap');
+  document.getElementById('dp-note').value=d.reason||'';
+  noteWrap.style.display=d.st==='reupload'?'block':'none';
+  document.getElementById('doc-preview-modal').classList.add('show');
+  document.body.style.overflow='hidden';
+  IC();
+}
+function closeDocPreview(){
+  document.getElementById('doc-preview-modal').classList.remove('show');
+  document.body.style.overflow='';
+}
+function saveDocReview(){
+  if(!currentDoc)return;
+  const sel=document.querySelector('input[name="dp-status"]:checked');
+  if(!sel){showNotif('Select a review status','warning');return;}
+  const note=document.getElementById('dp-note').value.trim();
+  const state=getDocState(onboardingApps.find(a=>a.id===currentDoc.id));
+  state[currentDoc.doc]={st:sel.value,reason:sel.value==='reupload'?(note||'Correction required'):''};
+  document.getElementById('doc-preview-modal').classList.remove('show');
+  document.body.style.overflow='';
+  renderReview(currentDoc.id);
+  showNotif('"'+currentDoc.doc+'" marked '+DOC_ST_META[sel.value].label,sel.value==='verified'?'success':'warning');
+  currentDoc=null;
 }
 
 function decideApp(id,action){
   const app=onboardingApps.find(a=>a.id===id);
+  const state=getDocState(app);
+  const notes=document.getElementById('review-notes-'+id);
+  if(notes)app._notes=notes.value;
   if(action==='approve'){
+    if(Object.values(state).some(d=>d.st!=='verified')){showNotif('All documents must be verified first','warning');return;}
     app.status='approved';
     renderOnboarding();closePanel();
     showNotif('"'+app.name+'" approved','success');
@@ -1479,17 +1624,21 @@ function decideApp(id,action){
     renderOnboarding();closePanel();
     showNotif('"'+app.name+'" rejected'+(reason?': '+reason:''),'danger');
   }else if(action==='request'){
-    const missing=ALL_DOCS.filter(d=>!app.docs.includes(d));
-    const which=prompt('Which documents are needed?',missing.join(', ')||'Specify documents');
-    if(which===null)return;
-    app.status='pending';
-    showNotif('Requested from "'+app.name+'": '+which,'warning');
+    // auto-generate correction request from documents marked Needs Correction
+    let needs=ALL_DOCS.filter(doc=>state[doc].st==='reupload').map(doc=>({doc,reason:state[doc].reason}));
+    if(!needs.length)needs=ALL_DOCS.filter(doc=>state[doc].st==='pending').map(doc=>({doc,reason:'Not reviewed / not submitted'}));
+    if(!needs.length){showNotif('No documents need correction','warning');return;}
+    const list=needs.map(d=>'• '+d.doc+' – '+(d.reason||'Re-upload required')).join('\n');
+    if(!confirm('Documents requiring attention:\n\n'+list+'\n\nAgency will be asked to re-upload only these documents.'))return;
+    app.status='flagged';
+    renderOnboarding();closePanel();
+    showNotif('Corrections requested from "'+app.name+'" ('+needs.length+' document'+(needs.length===1?'':'s')+')','warning');
   }else if(action==='flag'){
     const note=prompt('Internal flag note:');
     if(note===null)return;
     app.status='flagged';app.flagNote=note;
     renderOnboarding();closePanel();
-    showNotif('"'+app.name+'" flagged'+(note?': '+note:''),'warning');
+    showNotif('"'+app.name+'" flagged for manual review','warning');
   }
 }
 
