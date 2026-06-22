@@ -191,47 +191,51 @@ tr:hover td{background:#FAFAFA}
 .donut-legend-item{display:flex;align-items:center;gap:8px;font-size:12.5px}
 .donut-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 /* ── LOGIN ── */
-#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#FAFAFC;margin-left:0;margin-top:0;color:#111827;gap:72px;padding:48px;position:relative;overflow:hidden}
-/* subtle bg illustration */
-.login-bg{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.5}
-.login-bg svg{position:absolute}
-.login-bg .bg-cross-1{top:8%;right:6%;width:180px;height:180px;color:#635BFF;opacity:.04}
-.login-bg .bg-cross-2{bottom:10%;left:4%;width:120px;height:120px;color:#635BFF;opacity:.035}
-.login-bg .bg-pulse{bottom:14%;right:12%;width:340px;color:#635BFF;opacity:.05}
-.login-left{flex:1 1 0;display:flex;flex-direction:column;justify-content:center;max-width:540px;position:relative;z-index:1}
-.login-brand{display:flex;align-items:center;gap:10px;font-size:23px;font-weight:800;color:#111827;margin-bottom:40px;letter-spacing:-.5px}
-.login-headline{font-size:43px;font-weight:800;line-height:1.12;letter-spacing:-1.4px;color:#111827;margin-bottom:20px}
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#FAFAFC;margin-left:0;margin-top:0;color:#111827;gap:96px;padding:48px 64px;position:relative;overflow:hidden}
+/* subtle city/ambulance illustration bottom-left */
+.login-bg{position:absolute;left:0;bottom:0;z-index:0;pointer-events:none;width:620px;max-width:55vw;opacity:.5}
+.login-bg svg{width:100%;height:auto;display:block;color:#635BFF}
+.login-left{flex:0 1 540px;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1}
+.login-brand{display:flex;align-items:center;gap:11px;font-size:23px;font-weight:800;color:#111827;margin-bottom:48px;letter-spacing:-.5px}
+.login-headline{font-size:54px;font-weight:800;line-height:1.05;letter-spacing:-2px;color:#111827;margin-bottom:26px}
 .login-headline .accent{color:#635BFF}
-.login-desc{font-size:16px;line-height:1.7;color:#6B7280;max-width:420px;margin-bottom:40px}
-.login-stats{display:flex;align-items:center;background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:18px 8px;box-shadow:0 1px 3px rgba(17,24,39,.03);max-width:480px}
-.login-stat{flex:1;text-align:center;padding:0 16px;position:relative}
-.login-stat + .login-stat::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);height:34px;width:1px;background:#E5E7EB}
-.login-stat-value{font-size:24px;font-weight:800;color:#111827;letter-spacing:-.5px}
-.login-stat-label{font-size:12px;color:#6B7280;margin-top:3px}
-.login-right{flex:1 1 0;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
-.login-card{background:#fff;border-radius:20px;padding:44px;width:100%;max-width:580px;border:1px solid #E5E7EB;box-shadow:0 4px 24px rgba(17,24,39,.04),0 16px 56px rgba(17,24,39,.07)}
-.login-welcome{font-size:26px;font-weight:800;color:#111827;letter-spacing:-.6px;margin-bottom:6px}
-.login-welcome-sub{font-size:14px;color:#6B7280;margin-bottom:30px}
-.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px}
-.login-logo-icon{width:44px;height:44px;background:var(--primary);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.login-desc{font-size:16px;line-height:1.7;color:#6B7280;max-width:430px;margin-bottom:48px}
+.login-stats{display:flex;align-items:flex-start;border-top:1px solid #E5E7EB;padding-top:28px;max-width:520px}
+.login-stat{flex:1;padding:0 18px;position:relative}
+.login-stat:first-child{padding-left:0}
+.login-stat + .login-stat::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:1px;background:#E5E7EB}
+.login-stat-ic{width:38px;height:38px;border-radius:11px;background:#EEF2FF;color:#635BFF;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.login-stat-ic svg{width:17px;height:17px}
+.login-stat-value{font-size:24px;font-weight:800;color:#111827;letter-spacing:-.6px}
+.login-stat-label{font-size:12.5px;color:#6B7280;margin-top:3px}
+.login-right{flex:0 1 480px;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.login-card{background:#fff;border-radius:20px;padding:40px;width:100%;max-width:480px;border:1px solid #EEF0F3;box-shadow:0 1px 2px rgba(17,24,39,.03),0 18px 50px rgba(17,24,39,.06)}
+.login-welcome{font-size:26px;font-weight:800;color:#111827;letter-spacing:-.6px;text-align:center;margin-bottom:6px}
+.login-welcome-sub{font-size:14px;color:#6B7280;text-align:center;margin-bottom:32px}
+.login-card .label{font-size:13px;font-weight:600;color:#374151;margin-bottom:7px}
 .login-field{position:relative;display:flex;align-items:center}
-.login-field .field-icon{position:absolute;left:15px;font-size:15px;color:#9CA3AF;pointer-events:none}
-.login-input{width:100%;height:50px;padding:0 16px 0 42px;border:1px solid #E5E7EB;border-radius:11px;font-size:14.5px;color:#111827;background:#fff;outline:none;transition:.15s;font-family:inherit}
-.login-input:focus{border-color:#635BFF;box-shadow:0 0 0 3px rgba(99,91,255,.12)}
+.login-field .field-icon{position:absolute;left:14px;font-size:15px;color:#9CA3AF;pointer-events:none;display:flex}
+.login-field .field-icon svg{width:16px;height:16px}
+.login-eye{position:absolute;right:12px;background:none;border:none;color:#9CA3AF;cursor:pointer;display:flex;padding:4px}
+.login-eye:hover{color:#6B7280}
+.login-eye svg{width:16px;height:16px}
+.login-input{width:100%;height:46px;padding:0 16px 0 40px;border:1px solid #E5E7EB;border-radius:10px;font-size:14px;color:#111827;background:#fff;outline:none;transition:.15s;font-family:inherit}
+.login-input:focus{border-color:#635BFF;box-shadow:0 0 0 3px rgba(99,91,255,.1)}
 .login-input::placeholder{color:#9CA3AF}
 .login-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
-.login-check{display:flex;align-items:center;gap:7px;font-size:13.5px;color:#6B7280;cursor:pointer;user-select:none}
-.login-check input{width:16px;height:16px;accent-color:#635BFF;cursor:pointer}
-.login-link{font-size:13.5px;color:#635BFF;cursor:pointer;font-weight:600}
-.btn-login{width:100%;height:50px;justify-content:center;background:linear-gradient(135deg,#635BFF 0%,#5048E5 100%);color:#fff;border:none;border-radius:11px;font-size:15px;font-weight:600;cursor:pointer;transition:.15s;box-shadow:0 4px 12px rgba(99,91,255,.25)}
-.btn-login:hover{box-shadow:0 6px 18px rgba(99,91,255,.35);transform:translateY(-1px)}
-.login-secure{display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;color:#9CA3AF;margin-top:16px}
+.login-check{display:flex;align-items:center;gap:7px;font-size:13px;color:#6B7280;cursor:pointer;user-select:none}
+.login-check input{width:15px;height:15px;accent-color:#635BFF;cursor:pointer}
+.login-link{font-size:13px;color:#635BFF;cursor:pointer;font-weight:600}
+.btn-login{width:100%;height:48px;justify-content:center;background:#635BFF;color:#fff;border:none;border-radius:10px;font-size:14.5px;font-weight:600;cursor:pointer;transition:.15s}
+.btn-login:hover{background:#5048E5}
+.login-secure{display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;color:#9CA3AF;margin-top:18px}
+.login-secure svg{width:14px;height:14px}
 @media(max-width:980px){
-  #login-screen{flex-direction:column;gap:36px;padding:48px 32px;justify-content:flex-start}
-  .login-left{max-width:580px;width:100%;text-align:center;align-items:center}
-  .login-headline{font-size:34px}
-  .login-desc{margin-left:auto;margin-right:auto}
-  .login-right{width:100%}
+  #login-screen{flex-direction:column;gap:40px;padding:48px 28px;justify-content:flex-start}
+  .login-left{flex:none;max-width:520px;width:100%}
+  .login-headline{font-size:40px}
+  .login-right{flex:none;width:100%}
+  .login-bg{display:none}
 }
 /* ── OTP ── */
 .otp-inputs{display:flex;gap:10px;justify-content:center;margin:16px 0}
@@ -444,44 +448,68 @@ tr.row-clickable:hover .row-hint{opacity:1}
 <!-- LOGIN SCREEN -->
 <div id="login-screen" class="screen active" style="position:fixed;inset:0;z-index:500;margin:0">
   <div class="login-bg">
-    <svg class="bg-cross-1" viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M40 10h20v30h30v20H60v30H40V60H10V40h30z"/></svg>
-    <svg class="bg-cross-2" viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M40 10h20v30h30v20H60v30H40V60H10V40h30z"/></svg>
-    <svg class="bg-pulse" viewBox="0 0 340 80" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M0 40h70l18-30 26 60 22-50 16 30 14-10h158"/></svg>
+    <svg viewBox="0 0 620 220" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg">
+      <!-- skyline -->
+      <g opacity="0.16">
+        <rect x="250" y="120" width="34" height="90"/><rect x="258" y="130" width="6" height="6"/><rect x="270" y="130" width="6" height="6"/><rect x="258" y="146" width="6" height="6"/><rect x="270" y="146" width="6" height="6"/><rect x="258" y="162" width="6" height="6"/><rect x="270" y="162" width="6" height="6"/>
+        <rect x="292" y="90" width="40" height="120"/><rect x="300" y="102" width="7" height="7"/><rect x="316" y="102" width="7" height="7"/><rect x="300" y="120" width="7" height="7"/><rect x="316" y="120" width="7" height="7"/><rect x="300" y="138" width="7" height="7"/><rect x="316" y="138" width="7" height="7"/>
+        <rect x="340" y="140" width="30" height="70"/><rect x="346" y="150" width="6" height="6"/><rect x="358" y="150" width="6" height="6"/><rect x="346" y="166" width="6" height="6"/><rect x="358" y="166" width="6" height="6"/>
+        <rect x="378" y="105" width="36" height="105"/><rect x="386" y="116" width="6" height="6"/><rect x="400" y="116" width="6" height="6"/><rect x="386" y="134" width="6" height="6"/><rect x="400" y="134" width="6" height="6"/><rect x="386" y="152" width="6" height="6"/><rect x="400" y="152" width="6" height="6"/>
+        <rect x="422" y="150" width="28" height="60"/>
+        <rect x="200" y="150" width="44" height="60"/><rect x="208" y="160" width="7" height="7"/><rect x="226" y="160" width="7" height="7"/>
+      </g>
+      <!-- road -->
+      <path d="M30 210 L600 210" opacity="0.18"/>
+      <path d="M70 210 q120 -20 250 -16" opacity="0.12" stroke-dasharray="6 10"/>
+      <!-- ambulance -->
+      <g opacity="0.5">
+        <rect x="60" y="160" width="110" height="38" rx="6"/>
+        <path d="M170 172 h26 l20 18 v8 h-46 z"/>
+        <circle cx="92" cy="200" r="11"/><circle cx="186" cy="200" r="11"/>
+        <path d="M92 152 v-4 M78 168 h12 M84 162 v12" />
+      </g>
+      <!-- location pin -->
+      <g opacity="0.28"><path d="M300 120 a12 12 0 1 1 0.01 0 M300 132 v14"/></g>
+      <!-- clouds -->
+      <path d="M120 110 q8 -12 22 -6 q10 -10 22 0 q12 -2 10 8 h-58 q-6 -6 4 -2" opacity="0.1"/>
+      <path d="M460 96 q8 -12 22 -6 q10 -10 22 0 q12 -2 10 8 h-58 q-6 -6 4 -2" opacity="0.1"/>
+    </svg>
   </div>
   <div class="login-left">
     <div class="login-brand"><i data-lucide="ambulance"></i> Medurun</div>
     <div class="login-headline">Emergency Care,<br>Managed <span class="accent">Smarter.</span></div>
     <div class="login-desc">Unified super admin platform for ambulance agencies, drivers, dispatchers, and patients across all cities.</div>
     <div class="login-stats">
-      <div class="login-stat"><div class="login-stat-value">142</div><div class="login-stat-label">Active Agencies</div></div>
-      <div class="login-stat"><div class="login-stat-value">3,841</div><div class="login-stat-label">Verified Drivers</div></div>
-      <div class="login-stat"><div class="login-stat-value">₹2.4Cr</div><div class="login-stat-label">Monthly Revenue</div></div>
+      <div class="login-stat"><div class="login-stat-ic"><i data-lucide="building-2"></i></div><div class="login-stat-value">142</div><div class="login-stat-label">Active Agencies</div></div>
+      <div class="login-stat"><div class="login-stat-ic"><i data-lucide="users"></i></div><div class="login-stat-value">3,841</div><div class="login-stat-label">Verified Drivers</div></div>
+      <div class="login-stat"><div class="login-stat-ic"><i data-lucide="indian-rupee"></i></div><div class="login-stat-value">₹2.4Cr</div><div class="login-stat-label">Monthly Revenue</div></div>
     </div>
   </div>
   <div class="login-right">
     <div class="login-card">
       <div id="login-step-1">
         <div class="login-welcome">Welcome Back</div>
-        <div class="login-welcome-sub">Sign in to continue</div>
+        <div class="login-welcome-sub">Sign in to your super admin account</div>
         <div class="form-group">
           <label class="label">Email Address</label>
           <div class="login-field">
             <span class="field-icon"><i data-lucide="mail"></i></span>
-            <input class="login-input" type="email" placeholder="admin@medurun.com" value="admin@medurun.com">
+            <input class="login-input" type="email" placeholder="Enter your email" value="admin@medurun.com">
           </div>
         </div>
         <div class="form-group">
           <label class="label">Password</label>
           <div class="login-field">
             <span class="field-icon"><i data-lucide="lock"></i></span>
-            <input class="login-input" type="password" placeholder="••••••••" value="password123">
+            <input class="login-input" id="login-pwd" type="password" placeholder="Enter your password" value="password123">
+            <button class="login-eye" type="button" onclick="toggleLoginPwd(this)"><i data-lucide="eye"></i></button>
           </div>
         </div>
         <div class="login-row">
           <label class="login-check"><input type="checkbox" checked>Remember me</label>
           <span class="login-link">Forgot password?</span>
         </div>
-        <button class="btn-login" onclick="showOTP()">Continue →</button>
+        <button class="btn-login" onclick="showOTP()">Sign In</button>
         <div class="login-secure"><i data-lucide="shield-check"></i> Secure access with 2FA verification</div>
       </div>
       <div id="login-step-2" style="display:none">
@@ -2921,6 +2949,13 @@ function navTo(screen){
 }
 
 // ── LOGIN ──
+function toggleLoginPwd(btn){
+  const inp=document.getElementById('login-pwd');
+  const show=inp.type==='password';
+  inp.type=show?'text':'password';
+  btn.innerHTML='<i data-lucide="'+(show?'eye-off':'eye')+'"></i>';
+  IC();
+}
 function showOTP(){
   document.getElementById('login-step-1').style.display='none';
   document.getElementById('login-step-2').style.display='block';
