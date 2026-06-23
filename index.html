@@ -1394,13 +1394,13 @@ tr.row-clickable:hover .row-hint{opacity:1}
 <div class="modal-overlay" id="suspend-agency-modal">
   <div class="modal modal-narrow">
     <div class="modal-head">
-      <div><div class="modal-head-title">Suspend Agency</div><div class="modal-head-sub">Confirm suspension</div></div>
+      <div><div class="modal-head-title">Offboard Agency</div><div class="modal-head-sub">Confirm offboarding</div></div>
       <button class="modal-x" onclick="closeSuspendAgency()"><i data-lucide="x"></i></button>
     </div>
     <div class="modal-body">
       <div class="form-sec" style="border-bottom:none">
-        <p style="font-size:13.5px;color:#374151;line-height:1.6;margin-bottom:6px">You are about to suspend <b id="sa-name">this agency</b>.</p>
-        <p style="font-size:12.5px;color:#B45309;line-height:1.5;margin-bottom:16px">Suspended agencies will not be able to accept new rides.</p>
+        <p style="font-size:13.5px;color:#374151;line-height:1.6;margin-bottom:6px">You are about to offboard <b id="sa-name">this agency</b>.</p>
+        <p style="font-size:12.5px;color:#B45309;line-height:1.5;margin-bottom:16px">Offboarded agencies will not be able to accept new rides.</p>
         <div class="form-group"><label class="label">Reason *</label>
           <select class="input" id="sa-reason" onchange="saReasonChange()">
             <option value="">Select reason</option>
@@ -1415,7 +1415,7 @@ tr.row-clickable:hover .row-hint{opacity:1}
     </div>
     <div class="modal-foot">
       <button class="btn btn-outline btn-sm" onclick="closeSuspendAgency()">Cancel</button>
-      <button class="btn btn-danger-soft btn-sm" onclick="confirmSuspendAgency()">Suspend Agency</button>
+      <button class="btn btn-danger-soft btn-sm" onclick="confirmSuspendAgency()">Offboard Agency</button>
     </div>
   </div>
 </div>
@@ -1491,7 +1491,7 @@ tr.row-clickable:hover .row-hint{opacity:1}
 <div class="modal-overlay" id="suspend-driver-modal">
   <div class="modal modal-narrow">
     <div class="modal-head">
-      <div><div class="modal-head-title">Suspend Driver</div><div class="modal-head-sub">Suspending <span id="sd-name">driver</span></div></div>
+      <div><div class="modal-head-title">Offboard Driver</div><div class="modal-head-sub">Offboarding <span id="sd-name">driver</span></div></div>
       <button class="modal-x" onclick="closeSuspendDriver()"><i data-lucide="x"></i></button>
     </div>
     <div class="modal-body">
@@ -1510,7 +1510,7 @@ tr.row-clickable:hover .row-hint{opacity:1}
     </div>
     <div class="modal-foot">
       <button class="btn btn-outline btn-sm" onclick="closeSuspendDriver()">Cancel</button>
-      <button class="btn btn-danger-soft btn-sm" onclick="confirmSuspendDriver()">Suspend Driver</button>
+      <button class="btn btn-danger-soft btn-sm" onclick="confirmSuspendDriver()">Offboard Driver</button>
     </div>
   </div>
 </div>
@@ -2627,7 +2627,7 @@ function openDriverDetail(i){
     <div style="display:flex;gap:8px">
       ${suspended
         ?`<button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="reactivateDriver(${i})"><i data-lucide="circle-check"></i> Reactivate</button>`
-        :`<button class="btn btn-danger-soft btn-sm" style="flex:1;justify-content:center" onclick="openSuspendDriver(${i})"><i data-lucide="ban"></i> Suspend</button>`}
+        :`<button class="btn btn-danger-soft btn-sm" style="flex:1;justify-content:center" onclick="openSuspendDriver(${i})"><i data-lucide="ban"></i> Offboard</button>`}
       <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="openRideHistory(${i})"><i data-lucide="history"></i> Ride History</button>
     </div>`;
 
@@ -2681,7 +2681,7 @@ function confirmSuspendDriver(){
   if(reason==='Other'&&!document.getElementById('sd-notes').value.trim()){showNotif('Add notes for "Other"','warning');return;}
   driversData[suspendDriverIdx].status='inactive';
   closeSuspendDriver();renderDrivers();openDriverDetail(suspendDriverIdx);
-  showNotif('Driver suspended — '+reason,'warning');
+  showNotif('Driver offboarded — '+reason,'warning');
 }
 function reactivateDriver(i){
   driversData[i].status='active';
@@ -3104,7 +3104,7 @@ function openAgencyPanel(id){
     <div class="foot-label" style="color:#DC2626;margin-top:6px">Danger Zone</div>
     <div style="display:flex;gap:8px">
       ${a.status==='active'
-        ?`<button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="openSuspendAgency(${a.id})">Suspend</button>`
+        ?`<button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="openSuspendAgency(${a.id})">Offboard</button>`
         :`<button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="activateAgency(${a.id})">Activate</button>`}
       <button class="btn btn-danger-soft btn-sm" style="flex:1;justify-content:center" onclick="openRemoveAgency(${a.id})">Remove</button>
     </div>`;
@@ -3146,7 +3146,7 @@ function confirmSuspendAgency(){
   if(reason==='Other'&&!document.getElementById('sa-notes').value.trim()){showNotif('Add notes for "Other"','warning');return;}
   agencies.find(a=>a.id===suspendAgencyId).status='inactive';
   closeSuspendAgency();renderAgencies(agencies);openAgencyPanel(suspendAgencyId);
-  showNotif('Agency suspended — '+reason,'warning');
+  showNotif('Agency offboarded — '+reason,'warning');
 }
 
 // ── REMOVE AGENCY (type-to-confirm) ──
