@@ -1461,8 +1461,9 @@ tr.row-clickable:hover .row-hint{opacity:1}
   </div>
   <div class="card">
     <div class="filter-row">
-      <input class="filter-input" placeholder="Search agency...">
-      <select class="filter-input" id="payout-filter"><option>All Status</option><option>Pending</option><option>Paid</option><option>Failed</option></select>
+      <input class="filter-input" id="payout-search" placeholder="Search agency..." style="min-width:200px" oninput="renderPayouts()">
+      <select class="filter-input" id="payout-city" onchange="renderPayouts()"><option>All Cities</option><option>Mumbai</option><option>Delhi</option><option>Bangalore</option><option>Hyderabad</option><option>Pune</option><option>Ahmedabad</option><option>Chennai</option></select>
+      <select class="filter-input" id="payout-filter" onchange="renderPayouts()"><option>All Status</option><option>Pending</option><option>Processing</option><option>Paid</option><option>Failed</option></select>
     </div>
     <div class="table-wrap">
       <table>
@@ -4551,7 +4552,20 @@ function toggleBlockUser(i){
 // ── RENDER PAYOUTS ──
 function renderPayouts(){
   const tbody=document.getElementById('payouts-tbody');
-  tbody.innerHTML=payoutsData.map((p,i)=>`
+  const q=(document.getElementById('payout-search')?.value||'').toLowerCase().trim();
+  const fc=document.getElementById('payout-city')?.value||'All Cities';
+  const fs=document.getElementById('payout-filter')?.value||'All Status';
+  const list=payoutsData.map((p,i)=>({p,i})).filter(({p})=>{
+    const mq=!q||p.agency.toLowerCase().includes(q)||p.city.toLowerCase().includes(q);
+    const mc=fc==='All Cities'||p.city===fc;
+    const ms=fs==='All Status'||p.status===fs.toLowerCase();
+    return mq&&mc&&ms;
+  });
+  if(!list.length){
+    tbody.innerHTML=`<tr><td colspan="8"><div class="empty-state"><div class="empty-icon"><i data-lucide="search-x"></i></div><div class="empty-state-title">No matching payouts</div><div class="empty-state-sub">Try adjusting your filters.</div></div></td></tr>`;
+    IC();return;
+  }
+  tbody.innerHTML=list.map(({p,i})=>`
     <tr id="payout-row-${i}" class="row-clickable" onclick="openPayout(${i})">
       <td style="font-weight:600">${p.agency}</td>
       <td>${p.city}</td>
