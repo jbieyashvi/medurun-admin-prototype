@@ -271,8 +271,8 @@ tr:hover td{background:#FAFAFA}
 .stat-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #F1F5F9}
 .stat-row:last-child{border-bottom:none}
 /* ── NOTIFICATION ── */
-.notif{position:fixed;top:20px;right:20px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 18px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:999;font-size:13.5px;display:flex;align-items:center;gap:10px;transform:translateX(300px);transition:.3s;max-width:320px}
-.notif.show{transform:translateX(0)}
+.notif{position:fixed;top:20px;right:20px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 18px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:999;font-size:13.5px;display:flex;align-items:center;gap:10px;transform:translateX(calc(100% + 40px));opacity:0;visibility:hidden;transition:transform .3s ease,opacity .3s ease,visibility .3s;max-width:320px}
+.notif.show{transform:translateX(0);opacity:1;visibility:visible}
 .notif.success{border-left:4px solid var(--success)}
 .notif.warning{border-left:4px solid var(--warning)}
 .notif.danger{border-left:4px solid var(--danger)}
