@@ -171,6 +171,18 @@ tr:hover td{background:#FAFAFA}
 .danger-zone{border:1px solid #FECACA;background:#FEF2F2;border-radius:10px;padding:12px 14px}
 .danger-zone-title{font-size:11px;font-weight:700;color:#DC2626;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
 .foot-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:#9CA3AF;margin:4px 0 2px}
+/* header subtle text action */
+.hdr-action{display:inline-flex;align-items:center;gap:5px;background:none;border:none;color:#475569;font-size:13px;font-weight:500;cursor:pointer;padding:5px 8px;border-radius:7px;font-family:inherit}
+.hdr-action:hover{background:var(--bg);color:var(--primary)}
+.hdr-action svg{width:14px;height:14px}
+/* quick action list rows */
+.qa-list{display:flex;flex-direction:column;gap:6px}
+.qa-row{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:#fff;border:1px solid var(--border);border-radius:9px;padding:9px 12px;font-size:13px;font-weight:500;color:var(--text);cursor:pointer;font-family:inherit;transition:.12s}
+.qa-row:hover{background:var(--bg);border-color:#D8DCE3}
+.qa-row:hover .qa-chev{color:var(--primary);transform:translateX(2px)}
+.qa-ic{width:28px;height:28px;border-radius:7px;background:#F1F5F9;color:#475569;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.qa-ic svg{width:15px;height:15px}
+.qa-chev{width:15px;height:15px;color:#CBD5E1;margin-left:auto;transition:.12s}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:199;display:none}
 .overlay.show{display:block}
 /* ── DOC REVIEW CARDS ── */
@@ -299,17 +311,18 @@ tr:hover td{background:#FAFAFA}
 .chk-icon.missing{background:#FEF2F2;color:var(--danger)}
 .chk-icon.review{background:#FFFBEB;color:var(--warning)}
 /* ── REVIEW DOC ROWS (clean, bordered, no fill) ── */
-.rev-doc{display:flex;align-items:center;gap:12px;border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:8px}
-.rev-doc-ic{width:32px;height:32px;border-radius:7px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;color:#64748B;flex-shrink:0}
-.rev-doc-ic svg{width:15px;height:15px}
-.rev-doc-name{font-size:13px;font-weight:600;color:var(--text)}
-.rev-doc-status{display:inline-flex;align-items:center;gap:5px;font-size:12px;margin-top:3px;font-weight:500}
-.rev-doc-status svg{width:13px;height:13px}
-.rev-doc-status.verified{color:#059669}
-.rev-doc-status.reupload{color:#B45309}
-.rev-doc-status.pending{color:#9CA3AF}
-.rev-doc-reason{font-size:11.5px;color:#9CA3AF;margin-top:3px}
-.rev-doc-acts{display:flex;gap:6px;margin-left:auto;flex-shrink:0}
+.rev-doc{display:flex;align-items:center;gap:11px;border:1px solid var(--border);border-radius:9px;padding:7px 12px;margin-bottom:6px}
+.rev-doc-ic{width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;color:#64748B;flex-shrink:0}
+.rev-doc-ic svg{width:14px;height:14px}
+.rev-doc-name{flex:1;min-width:0;font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* compact single-line status chip */
+.status-chip{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:500;padding:2px 9px;border-radius:20px;flex-shrink:0}
+.status-chip svg{width:12px;height:12px}
+.status-chip.verified{background:#ECFDF5;color:#059669}
+.status-chip.reupload{background:#FFFBEB;color:#B45309}
+.status-chip.pending{background:#F1F5F9;color:#64748B}
+.rev-doc-acts{display:flex;gap:6px;margin-left:4px;flex-shrink:0}
+.rev-doc-acts .drawer-doc-act{width:26px;height:26px}
 .btn-ghost{background:transparent;border:none;color:var(--muted);font-weight:500}
 .btn-ghost:hover{background:var(--bg);color:var(--text)}
 .btn-danger-soft{background:#fff;border:1px solid var(--border);color:#DC2626}
@@ -335,6 +348,11 @@ tr:hover td{background:#FAFAFA}
 .docbtn{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:500;color:#475569;background:#fff;border:1px solid var(--border);border-radius:7px;padding:4px 9px;cursor:pointer;transition:.12s}
 .docbtn:hover{background:var(--bg);color:var(--text);border-color:#D8DCE3}
 .docbtn svg{width:12px;height:12px}
+/* ride history filter chips */
+.rh-filters{display:flex;gap:8px}
+.rh-chip{font-size:12.5px;font-weight:500;color:#475569;background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer;transition:.12s}
+.rh-chip:hover{background:var(--bg)}
+.rh-chip.active{background:var(--primary-light);border-color:#C7D2FE;color:var(--primary);font-weight:600}
 /* equipment chip (table) */
 .equip-chip{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:500}
 .equip-chip svg{width:13px;height:13px}
@@ -402,6 +420,13 @@ tr:hover td{background:#FAFAFA}
 .modal-overlay.show{display:flex}
 .modal{background:#fff;border-radius:16px;width:100%;max-width:560px;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border);box-shadow:0 16px 48px rgba(17,24,39,.12);animation:modalIn .2s ease}
 .modal.modal-narrow{max-width:480px}
+.modal.modal-wide{max-width:880px}
+.pager{display:flex;align-items:center;gap:4px}
+.pager-btn{min-width:30px;height:30px;padding:0 8px;border:1px solid var(--border);background:#fff;border-radius:7px;font-size:12.5px;font-weight:500;color:#475569;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.pager-btn:hover:not(:disabled){background:var(--bg)}
+.pager-btn.active{background:var(--primary-light);border-color:#C7D2FE;color:var(--primary);font-weight:600}
+.pager-btn:disabled{opacity:.4;cursor:not-allowed}
+.pager-btn svg{width:14px;height:14px}
 @keyframes modalIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
 .modal-head{flex-shrink:0;padding:20px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .modal-head-title{font-size:16px;font-weight:700;color:var(--text)}
@@ -1137,7 +1162,8 @@ tr.row-clickable:hover .row-hint{opacity:1}
 <!-- PANEL: AGENCY DETAIL -->
 <div class="panel" id="agency-panel">
   <div class="panel-header">
-    <div style="font-size:14px;font-weight:700">Agency Details</div>
+    <div style="font-size:14px;font-weight:700;flex:1">Agency Details</div>
+    <button class="hdr-action" onclick="openEditAgency(currentAgencyId)"><i data-lucide="pencil"></i> Edit</button>
     <button class="modal-x" onclick="closePanel()"><i data-lucide="x"></i></button>
   </div>
   <div class="panel-body">
@@ -1361,6 +1387,131 @@ tr.row-clickable:hover .row-hint{opacity:1}
           <tbody id="inv-tbody"></tbody>
         </table>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: SUSPEND AGENCY -->
+<div class="modal-overlay" id="suspend-agency-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head">
+      <div><div class="modal-head-title">Suspend Agency</div><div class="modal-head-sub">Confirm suspension</div></div>
+      <button class="modal-x" onclick="closeSuspendAgency()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-sec" style="border-bottom:none">
+        <p style="font-size:13.5px;color:#374151;line-height:1.6;margin-bottom:6px">You are about to suspend <b id="sa-name">this agency</b>.</p>
+        <p style="font-size:12.5px;color:#B45309;line-height:1.5;margin-bottom:16px">Suspended agencies will not be able to accept new rides.</p>
+        <div class="form-group"><label class="label">Reason *</label>
+          <select class="input" id="sa-reason" onchange="saReasonChange()">
+            <option value="">Select reason</option>
+            <option>Compliance issue</option><option>Expired documents</option><option>Low service quality</option><option>Payment dispute</option><option>Policy violation</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group" id="sa-notes-wrap" style="display:none">
+          <label class="label">Notes</label>
+          <textarea class="notes-area" id="sa-notes" placeholder="Describe the reason..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline btn-sm" onclick="closeSuspendAgency()">Cancel</button>
+      <button class="btn btn-danger-soft btn-sm" onclick="confirmSuspendAgency()">Suspend Agency</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: REMOVE AGENCY -->
+<div class="modal-overlay" id="remove-agency-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head">
+      <div><div class="modal-head-title">Remove Agency</div><div class="modal-head-sub">Destructive action</div></div>
+      <button class="modal-x" onclick="closeRemoveAgency()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-sec" style="border-bottom:none">
+        <p style="font-size:13.5px;color:#374151;line-height:1.6;margin-bottom:6px">This will remove <b id="ra-name">this agency</b> from the platform prototype data.</p>
+        <p style="font-size:12.5px;color:#DC2626;line-height:1.5;margin-bottom:16px">This action cannot be undone.</p>
+        <div class="form-group"><label class="label">Type <b style="color:#DC2626">REMOVE</b> to confirm</label>
+          <input class="input" id="ra-confirm" placeholder="REMOVE" oninput="raCheck()" autocomplete="off">
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline btn-sm" onclick="closeRemoveAgency()">Cancel</button>
+      <button class="btn btn-danger-soft btn-sm" id="ra-confirm-btn" disabled onclick="confirmRemoveAgency()">Remove Agency</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: RIDE HISTORY -->
+<div class="modal-overlay" id="ride-history-modal">
+  <div class="modal modal-wide">
+    <div class="modal-head">
+      <div>
+        <div class="modal-head-title">Ride History</div>
+        <div class="modal-head-sub" id="rh-sub">Driver · Agency</div>
+      </div>
+      <button class="modal-x" onclick="closeRideHistory()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body" id="ride-history-content"></div>
+    <div class="modal-foot" id="ride-history-foot" style="justify-content:space-between"></div>
+  </div>
+</div>
+
+<!-- MODAL: EDIT DRIVER -->
+<div class="modal-overlay" id="edit-driver-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head">
+      <div><div class="modal-head-title">Edit Driver</div><div class="modal-head-sub">Update driver information</div></div>
+      <button class="modal-x" onclick="closeEditDriver()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-sec" style="border-bottom:none">
+        <div class="form-group"><label class="label">Full Name</label><input class="input" id="ed-name"></div>
+        <div class="form-grid">
+          <div class="form-group"><label class="label">Phone</label><input class="input" id="ed-phone" maxlength="10"></div>
+          <div class="form-group"><label class="label">Email</label><input class="input" id="ed-email"></div>
+          <div class="form-group"><label class="label">Agency</label><input class="input" id="ed-agency"></div>
+          <div class="form-group"><label class="label">City</label>
+            <select class="input" id="ed-city"><option>Mumbai</option><option>Delhi</option><option>Bangalore</option><option>Hyderabad</option><option>Chennai</option><option>Pune</option><option>Ahmedabad</option></select>
+          </div>
+          <div class="form-group"><label class="label">License Number</label><input class="input" id="ed-license"></div>
+          <div class="form-group"><label class="label">Experience</label><input class="input" id="ed-exp"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline btn-sm" onclick="closeEditDriver()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="saveEditDriver()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: SUSPEND DRIVER -->
+<div class="modal-overlay" id="suspend-driver-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head">
+      <div><div class="modal-head-title">Suspend Driver</div><div class="modal-head-sub">Suspending <span id="sd-name">driver</span></div></div>
+      <button class="modal-x" onclick="closeSuspendDriver()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-sec" style="border-bottom:none">
+        <div class="form-group"><label class="label">Reason *</label>
+          <select class="input" id="sd-reason" onchange="sdReasonChange()">
+            <option value="">Select reason</option>
+            <option>Expired License</option><option>Missing Documents</option><option>Policy Violation</option><option>Poor Performance</option><option>Fraudulent Activity</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group" id="sd-notes-wrap" style="display:none">
+          <label class="label">Notes</label>
+          <textarea class="notes-area" id="sd-notes" placeholder="Describe the reason..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline btn-sm" onclick="closeSuspendDriver()">Cancel</button>
+      <button class="btn btn-danger-soft btn-sm" onclick="confirmSuspendDriver()">Suspend Driver</button>
     </div>
   </div>
 </div>
@@ -1691,6 +1842,7 @@ const DOC_ST_META={
   reupload:{label:'Needs Correction',icon:'alert-triangle'},
   pending:{label:'Pending Review',icon:'clock'},
 };
+function statusChip(st){const m=DOC_ST_META[st]||DOC_ST_META.pending;return `<span class="status-chip ${st}"><i data-lucide="${m.icon}"></i> ${m.label}</span>`;}
 
 let currentReviewId=null;
 function openReviewDrawer(id){
@@ -1733,14 +1885,11 @@ function renderReview(id){
       <div class="section-title">Document Review</div>
       <div class="rev-summary"><i data-lucide="${allVerified?'shield-check':'shield'}"></i> ${verifiedCount} of ${ALL_DOCS.length} documents verified</div>
       ${ALL_DOCS.map(doc=>{
-        const d=state[doc];const m=DOC_ST_META[d.st];
+        const d=state[doc];
         return `<div class="rev-doc">
           <div class="rev-doc-ic"><i data-lucide="file-text"></i></div>
-          <div style="flex:1;min-width:0">
-            <div class="rev-doc-name">${doc}</div>
-            <div class="rev-doc-status ${d.st}"><i data-lucide="${m.icon}"></i> ${m.label}</div>
-            ${d.reason?`<div class="rev-doc-reason">Reason: ${d.reason}</div>`:''}
-          </div>
+          <div class="rev-doc-name" title="${d.reason?'Reason: '+d.reason:doc}">${doc}</div>
+          ${statusChip(d.st)}
           <div class="rev-doc-acts">
             <button class="drawer-doc-act" title="Review document" onclick="openDocPreview(${id},'${doc.replace(/'/g,"")}')"><i data-lucide="eye"></i></button>
             <button class="drawer-doc-act" title="Download" onclick="showNotif('Downloading ${doc}','success')"><i data-lucide="download"></i></button>
@@ -1945,14 +2094,11 @@ function renderDriverReview(i){
       <div class="section-title">Document Review</div>
       <div class="rev-summary"><i data-lucide="${allVerified?'shield-check':'shield'}"></i> ${verified} of ${DQ_DOCS.length} documents verified</div>
       ${DQ_DOCS.map(doc=>{
-        const s=state[doc];const m=DQ_ST_META[s.st];const dq=doc.replace(/'/g,"");
+        const s=state[doc];const dq=doc.replace(/'/g,"");
         return `<div class="rev-doc">
           <div class="rev-doc-ic"><i data-lucide="file-text"></i></div>
-          <div style="flex:1;min-width:0">
-            <div class="rev-doc-name">${doc}</div>
-            <div class="rev-doc-status ${s.st}"><i data-lucide="${m.icon}"></i> ${m.label}</div>
-            ${s.reason?`<div class="rev-doc-reason">Reason: ${s.reason}</div>`:''}
-          </div>
+          <div class="rev-doc-name" title="${s.reason?'Reason: '+s.reason:doc}">${doc}</div>
+          ${statusChip(s.st)}
           <div class="rev-doc-acts">
             <button class="drawer-doc-act" title="Review document" onclick="openDqDocPreview(${i},'${dq}')"><i data-lucide="eye"></i></button>
             <button class="drawer-doc-act" title="Download" onclick="showNotif('Document downloaded','success')"><i data-lucide="download"></i></button>
@@ -2078,13 +2224,11 @@ function renderAmbulanceReview(i){
         <div class="text-sm" style="color:${ok?'var(--success)':'var(--danger)'}">${ok?'Present':'Missing'}</div></div>
     </div>`;
   const docRow=name=>{
-    const s=dstate[name];const m=DOC_ST_META[s.st];const dq=name.replace(/'/g,"");
+    const s=dstate[name];const dq=name.replace(/'/g,"");
     return `<div class="rev-doc">
       <div class="rev-doc-ic"><i data-lucide="file-text"></i></div>
-      <div style="flex:1;min-width:0"><div class="rev-doc-name">${name}</div>
-        <div class="rev-doc-status ${s.st}"><i data-lucide="${m.icon}"></i> ${m.label}</div>
-        ${s.reason?`<div class="rev-doc-reason">Reason: ${s.reason}</div>`:''}
-      </div>
+      <div class="rev-doc-name" title="${s.reason?'Reason: '+s.reason:name}">${name}</div>
+      ${statusChip(s.st)}
       <div class="rev-doc-acts">
         <button class="drawer-doc-act" title="Review document" onclick="openAmbDocPreview(${i},'${dq}')"><i data-lucide="eye"></i></button>
         <button class="drawer-doc-act" title="Download" onclick="showNotif('Document downloaded','success')"><i data-lucide="download"></i></button>
@@ -2478,11 +2622,14 @@ function openDriverDetail(i){
       </div>
     </div>`;
 
+  const suspended=d.status!=='active';
   document.getElementById('driver-detail-foot').innerHTML=`
-    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="showNotif('Edit mode','success')"><i data-lucide="pencil"></i> Edit Driver</button>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="openEditDriver(${i})"><i data-lucide="pencil"></i> Edit Driver</button>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-warning btn-sm" style="flex:1;justify-content:center" onclick="suspendDriver(${i})"><i data-lucide="ban"></i> Suspend</button>
-      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="showNotif('Loading ride history','success')"><i data-lucide="history"></i> Ride History</button>
+      ${suspended
+        ?`<button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="reactivateDriver(${i})"><i data-lucide="circle-check"></i> Reactivate</button>`
+        :`<button class="btn btn-danger-soft btn-sm" style="flex:1;justify-content:center" onclick="openSuspendDriver(${i})"><i data-lucide="ban"></i> Suspend</button>`}
+      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="openRideHistory(${i})"><i data-lucide="history"></i> Ride History</button>
     </div>`;
 
   document.getElementById('driver-add-panel').classList.remove('open');
@@ -2491,10 +2638,131 @@ function openDriverDetail(i){
   IC();
 }
 
-function suspendDriver(i){
-  driversData[i].status=driversData[i].status==='active'?'inactive':'active';
+// ── EDIT DRIVER ──
+let editDriverIdx=null;
+function openEditDriver(i){
+  editDriverIdx=i;const d=driversData[i];
+  document.getElementById('ed-name').value=d.name;
+  document.getElementById('ed-phone').value=d.phone;
+  document.getElementById('ed-email').value=d.email||'';
+  document.getElementById('ed-agency').value=d.agency;
+  document.getElementById('ed-city').value=d.city;
+  document.getElementById('ed-license').value=d.license;
+  document.getElementById('ed-exp').value=d.experience||DRIVER_EXP[i%DRIVER_EXP.length];
+  document.getElementById('edit-driver-modal').classList.add('show');
+  document.body.style.overflow='hidden';IC();
+}
+function closeEditDriver(){document.getElementById('edit-driver-modal').classList.remove('show');document.body.style.overflow='';}
+function saveEditDriver(){
+  const d=driversData[editDriverIdx];if(!d)return;
+  const g=id=>document.getElementById(id).value.trim();
+  if(!g('ed-name')||!g('ed-phone')){showNotif('Name and phone required','warning');return;}
+  d.name=g('ed-name');d.phone=g('ed-phone');d.email=g('ed-email');d.agency=g('ed-agency');
+  d.city=document.getElementById('ed-city').value;d.license=g('ed-license');d.experience=g('ed-exp');
+  closeEditDriver();renderDrivers();openDriverDetail(editDriverIdx);
+  showNotif('Driver details updated','success');
+}
+
+// ── SUSPEND DRIVER (confirmation) ──
+let suspendDriverIdx=null;
+function openSuspendDriver(i){
+  suspendDriverIdx=i;
+  document.getElementById('sd-name').textContent=driversData[i].name;
+  document.getElementById('sd-reason').value='';
+  document.getElementById('sd-notes-wrap').style.display='none';
+  document.getElementById('sd-notes').value='';
+  document.getElementById('suspend-driver-modal').classList.add('show');
+  document.body.style.overflow='hidden';IC();
+}
+function closeSuspendDriver(){document.getElementById('suspend-driver-modal').classList.remove('show');document.body.style.overflow='';}
+function sdReasonChange(){document.getElementById('sd-notes-wrap').style.display=document.getElementById('sd-reason').value==='Other'?'block':'none';}
+function confirmSuspendDriver(){
+  const reason=document.getElementById('sd-reason').value;
+  if(!reason){showNotif('Select a reason','warning');return;}
+  if(reason==='Other'&&!document.getElementById('sd-notes').value.trim()){showNotif('Add notes for "Other"','warning');return;}
+  driversData[suspendDriverIdx].status='inactive';
+  closeSuspendDriver();renderDrivers();openDriverDetail(suspendDriverIdx);
+  showNotif('Driver suspended — '+reason,'warning');
+}
+function reactivateDriver(i){
+  driversData[i].status='active';
   renderDrivers();openDriverDetail(i);
-  showNotif('Driver '+(driversData[i].status==='inactive'?'suspended':'reactivated'),'warning');
+  showNotif('Driver reactivated','success');
+}
+
+// ── RIDE HISTORY MODAL (overlays driver detail drawer) ──
+const RH_AREAS=['Andheri','Bandra','Powai','Dadar','Colaba','Thane','Worli','Vashi','Borivali','Chembur'];
+const RH_PAGE_SIZE=8;
+let rideHistIdx=null,rideHistRange='30',rideHistPage=1;
+function openRideHistory(i){
+  rideHistIdx=i;rideHistRange='30';rideHistPage=1;
+  document.getElementById('ride-history-modal').classList.add('show');
+  document.body.style.overflow='hidden';
+  renderRideHistory();
+}
+function closeRideHistory(){
+  document.getElementById('ride-history-modal').classList.remove('show');
+  document.body.style.overflow=''; // driver detail drawer remains open behind
+}
+function rideHistFilter(r){rideHistRange=r;rideHistPage=1;renderRideHistory();}
+function rideHistGoPage(p){rideHistPage=p;renderRideHistory();}
+function rideHistRows(d){
+  const fares=[1840,2260,980,3120,1450,2670,1290,2090,760,3340];
+  const days={'7':7,'30':22,'all':40};
+  const count=Math.min(days[rideHistRange],Math.max(3,d.rides));
+  const out=[];
+  for(let k=0;k<count;k++){
+    const day=22-Math.floor(k*(rideHistRange==='7'?1:rideHistRange==='30'?1.3:1.8));
+    const dd=day>0?day:(day+30);const mon=day>0?'Jun':'May';
+    const st=k%9===4?'cancelled':'completed';
+    const fare=st==='cancelled'?0:fares[k%fares.length];
+    out.push({date:String(dd).padStart(2,'0')+' '+mon+' 2026',id:'RID-'+(rideHistIdx*131+k*7+1000),
+      pickup:RH_AREAS[k%RH_AREAS.length],drop:RH_AREAS[(k+3)%RH_AREAS.length],fare,st});
+  }
+  return out;
+}
+function renderRideHistory(){
+  const d=driversData[rideHistIdx];
+  const total=d.rides,completed=Math.round(total*0.94),cancelled=total-completed;
+  const earnings='₹'+(total*1850).toLocaleString('en-IN');
+  document.getElementById('rh-sub').textContent=d.name+' · '+d.agency;
+  const all=rideHistRows(d);
+  const pages=Math.max(1,Math.ceil(all.length/RH_PAGE_SIZE));
+  if(rideHistPage>pages)rideHistPage=pages;
+  const start=(rideHistPage-1)*RH_PAGE_SIZE;
+  const pageRows=all.slice(start,start+RH_PAGE_SIZE);
+  document.getElementById('ride-history-content').innerHTML=`
+    <div class="drawer-metrics" style="margin:4px 0 0;border-radius:12px;border:1px solid var(--border)">
+      <div class="drawer-metric"><div class="drawer-metric-val">${total}</div><div class="drawer-metric-label">Total Rides</div></div>
+      <div class="drawer-metric"><div class="drawer-metric-val">${completed}</div><div class="drawer-metric-label">Completed</div></div>
+      <div class="drawer-metric"><div class="drawer-metric-val">${cancelled}</div><div class="drawer-metric-label">Cancelled</div></div>
+      <div class="drawer-metric"><div class="drawer-metric-val">${earnings}</div><div class="drawer-metric-label">Total Earnings</div></div>
+    </div>
+    <div class="rh-filters" style="margin-top:16px">
+      ${[['7','Last 7 Days'],['30','Last 30 Days'],['all','All Time']].map(r=>`<button class="rh-chip ${rideHistRange===r[0]?'active':''}" onclick="rideHistFilter('${r[0]}')">${r[1]}</button>`).join('')}
+    </div>
+    <div class="table-wrap" style="margin-top:14px">
+      <table style="font-size:12.5px">
+        <thead><tr><th>Date</th><th>Ride ID</th><th>Pickup</th><th>Drop</th><th>Fare</th><th>Status</th></tr></thead>
+        <tbody>${pageRows.map(r=>`<tr>
+          <td class="text-sm text-muted">${r.date}</td>
+          <td style="font-family:monospace;font-size:12px">${r.id}</td>
+          <td>${r.pickup}</td>
+          <td>${r.drop}</td>
+          <td style="font-weight:600">${r.fare?'₹'+r.fare.toLocaleString('en-IN'):'—'}</td>
+          <td><span class="badge ${r.st==='completed'?'verified':'rejected'}">${r.st==='completed'?'Completed':'Cancelled'}</span></td>
+        </tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+  // footer pagination
+  document.getElementById('ride-history-foot').innerHTML=`
+    <div class="text-sm text-muted">Showing ${all.length?start+1:0}–${Math.min(start+RH_PAGE_SIZE,all.length)} of ${all.length}</div>
+    <div class="pager">
+      <button class="pager-btn" ${rideHistPage<=1?'disabled':''} onclick="rideHistGoPage(${rideHistPage-1})"><i data-lucide="chevron-left"></i></button>
+      ${Array.from({length:pages}).map((_,k)=>`<button class="pager-btn ${rideHistPage===k+1?'active':''}" onclick="rideHistGoPage(${k+1})">${k+1}</button>`).join('')}
+      <button class="pager-btn" ${rideHistPage>=pages?'disabled':''} onclick="rideHistGoPage(${rideHistPage+1})"><i data-lucide="chevron-right"></i></button>
+    </div>`;
+  IC();
 }
 
 // ── RENDER USERS ──
@@ -2730,8 +2998,10 @@ function saveDraftAgency(){
 }
 
 // ── PANELS ──
+let currentAgencyId=null;
 function openAgencyPanel(id){
   const a=agencies.find(x=>x.id===id);
+  currentAgencyId=id;
   const docs=['Registration Certificate','GST Certificate','Ambulance RC','NOC Certificate','Director ID'];
   const sampleDrivers=driversData.slice(0,Math.min(4,Math.max(1,Math.round(a.drivers/12)||3)));
   const sampleAmb=ambulanceQueue.map(x=>x.type);
@@ -2781,15 +3051,15 @@ function openAgencyPanel(id){
     <div class="drawer-tabpane" data-pane="documents">
       ${docs.map((doc,di)=>{
         const ok=a.status==='active'||di<3;
-        return `<div class="drawer-doc">
-          <div class="drawer-doc-icon"><i data-lucide="file-text"></i></div>
-          <div style="flex:1;min-width:0">
-            <div style="font-weight:600;font-size:13px">${doc}</div>
-            <div style="margin-top:3px">${ok?'<span class="badge verified">verified</span>':'<span class="badge pending">awaiting</span>'}</div>
-          </div>
+        return `<div class="rev-doc">
+          <div class="rev-doc-ic"><i data-lucide="file-text"></i></div>
+          <div class="rev-doc-name">${doc}</div>
+          ${statusChip(ok?'verified':'pending')}
+          <div class="rev-doc-acts">
           ${ok?`<button class="drawer-doc-act" title="View" onclick="openDocView('${doc.replace(/'/g,"")}')"><i data-lucide="eye"></i></button>
                 <button class="drawer-doc-act" title="Download" onclick="showNotif('Downloading ${doc}','success')"><i data-lucide="download"></i></button>`
               :`<button class="drawer-doc-act" title="Request" onclick="showNotif('Requested ${doc}','warning')"><i data-lucide="rotate-cw"></i></button>`}
+          </div>
         </div>`;}).join('')}
     </div>
 
@@ -2825,17 +3095,19 @@ function openAgencyPanel(id){
       </div>
     </div>`;
 
-  // footer actions — hierarchy
+  // footer actions — quick actions (list) + separated danger zone
   document.getElementById('panel-agency-foot').innerHTML=`
-    <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center" onclick="openEditAgency(${a.id})">Edit Agency</button>
     <div class="foot-label">Quick Actions</div>
-    <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center" onclick="openInvoices(${a.id})"><i data-lucide="file-text"></i> View Invoices</button>
-    <div class="foot-label" style="color:#DC2626">Danger Zone</div>
+    <div class="qa-list">
+      <button class="qa-row" onclick="openInvoices(${a.id})"><span class="qa-ic"><i data-lucide="file-text"></i></span>View Invoices<i data-lucide="chevron-right" class="qa-chev"></i></button>
+      <button class="qa-row" onclick="showNotif('Loading ride history for ${a.name.replace(/'/g,"")}','success')"><span class="qa-ic"><i data-lucide="ambulance"></i></span>View Rides<i data-lucide="chevron-right" class="qa-chev"></i></button>
+    </div>
+    <div class="foot-label" style="color:#DC2626;margin-top:6px">Danger Zone</div>
     <div style="display:flex;gap:8px">
       ${a.status==='active'
-        ?`<button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="suspendAgency(${a.id})">Suspend Agency</button>`
-        :`<button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="activateAgency(${a.id})">Activate Agency</button>`}
-      <button class="btn btn-danger-soft btn-sm" style="flex:1;justify-content:center" onclick="removeAgency(${a.id})">Remove Agency</button>
+        ?`<button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="openSuspendAgency(${a.id})">Suspend</button>`
+        :`<button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="activateAgency(${a.id})">Activate</button>`}
+      <button class="btn btn-danger-soft btn-sm" style="flex:1;justify-content:center" onclick="openRemoveAgency(${a.id})">Remove</button>
     </div>`;
 
   document.getElementById('agency-panel').classList.add('open');
@@ -2856,17 +3128,46 @@ function activateAgency(id){
   renderAgencies(agencies);openAgencyPanel(id);
   showNotif('Agency activated','success');
 }
-function suspendAgency(id){
-  agencies.find(a=>a.id===id).status='inactive';
-  renderAgencies(agencies);openAgencyPanel(id);
-  showNotif('Agency suspended','warning');
+// ── SUSPEND AGENCY (confirmation) ──
+let suspendAgencyId=null;
+function openSuspendAgency(id){
+  suspendAgencyId=id;
+  document.getElementById('sa-name').textContent=agencies.find(a=>a.id===id).name;
+  document.getElementById('sa-reason').value='';
+  document.getElementById('sa-notes-wrap').style.display='none';
+  document.getElementById('sa-notes').value='';
+  document.getElementById('suspend-agency-modal').classList.add('show');
+  document.body.style.overflow='hidden';IC();
 }
-function removeAgency(id){
-  const a=agencies.find(x=>x.id===id);
-  if(!confirm('Remove "'+a.name+'"? This cannot be undone.'))return;
-  const idx=agencies.indexOf(a);agencies.splice(idx,1);
-  renderAgencies(agencies);closePanel();
-  showNotif('Agency removed','danger');
+function closeSuspendAgency(){document.getElementById('suspend-agency-modal').classList.remove('show');document.body.style.overflow='';}
+function saReasonChange(){document.getElementById('sa-notes-wrap').style.display=document.getElementById('sa-reason').value==='Other'?'block':'none';}
+function confirmSuspendAgency(){
+  const reason=document.getElementById('sa-reason').value;
+  if(!reason){showNotif('Select a reason','warning');return;}
+  if(reason==='Other'&&!document.getElementById('sa-notes').value.trim()){showNotif('Add notes for "Other"','warning');return;}
+  agencies.find(a=>a.id===suspendAgencyId).status='inactive';
+  closeSuspendAgency();renderAgencies(agencies);openAgencyPanel(suspendAgencyId);
+  showNotif('Agency suspended — '+reason,'warning');
+}
+
+// ── REMOVE AGENCY (type-to-confirm) ──
+let removeAgencyId=null;
+function openRemoveAgency(id){
+  removeAgencyId=id;
+  document.getElementById('ra-name').textContent=agencies.find(a=>a.id===id).name;
+  document.getElementById('ra-confirm').value='';
+  document.getElementById('ra-confirm-btn').disabled=true;
+  document.getElementById('remove-agency-modal').classList.add('show');
+  document.body.style.overflow='hidden';IC();
+}
+function closeRemoveAgency(){document.getElementById('remove-agency-modal').classList.remove('show');document.body.style.overflow='';}
+function raCheck(){document.getElementById('ra-confirm-btn').disabled=document.getElementById('ra-confirm').value.trim().toUpperCase()!=='REMOVE';}
+function confirmRemoveAgency(){
+  if(document.getElementById('ra-confirm').value.trim().toUpperCase()!=='REMOVE')return;
+  const a=agencies.find(x=>x.id===removeAgencyId);
+  agencies.splice(agencies.indexOf(a),1);
+  closeRemoveAgency();renderAgencies(agencies);closePanel();
+  showNotif('"'+a.name+'" removed from platform','danger');
 }
 
 // ── DOCUMENT VIEW (preview only) ──
