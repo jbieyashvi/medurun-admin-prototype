@@ -353,6 +353,152 @@ tr:hover td{background:#FAFAFA}
 .rh-chip{font-size:12.5px;font-weight:500;color:#475569;background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer;transition:.12s}
 .rh-chip:hover{background:var(--bg)}
 .rh-chip.active{background:var(--primary-light);border-color:#C7D2FE;color:var(--primary);font-weight:600}
+/* ── GPS TRACKING ── */
+.gps-layout{display:grid;grid-template-columns:1fr 380px;gap:18px;align-items:start}
+.gps-map-card{overflow:hidden}
+.gps-map{position:relative;height:560px;border-radius:14px;overflow:hidden}
+.gps-map-bg{position:absolute;inset:0;width:100%;height:100%}
+.gps-marker{position:absolute;transform:translate(-50%,-50%);cursor:pointer;z-index:2}
+.gps-pin{width:16px;height:16px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 1px 4px rgba(17,24,39,.25)}
+.gps-marker:hover .gps-pin{transform:scale(1.2)}
+.gps-marker.sel .gps-pin{box-shadow:0 0 0 4px rgba(99,91,255,.25),0 1px 4px rgba(17,24,39,.25)}
+.gps-pin.available{background:#10B981}
+.gps-pin.onride{background:#635BFF}
+.gps-pin.offline{background:#94A3B8}
+.gps-pin.sos{background:#EF4444}
+.gps-marker.sos .gps-pin{animation:sosPulse 1.4s ease infinite}
+@keyframes sosPulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.35)}50%{box-shadow:0 0 0 7px rgba(239,68,68,0)}}
+.gps-legend{position:absolute;left:14px;bottom:14px;background:#fff;border:1px solid var(--border);border-radius:9px;padding:8px 12px;display:flex;gap:14px;font-size:11.5px;color:#475569;box-shadow:var(--shadow-sm)}
+.gps-legend span{display:inline-flex;align-items:center;gap:6px}
+.gps-dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.gps-dot.available{background:#10B981}.gps-dot.onride{background:#635BFF}.gps-dot.offline{background:#94A3B8}.gps-dot.sos{background:#EF4444}
+.gps-list-card{max-height:632px;display:flex;flex-direction:column}
+.gps-list{overflow-y:auto;padding:8px 8px 8px;margin-top:10px;border-top:1px solid var(--border)}
+.gps-row{display:flex;align-items:center;gap:11px;padding:11px 10px;border-radius:9px;cursor:pointer;transition:.12s}
+.gps-row:hover{background:var(--bg)}
+.gps-row.sel{background:var(--primary-light)}
+.gps-row-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.gps-row-dot.available{background:#10B981}.gps-row-dot.onride{background:#635BFF}.gps-row-dot.offline{background:#94A3B8}.gps-row-dot.sos{background:#EF4444}
+.gps-row-main{flex:1;min-width:0}
+.gps-row-reg{font-size:13px;font-weight:600;font-family:monospace}
+.gps-row-sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gps-row-meta{text-align:right;flex-shrink:0}
+.gps-status-text{font-size:11.5px;font-weight:600}
+.gps-status-text.available{color:#059669}.gps-status-text.onride{color:#635BFF}.gps-status-text.offline{color:#94A3B8}.gps-status-text.sos{color:#DC2626}
+.gps-row-time{font-size:11px;color:#9CA3AF;margin-top:2px}
+@media(max-width:980px){.gps-layout{grid-template-columns:1fr}.gps-list-card{max-height:none}}
+/* live ops dashboard card */
+.live-ops{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px 18px;box-shadow:var(--shadow-sm);margin-bottom:20px;cursor:pointer;transition:.12s}
+.live-ops:hover{border-color:#D8DCE3;box-shadow:var(--shadow)}
+.live-ops-ic{width:38px;height:38px;border-radius:10px;background:#F1F5F9;color:#475569;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.live-ops-ic svg{width:18px;height:18px}
+.live-ops-stat{display:flex;flex-direction:column}
+.live-ops-stat b{font-size:16px;font-weight:700;letter-spacing:-.3px}
+.live-ops-stat span{font-size:11.5px;color:var(--muted)}
+.live-ops-div{width:1px;height:30px;background:var(--border)}
+.live-ops-link{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:var(--primary)}
+.live-ops-link svg{width:15px;height:15px}
+/* status banner (revenue / payout drawers) */
+.st-banner{display:flex;gap:11px;border-radius:11px;padding:13px 15px;margin:4px 0 4px}
+.st-banner-ic{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.st-banner-ic svg{width:16px;height:16px}
+.st-banner-title{font-size:13.5px;font-weight:700}
+.st-banner-msg{font-size:12.5px;line-height:1.5;margin-top:2px}
+.st-banner.green{background:#ECFDF5;border:1px solid #A7F3D0}.st-banner.green .st-banner-ic{background:#D1FAE5;color:#059669}.st-banner.green .st-banner-title{color:#047857}.st-banner.green .st-banner-msg{color:#047857}
+.st-banner.blue{background:#EFF6FF;border:1px solid #BFDBFE}.st-banner.blue .st-banner-ic{background:#DBEAFE;color:#2563EB}.st-banner.blue .st-banner-title{color:#1D4ED8}.st-banner.blue .st-banner-msg{color:#1E40AF}
+.st-banner.yellow{background:#FEFCE8;border:1px solid #FDE68A}.st-banner.yellow .st-banner-ic{background:#FEF9C3;color:#A16207}.st-banner.yellow .st-banner-title{color:#A16207}.st-banner.yellow .st-banner-msg{color:#854D0E}
+.st-banner.red{background:#FEF2F2;border:1px solid #FECACA}.st-banner.red .st-banner-ic{background:#FEE2E2;color:#DC2626}.st-banner.red .st-banner-title{color:#B91C1C}.st-banner.red .st-banner-msg{color:#B91C1C}
+/* clickable pending reason row + required action */
+.reason-row{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid #FDE68A;background:#FFFBEB;border-radius:10px;padding:11px 13px;cursor:pointer;transition:.12s}
+.reason-row:hover{background:#FEF3C7}
+.reason-row>i{width:16px;height:16px;color:#B45309;flex-shrink:0}
+.required-action{display:flex;gap:9px;margin-top:10px;font-size:12.5px}
+.required-action>i{width:15px;height:15px;color:#94A3B8;flex-shrink:0;margin-top:1px}
+.ra-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#9CA3AF}
+.ra-msg{color:#374151;line-height:1.5;margin-top:2px}
+th.rev-sort{cursor:pointer;user-select:none;white-space:nowrap}
+th.rev-sort svg{width:12px;height:12px;vertical-align:-2px;color:#CBD5E1}
+th.rev-sort:hover{color:var(--text)}
+th.rev-sort:hover svg{color:#94A3B8}
+/* revenue drawer — clear section dividers + spacing */
+.rev-drawer-body .section-title{margin:20px 0 10px;padding-top:18px;border-top:1px solid var(--border)}
+.rev-drawer-body>.section-title:first-child{margin-top:6px;padding-top:0;border-top:none}
+.rev-drawer-body .stat-row{padding:8px 0}
+/* ── DOCUMENT CENTER ── */
+.doc-strip{display:flex;align-items:center;flex-wrap:wrap;gap:14px;background:#FAFBFC;border:1px solid var(--border);border-radius:10px;padding:10px 16px;margin-bottom:12px}
+.doc-strip-item{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted)}
+.doc-strip-item svg{width:14px;height:14px;color:#94A3B8}
+.doc-strip-item b{font-size:13.5px;font-weight:700;color:var(--text)}
+.doc-strip-sep{width:1px;height:16px;background:var(--border)}
+.doc-alert-strip{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:18px}
+.doc-pill{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:500;color:#475569;background:#fff;border:1px solid var(--border);border-radius:20px;padding:6px 13px;cursor:pointer;transition:.12s;font-family:inherit}
+.doc-pill:hover{background:var(--bg);border-color:#D8DCE3}
+.doc-pill b{font-weight:700;background:#F1F5F9;color:#475569;border-radius:20px;padding:0 7px;font-size:11.5px}
+.doc-pill svg{width:14px;height:14px}
+.doc-pill.red{color:#B91C1C}.doc-pill.red svg{color:#EF4444}.doc-pill.red b{background:#FEE2E2;color:#B91C1C}
+.doc-pill.orange{color:#B45309}.doc-pill.orange svg{color:#F59E0B}.doc-pill.orange b{background:#FEF3C7;color:#B45309}
+.doc-pill.yellow{color:#A16207}.doc-pill.yellow svg{color:#EAB308}.doc-pill.yellow b{background:#FEF9C3;color:#A16207}
+.doc-pill.purple{color:#7C3AED}.doc-pill.purple svg{color:#8B5CF6}.doc-pill.purple b{background:#EDE9FE;color:#7C3AED}
+/* document status pill */
+.docst{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:20px}
+.docst::before{content:'';width:6px;height:6px;border-radius:50%}
+.docst.verified{color:#059669;background:#ECFDF5}.docst.verified::before{background:#10B981}
+.docst.expiring{color:#B45309;background:#FFFBEB}.docst.expiring::before{background:#F59E0B}
+.docst.expired{color:#DC2626;background:#FEF2F2}.docst.expired::before{background:#EF4444}
+.docst.pending{color:#A16207;background:#FEFCE8}.docst.pending::before{background:#EAB308}
+.docst.reupload{color:#7C3AED;background:#F5F3FF}.docst.reupload::before{background:#8B5CF6}
+@media(max-width:1100px){.doc-summary{grid-template-columns:repeat(2,1fr)}}
+/* employee permissions — summary + module cards */
+.perm-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:4px 0 6px}
+.perm-sum-cell{border:1px solid var(--border);border-radius:10px;padding:11px 8px;text-align:center}
+.perm-sum-val{font-size:19px;font-weight:700;letter-spacing:-.5px;line-height:1}
+.perm-sum-label{font-size:10.5px;color:var(--muted);margin-top:4px}
+.mod-card{display:flex;align-items:center;gap:11px;border:1px solid var(--border);border-radius:9px;padding:10px 13px;margin-bottom:7px}
+.mod-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.mod-name{flex:1;min-width:0;font-size:13px;font-weight:600;color:var(--text)}
+.mod-dot.full,.access-badge.full{--ac:#10B981}
+.mod-dot.manage,.access-badge.manage{--ac:#635BFF}
+.mod-dot.view,.access-badge.view{--ac:#F59E0B}
+.mod-dot.none,.access-badge.none{--ac:#94A3B8}
+.mod-dot{background:var(--ac)}
+.access-badge{font-size:11px;font-weight:600;padding:2px 10px;border-radius:20px;flex-shrink:0;color:var(--ac);background:color-mix(in srgb,var(--ac) 12%,#fff)}
+.perm-name{font-size:13px;font-weight:600;color:var(--text)}
+/* permission edit modal */
+.perm-edit-row{padding:13px 0;border-bottom:1px solid #F1F5F9}
+.perm-edit-row:last-child{border-bottom:none}
+.perm-edit-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.perm-checks{display:flex;flex-wrap:wrap;gap:7px}
+.perm-check{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:#475569;cursor:pointer;user-select:none;border:1px solid var(--border);border-radius:8px;padding:4px 9px;transition:.12s}
+.perm-check:hover{border-color:#C7D2FE}
+.perm-check.on{background:var(--primary-light);border-color:#C7D2FE;color:var(--primary)}
+.perm-check-box{width:14px;height:14px;border:1.5px solid #CBD5E1;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff}
+.perm-check-box svg{width:11px;height:11px;opacity:0}
+.perm-check.on .perm-check-box{background:var(--primary);border-color:var(--primary)}
+.perm-check.on .perm-check-box svg{opacity:1}
+/* credential cards (success modal) */
+.cred-card{border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:10px;background:#FAFBFC}
+.cred-k{font-size:11px;color:#9CA3AF;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.cred-v{font-size:15px;font-weight:700;color:var(--text);letter-spacing:.5px}
+/* ticket comments + activity log */
+.tk-comment{border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:8px}
+.tk-comment-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:5px}
+.tk-comment-name{font-size:13px;font-weight:600;color:var(--text)}
+.tk-comment-role{font-size:11px;color:var(--primary);background:var(--primary-light);padding:1px 7px;border-radius:20px;font-weight:600}
+.tk-comment-time{font-size:11px;color:#9CA3AF;margin-left:auto}
+.tk-comment-body{font-size:12.5px;line-height:1.55;color:#374151}
+.tk-log{display:flex;align-items:flex-start;gap:11px;padding:9px 0;border-bottom:1px solid #F1F5F9}
+.tk-log:last-child{border-bottom:none}
+.tk-log-ic{width:28px;height:28px;border-radius:7px;background:#F1F5F9;color:#475569;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tk-log-ic svg{width:14px;height:14px}
+.tk-log-text{font-size:12.5px;font-weight:500;color:var(--text)}
+.tk-log-time{font-size:11px;color:#9CA3AF;margin-top:1px}
+/* ticket priority chip */
+.prio{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600}
+.prio::before{content:'';width:7px;height:7px;border-radius:50%}
+.prio.urgent{color:#DC2626}.prio.urgent::before{background:#DC2626}
+.prio.high{color:#B45309}.prio.high::before{background:#F59E0B}
+.prio.medium{color:#475569}.prio.medium::before{background:#94A3B8}
+.prio.low{color:#94A3B8}.prio.low::before{background:#CBD5E1}
 /* equipment chip (table) */
 .equip-chip{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:500}
 .equip-chip svg{width:13px;height:13px}
@@ -586,12 +732,16 @@ tr.row-clickable:hover .row-hint{opacity:1}
     <div class="sb-item" onclick="navigate('onboarding',this)"><span class="icon"><i data-lucide="clipboard-check"></i></span>Onboarding Review<span class="badge">7</span></div>
     <div class="sb-item" onclick="navigate('drivers-q',this)"><span class="icon"><i data-lucide="user-check"></i></span>Driver Verification<span class="badge">12</span></div>
     <div class="sb-item" onclick="navigate('ambulance-q',this)"><span class="icon"><i data-lucide="ambulance"></i></span>Ambulance Queue<span class="badge">5</span></div>
+    <div class="sb-item" onclick="navigate('gps-tracking',this)"><span class="icon"><i data-lucide="map-pin"></i></span>GPS Tracking</div>
+    <div class="sb-item" onclick="navigate('tickets',this)"><span class="icon"><i data-lucide="life-buoy"></i></span>Tickets &amp; Queries<span class="badge">9</span></div>
+    <div class="sb-item" onclick="navigate('documents',this)"><span class="icon"><i data-lucide="folder-check"></i></span>Document Center</div>
     <div class="sb-section">Finance</div>
     <div class="sb-item" onclick="navigate('revenue',this)"><span class="icon"><i data-lucide="indian-rupee"></i></span>Revenue & Commission</div>
     <div class="sb-item" onclick="navigate('payouts',this)"><span class="icon"><i data-lucide="credit-card"></i></span>Payout Management</div>
     <div class="sb-section">People</div>
     <div class="sb-item" onclick="navigate('drivers',this)"><span class="icon"><i data-lucide="car"></i></span>Driver Overview</div>
     <div class="sb-item" onclick="navigate('users',this)"><span class="icon"><i data-lucide="users"></i></span>Users / Customers</div>
+    <div class="sb-item" onclick="navigate('employees',this)"><span class="icon"><i data-lucide="user-cog"></i></span>Employee Management</div>
     <div class="sb-section">Insights</div>
     <div class="sb-item" onclick="navigate('analytics',this)"><span class="icon"><i data-lucide="line-chart"></i></span>Platform Analytics</div>
     <div class="sb-section">System</div>
@@ -648,6 +798,15 @@ tr.row-clickable:hover .row-hint{opacity:1}
       <div class="kpi-val">24</div>
       <div class="kpi-meta down">Needs attention</div>
     </div>
+  </div>
+
+  <!-- live operations -->
+  <div class="live-ops" onclick="gpsFromDashboard()">
+    <div class="live-ops-ic"><i data-lucide="map-pin"></i></div>
+    <div class="live-ops-stat"><b>87</b><span>Online Ambulances</span></div>
+    <div class="live-ops-div"></div>
+    <div class="live-ops-stat"><b>24</b><span>On Ride</span></div>
+    <div class="live-ops-link">View GPS Tracking <i data-lucide="arrow-right"></i></div>
   </div>
 
   <!-- pending actions + recent activity -->
@@ -833,46 +992,204 @@ tr.row-clickable:hover .row-hint{opacity:1}
   </div>
 </div>
 
+<!-- ── SCREEN: GPS TRACKING ── -->
+<div class="screen" id="screen-gps-tracking">
+  <div class="section-header">
+    <div><div style="font-size:22px;font-weight:800">GPS Tracking</div><div style="font-size:13px;color:var(--muted);margin-top:2px">Live location of online ambulances and drivers</div></div>
+  </div>
+  <div class="onb-summary">
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="ambulance"></i></div><div><div class="onb-stat-val" id="gps-sum-online">0</div><div class="onb-stat-label">Online Ambulances</div></div></div>
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="navigation"></i></div><div><div class="onb-stat-val" id="gps-sum-onride">0</div><div class="onb-stat-label">On Ride</div></div></div>
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="circle-check"></i></div><div><div class="onb-stat-val" id="gps-sum-available">0</div><div class="onb-stat-label">Available</div></div></div>
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="wifi-off"></i></div><div><div class="onb-stat-val" id="gps-sum-offline">0</div><div class="onb-stat-label">Offline / No Signal</div></div></div>
+  </div>
+  <div class="gps-layout">
+    <!-- MAP -->
+    <div class="card gps-map-card" style="padding:0">
+      <div class="gps-map" id="gps-map">
+        <svg class="gps-map-bg" viewBox="0 0 800 560" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="560" fill="#EEF1F5"/>
+          <g stroke="#DBE0E7" stroke-width="14" fill="none" stroke-linecap="round">
+            <path d="M-20 120 H820"/><path d="M-20 300 H820"/><path d="M-20 460 H820"/>
+            <path d="M160 -20 V580"/><path d="M400 -20 V580"/><path d="M620 -20 V580"/>
+          </g>
+          <g stroke="#E4E8EE" stroke-width="6" fill="none">
+            <path d="M-20 210 H820"/><path d="M-20 380 H820"/><path d="M270 -20 V580"/><path d="M520 -20 V580"/><path d="M700 -20 V580"/>
+          </g>
+          <g fill="#E6EAF0">
+            <rect x="40" y="150" width="90" height="120" rx="4"/><rect x="200" y="150" width="150" height="120" rx="4"/>
+            <rect x="440" y="150" width="140" height="120" rx="4"/><rect x="660" y="150" width="110" height="120" rx="4"/>
+            <rect x="40" y="330" width="90" height="100" rx="4"/><rect x="200" y="330" width="150" height="100" rx="4"/>
+            <rect x="440" y="330" width="140" height="100" rx="4"/><rect x="660" y="330" width="110" height="100" rx="4"/>
+          </g>
+          <g fill="#E0F0E4"><rect x="200" y="490" width="150" height="60" rx="6"/><circle cx="120" cy="500" r="34"/></g>
+        </svg>
+        <div id="gps-markers"></div>
+        <div class="gps-legend">
+          <span><i class="gps-dot available"></i>Available</span>
+          <span><i class="gps-dot onride"></i>On Ride</span>
+          <span><i class="gps-dot offline"></i>Offline</span>
+          <span><i class="gps-dot sos"></i>SOS / Issue</span>
+        </div>
+      </div>
+    </div>
+    <!-- VEHICLE LIST -->
+    <div class="card gps-list-card" style="padding:0">
+      <div style="padding:14px 14px 0">
+        <input class="filter-input" id="gps-search" placeholder="Search ambulance, driver..." style="width:100%" oninput="renderGpsList()">
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <select class="filter-input" id="gps-status" style="flex:1" onchange="renderGpsList()">
+            <option>All Status</option><option>Available</option><option>On Ride</option><option>Offline</option><option>SOS / Issue</option>
+          </select>
+          <select class="filter-input" id="gps-city" style="flex:1" onchange="renderGpsList()">
+            <option>All Cities</option><option>Mumbai</option><option>Delhi</option><option>Bangalore</option><option>Pune</option><option>Hyderabad</option>
+          </select>
+        </div>
+      </div>
+      <div class="gps-list" id="gps-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: TICKETS ── -->
+<div class="screen" id="screen-tickets">
+  <div class="section-header">
+    <div><div style="font-size:22px;font-weight:800">Tickets &amp; Queries</div><div style="font-size:13px;color:var(--muted);margin-top:2px">Support tickets raised by customers and agencies</div></div>
+  </div>
+  <div class="onb-summary">
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="inbox"></i></div><div><div class="onb-stat-val" id="tk-sum-open">0</div><div class="onb-stat-label">Open Tickets</div></div></div>
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="search"></i></div><div><div class="onb-stat-val" id="tk-sum-review">0</div><div class="onb-stat-label">Under Review</div></div></div>
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="loader"></i></div><div><div class="onb-stat-val" id="tk-sum-progress">0</div><div class="onb-stat-label">In Progress</div></div></div>
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="circle-check"></i></div><div><div class="onb-stat-val" id="tk-sum-resolved">0</div><div class="onb-stat-label">Resolved Today</div></div></div>
+  </div>
+  <div class="card" style="padding:0">
+    <div class="filter-row" style="padding:14px 16px 0">
+      <input class="filter-input" id="tk-search" placeholder="Search tickets, users..." style="min-width:240px" oninput="renderTickets()">
+      <select class="filter-input" id="tk-status" onchange="renderTickets()">
+        <option>All Status</option><option>Open</option><option>Under Review</option><option>In Progress</option><option>Resolved</option>
+      </select>
+      <select class="filter-input" id="tk-priority" onchange="renderTickets()">
+        <option>All Priority</option><option>Urgent</option><option>High</option><option>Medium</option><option>Low</option>
+      </select>
+      <button class="btn btn-outline btn-sm" style="margin-left:auto" onclick="showNotif('Exporting tickets to CSV','success')"><i data-lucide="download"></i> Export CSV</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Ticket ID</th><th>User</th><th>Category</th><th>Priority</th><th>Status</th><th>Assigned Department</th><th>Created</th></tr></thead>
+        <tbody id="tickets-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: DOCUMENT CENTER ── -->
+<div class="screen" id="screen-documents">
+  <div class="section-header">
+    <div><div style="font-size:22px;font-weight:800">Document Center</div><div style="font-size:13px;color:var(--muted);margin-top:2px;max-width:640px">Track document verification, expiry dates, compliance status, and pending actions across agencies, ambulances, and drivers.</div></div>
+  </div>
+  <div class="doc-strip">
+    <span class="doc-strip-item"><i data-lucide="files"></i> Documents <b id="doc-sum-total">0</b></span>
+    <span class="doc-strip-sep"></span>
+    <span class="doc-strip-item">Pending Verification <b id="doc-sum-pending">0</b></span>
+    <span class="doc-strip-sep"></span>
+    <span class="doc-strip-item">Expiring in 7 Days <b id="doc-sum-7">0</b></span>
+    <span class="doc-strip-sep"></span>
+    <span class="doc-strip-item">Expired <b id="doc-sum-expired">0</b></span>
+    <span class="doc-strip-sep"></span>
+    <span class="doc-strip-item">Re-upload Requested <b id="doc-sum-reupload">0</b></span>
+  </div>
+  <div class="card" style="padding:0">
+    <div class="filter-row" style="padding:14px 16px 0">
+      <input class="filter-input" id="doc-search" placeholder="Search document..." style="min-width:200px" oninput="renderDocs()">
+      <select class="filter-input" id="doc-type" onchange="renderDocs()"><option>All Documents</option><option>Agency Documents</option><option>Driver Documents</option><option>Ambulance Documents</option></select>
+      <select class="filter-input" id="doc-status" onchange="renderDocs()"><option>All Status</option><option>Verified</option><option>Pending</option><option>Expired</option><option>Expiring Soon</option><option>Re-upload Requested</option></select>
+      <select class="filter-input" id="doc-city" onchange="renderDocs()"><option>All Cities</option><option>Mumbai</option><option>Delhi</option><option>Bangalore</option><option>Pune</option><option>Hyderabad</option><option>Chennai</option></select>
+      <select class="filter-input" id="doc-agency" onchange="renderDocs()"><option>All Agencies</option><option>LifeLine Ambulance</option><option>Metro Medic</option><option>RapidCare</option><option>Swift Ambulance</option><option>Falcon Medical</option><option>CarePlus</option></select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Document</th><th>Owner Type</th><th>Owner</th><th>Document Number</th><th>Expiry Date</th><th>Status</th><th>Last Updated</th><th></th></tr></thead>
+        <tbody id="documents-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: EMPLOYEE MANAGEMENT ── -->
+<div class="screen" id="screen-employees">
+  <div class="section-header">
+    <div><div style="font-size:22px;font-weight:800">Employee Management</div><div style="font-size:13px;color:var(--muted);margin-top:2px">Manage internal staff, roles, and dashboard access.</div></div>
+    <button class="btn btn-primary" onclick="openAddEmployee()">+ Add Employee</button>
+  </div>
+  <div class="onb-summary">
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="users"></i></div><div><div class="onb-stat-val" id="emp-sum-total">0</div><div class="onb-stat-label">Total Employees</div></div></div>
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="circle-dot"></i></div><div><div class="onb-stat-val" id="emp-sum-online">0</div><div class="onb-stat-label">Online Now</div></div></div>
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="shield"></i></div><div><div class="onb-stat-val" id="emp-sum-roles">0</div><div class="onb-stat-label">Active Roles</div></div></div>
+    <div class="onb-stat"><div class="onb-stat-icon"><i data-lucide="mail"></i></div><div><div class="onb-stat-val" id="emp-sum-invites">0</div><div class="onb-stat-label">Pending Invites</div></div></div>
+  </div>
+  <div class="card" style="padding:0">
+    <div class="filter-row" style="padding:14px 16px 0">
+      <input class="filter-input" id="emp-search" placeholder="Search employee..." style="min-width:220px" oninput="renderEmployees()">
+      <select class="filter-input" id="emp-role" onchange="renderEmployees()"><option>All Roles</option><option>Super Admin</option><option>Operations</option><option>Finance</option><option>Customer Support</option><option>Marketing</option><option>Custom Role</option></select>
+      <select class="filter-input" id="emp-dept" onchange="renderEmployees()"><option>All Departments</option><option>Administration</option><option>Operations</option><option>Finance</option><option>Customer Support</option><option>Marketing</option></select>
+      <select class="filter-input" id="emp-status" onchange="renderEmployees()"><option>All Status</option><option>Online</option><option>Offline</option><option>Suspended</option></select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Employee</th><th>Employee ID</th><th>Role</th><th>Department</th><th>Status</th><th>Last Active</th><th>Created By</th><th></th></tr></thead>
+        <tbody id="employees-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <!-- ── SCREEN: REVENUE ── -->
 <div class="screen" id="screen-revenue">
   <div class="section-header">
-    <div><div style="font-size:22px;font-weight:800">Revenue & Commission</div><div style="font-size:13px;color:var(--muted);margin-top:2px">June 2026</div></div>
+    <div><div style="font-size:22px;font-weight:800">Revenue & Commission</div><div style="font-size:13px;color:var(--muted);margin-top:2px" id="rev-period-label">Monthly · June 2026</div></div>
     <div class="flex gap-8">
-      <select class="filter-input"><option>June 2026</option><option>May 2026</option><option>April 2026</option></select>
-      <button class="btn btn-outline btn-sm">Export</button>
+      <div class="rh-filters" id="rev-period">
+        <button class="rh-chip active" onclick="setRevPeriod('monthly')">Monthly</button>
+        <button class="rh-chip" onclick="setRevPeriod('quarterly')">Quarterly</button>
+        <button class="rh-chip" onclick="setRevPeriod('yearly')">Yearly</button>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="showNotif('Exporting revenue report','success')"><i data-lucide="download"></i> Export</button>
     </div>
   </div>
   <div class="metric-grid" style="grid-template-columns:repeat(4,1fr)">
-    <div class="metric-card green"><div class="metric-icon green"><i data-lucide="indian-rupee"></i></div><div class="metric-label">Total Revenue</div><div class="metric-value">₹2.41Cr</div><div class="metric-change up">↑ 18% MoM</div></div>
-    <div class="metric-card blue" id="rev-kpi-commission" style="cursor:pointer" onclick="revenueFilter('commission')"><div class="metric-icon blue"><i data-lucide="credit-card"></i></div><div class="metric-label">Platform Commission</div><div class="metric-value">₹36.15L</div><div class="metric-change up">↑ 15% · sort ↓</div></div>
-    <div class="metric-card purple" id="rev-kpi-payouts" style="cursor:pointer" onclick="revenueFilter('settled')"><div class="metric-icon purple"><i data-lucide="landmark"></i></div><div class="metric-label">Agency Payouts</div><div class="metric-value">₹2.05Cr</div><div class="metric-change up">↑ Settled · filter</div></div>
-    <div class="metric-card orange" id="rev-kpi-pending" style="cursor:pointer" onclick="revenueFilter('pending')"><div class="metric-icon orange"><i data-lucide="clock"></i></div><div class="metric-label">Pending Settlement</div><div class="metric-value">₹18.4L</div><div class="metric-change down">↓ 6 agencies · filter</div></div>
+    <div class="metric-card"><div class="metric-icon"><i data-lucide="indian-rupee"></i></div><div class="metric-label">Total Revenue</div><div class="metric-value" id="rev-kpi-total">—</div><div class="metric-change up" id="rev-kpi-total-d">↑ 18%</div></div>
+    <div class="metric-card"><div class="metric-icon"><i data-lucide="credit-card"></i></div><div class="metric-label">Platform Commission</div><div class="metric-value" id="rev-kpi-comm">—</div><div class="metric-change up">15% of gross</div></div>
+    <div class="metric-card"><div class="metric-icon"><i data-lucide="route"></i></div><div class="metric-label">Total Rides</div><div class="metric-value" id="rev-kpi-rides">—</div><div class="metric-change up" id="rev-kpi-rides-d">↑ 12%</div></div>
+    <div class="metric-card"><div class="metric-icon"><i data-lucide="receipt"></i></div><div class="metric-label">Average Ride Value</div><div class="metric-value" id="rev-kpi-avg">—</div><div class="metric-change up">per ride</div></div>
   </div>
-  <div class="card">
-    <div class="section-header"><div class="section-title">Agency-wise Revenue Breakdown</div></div>
+  <div class="card" style="padding:0">
+    <div class="section-header" style="padding:16px 18px 6px"><div class="section-title">Agency-wise Revenue</div><span class="text-sm text-muted" id="rev-table-note"></span></div>
+    <div class="filter-row" style="padding:0 16px">
+      <input class="filter-input" id="rev-f-search" placeholder="Search agency..." style="min-width:200px" oninput="renderRevenue()">
+      <select class="filter-input" id="rev-f-city" onchange="renderRevenue()"><option>All Cities</option><option>Mumbai</option><option>Delhi</option><option>Hyderabad</option><option>Pune</option><option>Ahmedabad</option><option>Chennai</option></select>
+      <select class="filter-input" id="rev-f-status" onchange="renderRevenue()"><option>All Status</option><option>Paid</option><option>Processing</option><option>Pending</option></select>
+      <select class="filter-input" id="rev-f-period" onchange="setRevPeriod(this.value.toLowerCase())"><option>Month</option><option>Quarter</option><option>Year</option></select>
+    </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Agency</th><th>City</th><th>Total Rides</th><th>Gross Revenue</th><th>Commission (15%)</th><th>Net Payout</th><th>Settlement</th><th>Action</th></tr></thead>
+        <thead><tr><th>Agency</th><th>City</th><th class="rev-sort" onclick="revSort('rides')">Total Rides <i data-lucide="chevrons-up-down"></i></th><th class="rev-sort" onclick="revSort('gross')">Gross Revenue <i data-lucide="chevrons-up-down"></i></th><th class="rev-sort" onclick="revSort('commission')">Commission (15%) <i data-lucide="chevrons-up-down"></i></th><th class="rev-sort" onclick="revSort('net')">Net Payout <i data-lucide="chevrons-up-down"></i></th><th>Settlement</th><th></th></tr></thead>
         <tbody id="revenue-tbody"></tbody>
       </table>
     </div>
   </div>
   <div class="grid-2" style="margin-top:16px">
     <div class="card">
-      <div class="section-header"><div class="section-title">Commission by Type</div></div>
-      <div class="chart-bar-row"><div class="chart-label">BLS</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:72%"></div></div><div class="chart-val">₹14.2L</div></div>
-      <div class="chart-bar-row"><div class="chart-label">ALS</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:54%"></div></div><div class="chart-val">₹10.6L</div></div>
-      <div class="chart-bar-row"><div class="chart-label">ICU</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:38%;background:var(--success)"></div></div><div class="chart-val">₹7.5L</div></div>
-      <div class="chart-bar-row"><div class="chart-label">Neonatal</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:20%;background:var(--warning)"></div></div><div class="chart-val">₹3.9L</div></div>
+      <div class="section-header"><div class="section-title">Revenue by City</div></div>
+      <div id="rev-city-chart"></div>
     </div>
     <div class="card">
-      <div class="section-header"><div class="section-title">Monthly Trend</div></div>
+      <div class="section-header"><div class="section-title">Revenue Trend</div><span class="text-sm text-muted" id="rev-trend-note">Last 6 months</span></div>
       <svg class="sparkline" viewBox="0 0 400 60" xmlns="http://www.w3.org/2000/svg">
-        <defs><linearGradient id="lg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity=".2"/><stop offset="100%" stop-color="#10B981" stop-opacity="0"/></linearGradient></defs>
-        <path d="M0,50 L66,44 L132,40 L198,32 L264,26 L330,18 L400,12" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/>
+        <defs><linearGradient id="lg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#635BFF" stop-opacity=".18"/><stop offset="100%" stop-color="#635BFF" stop-opacity="0"/></linearGradient></defs>
+        <path d="M0,50 L66,44 L132,40 L198,32 L264,26 L330,18 L400,12" fill="none" stroke="#635BFF" stroke-width="2.5" stroke-linecap="round"/>
         <path d="M0,50 L66,44 L132,40 L198,32 L264,26 L330,18 L400,12 L400,60 L0,60 Z" fill="url(#lg2)"/>
       </svg>
-      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px">
+      <div id="rev-trend-labels" style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px">
         <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
       </div>
     </div>
@@ -1132,8 +1449,8 @@ tr.row-clickable:hover .row-hint{opacity:1}
   <div class="section-header">
     <div><div style="font-size:22px;font-weight:800">Payout Management</div><div style="font-size:13px;color:var(--muted);margin-top:2px">June 2026 · ₹18.4L pending</div></div>
     <div class="flex gap-8">
-      <select class="filter-input"><option>June 2026</option><option>May 2026</option></select>
-      <button class="btn btn-primary" onclick="markAllPaid()">Mark All Paid</button>
+      <select class="filter-input"><option>June 2026</option><option>May 2026</option><option>April 2026</option></select>
+      <button class="btn btn-outline btn-sm" onclick="showNotif('Exporting payout report','success')"><i data-lucide="download"></i> Export Report</button>
     </div>
   </div>
   <div class="metric-grid" style="grid-template-columns:repeat(4,1fr)">
@@ -1206,6 +1523,55 @@ tr.row-clickable:hover .row-hint{opacity:1}
   <div class="drawer-foot" id="ambulance-foot"></div>
 </div>
 
+<!-- PANEL: DOCUMENT DETAIL -->
+<div class="panel" id="document-panel">
+  <div class="panel-header">
+    <div style="font-size:14px;font-weight:700">Document Details</div>
+    <button class="modal-x" onclick="closePanel()"><i data-lucide="x"></i></button>
+  </div>
+  <div class="panel-body"><div id="document-content"></div></div>
+</div>
+
+<!-- PANEL: EMPLOYEE DETAIL -->
+<div class="panel" id="employee-panel">
+  <div class="panel-header">
+    <div style="font-size:14px;font-weight:700">Employee Details</div>
+    <button class="modal-x" onclick="closePanel()"><i data-lucide="x"></i></button>
+  </div>
+  <div class="panel-body"><div id="employee-content"></div></div>
+  <div class="drawer-foot" id="employee-foot"></div>
+</div>
+
+<!-- PANEL: TICKET DETAIL -->
+<div class="panel" id="ticket-panel">
+  <div class="panel-header">
+    <div style="font-size:14px;font-weight:700">Ticket Details</div>
+    <button class="modal-x" onclick="closePanel()"><i data-lucide="x"></i></button>
+  </div>
+  <div class="panel-body"><div id="ticket-content"></div></div>
+  <div class="drawer-foot" id="ticket-foot"></div>
+</div>
+
+<!-- PANEL: AMBULANCE PROFILE (operational, read-only) -->
+<div class="panel" id="amb-profile-panel">
+  <div class="panel-header">
+    <div style="font-size:14px;font-weight:700">Ambulance Profile</div>
+    <button class="modal-x" onclick="closePanel()"><i data-lucide="x"></i></button>
+  </div>
+  <div class="panel-body"><div id="amb-profile-content"></div></div>
+  <div class="drawer-foot" id="amb-profile-foot"></div>
+</div>
+
+<!-- PANEL: GPS VEHICLE -->
+<div class="panel" id="gps-panel">
+  <div class="panel-header">
+    <div style="font-size:14px;font-weight:700">Vehicle Details</div>
+    <button class="modal-x" onclick="closePanel()"><i data-lucide="x"></i></button>
+  </div>
+  <div class="panel-body"><div id="gps-content"></div></div>
+  <div class="drawer-foot" id="gps-foot"></div>
+</div>
+
 <!-- PANEL: CUSTOMER DETAIL -->
 <div class="panel" id="user-panel">
   <div class="panel-header">
@@ -1224,6 +1590,16 @@ tr.row-clickable:hover .row-hint{opacity:1}
   </div>
   <div class="panel-body"><div id="revenue-content"></div></div>
   <div class="drawer-foot" id="revenue-foot"></div>
+</div>
+
+<!-- PANEL: PAYOUT DETAIL (operations) -->
+<div class="panel" id="payout-panel">
+  <div class="panel-header">
+    <div style="font-size:14px;font-weight:700">Payout Operations</div>
+    <button class="modal-x" onclick="closePanel()"><i data-lucide="x"></i></button>
+  </div>
+  <div class="panel-body"><div id="payout-content"></div></div>
+  <div class="drawer-foot" id="payout-foot"></div>
 </div>
 
 <!-- PANEL: ONBOARDING REVIEW -->
@@ -1511,6 +1887,282 @@ tr.row-clickable:hover .row-hint{opacity:1}
     <div class="modal-foot">
       <button class="btn btn-outline btn-sm" onclick="closeSuspendDriver()">Cancel</button>
       <button class="btn btn-danger-soft btn-sm" onclick="confirmSuspendDriver()">Offboard Driver</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: EDIT PERMISSIONS -->
+<div class="modal-overlay" id="perm-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head"><div><div class="modal-head-title">Edit Permissions</div><div class="modal-head-sub" id="perm-modal-sub">Module access</div></div><button class="modal-x" onclick="closePermModal()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body" id="perm-modal-body" style="padding:8px 22px 16px"></div>
+    <div class="modal-foot"><button class="btn btn-outline btn-sm" onclick="closePermModal()">Cancel</button><button class="btn btn-primary btn-sm" onclick="savePermModal()">Save Permissions</button></div>
+  </div>
+</div>
+
+<!-- MODAL: REQUEST RE-UPLOAD (document) -->
+<div class="modal-overlay" id="doc-reupload-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head"><div><div class="modal-head-title">Request Re-upload</div><div class="modal-head-sub" id="dru-sub">Request a fresh document</div></div><button class="modal-x" onclick="closeDocReupload()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body"><div class="form-sec" style="border-bottom:none">
+      <div class="form-group"><label class="label">Reason *</label><select class="input" id="dru-reason"><option value="">Select reason</option><option>Missing Information</option><option>Expired Document</option><option>Incorrect Upload</option><option>Unreadable Document</option><option>Other</option></select></div>
+      <div class="form-group"><label class="label">Comments</label><textarea class="notes-area" id="dru-comments" placeholder="Add details for the owner..."></textarea></div>
+    </div></div>
+    <div class="modal-foot"><button class="btn btn-outline btn-sm" onclick="closeDocReupload()">Cancel</button><button class="btn btn-primary btn-sm" onclick="sendDocReupload()"><i data-lucide="send"></i> Send Request</button></div>
+  </div>
+</div>
+
+<!-- MODAL: UPDATE EXPIRY (document) -->
+<div class="modal-overlay" id="doc-expiry-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head"><div><div class="modal-head-title">Update Expiry Date</div><div class="modal-head-sub" id="dex-sub">Document</div></div><button class="modal-x" onclick="closeDocExpiry()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body"><div class="form-sec" style="border-bottom:none">
+      <div class="form-group"><label class="label">New Expiry Date *</label><input class="input" id="dex-date" type="date"></div>
+    </div></div>
+    <div class="modal-foot"><button class="btn btn-outline btn-sm" onclick="closeDocExpiry()">Cancel</button><button class="btn btn-primary btn-sm" onclick="saveDocExpiry()">Update</button></div>
+  </div>
+</div>
+
+<!-- MODAL: ADD EMPLOYEE -->
+<div class="modal-overlay" id="add-employee-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head"><div><div class="modal-head-title">Add Employee</div><div class="modal-head-sub">Create a new internal staff account</div></div><button class="modal-x" onclick="closeAddEmployee()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body"><div class="form-sec" style="border-bottom:none">
+      <div class="form-group"><label class="label">Employee Name *</label><input class="input" id="ae-name" placeholder="Full name"></div>
+      <div class="form-grid">
+        <div class="form-group"><label class="label">Email *</label><input class="input" id="ae-email" placeholder="name@medurun.in"></div>
+        <div class="form-group"><label class="label">Phone *</label><input class="input" id="ae-phone" maxlength="10" placeholder="9820000000"></div>
+        <div class="form-group"><label class="label">Department *</label><select class="input" id="ae-dept"><option value="">Select</option><option>Administration</option><option>Operations</option><option>Finance</option><option>Customer Support</option><option>Marketing</option></select></div>
+        <div class="form-group"><label class="label">Role *</label><select class="input" id="ae-role"><option value="">Select</option><option>Super Admin</option><option>Operations</option><option>Finance</option><option>Customer Support</option><option>Marketing</option><option>Custom Role</option></select></div>
+      </div>
+    </div></div>
+    <div class="modal-foot"><button class="btn btn-outline btn-sm" onclick="closeAddEmployee()">Cancel</button><button class="btn btn-primary btn-sm" onclick="createEmployee()">Create Employee</button></div>
+  </div>
+</div>
+
+<!-- MODAL: EMPLOYEE CREATED SUCCESS -->
+<div class="modal-overlay" id="emp-success-modal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-head"><div><div class="modal-head-title">Employee Created Successfully</div><div class="modal-head-sub" id="es-sub">Account ready</div></div><button class="modal-x" onclick="closeEmpSuccess()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body" style="padding:18px 22px">
+      <div class="cred-card"><div class="cred-k">Employee ID</div><div class="cred-v" id="es-id">EMP-0000</div></div>
+      <div class="cred-card"><div class="cred-k">Temporary Password</div><div class="cred-v" style="font-family:monospace" id="es-pwd">••••••••</div></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-outline btn-sm" onclick="copyCredentials()"><i data-lucide="copy"></i> Copy Credentials</button><button class="btn btn-primary btn-sm" onclick="sendInvitation()"><i data-lucide="send"></i> Send Invitation</button></div>
+  </div>
+</div>
+
+<!-- MODAL: EDIT EMPLOYEE -->
+<div class="modal-overlay" id="edit-employee-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head"><div><div class="modal-head-title">Edit Employee</div><div class="modal-head-sub">Update staff details</div></div><button class="modal-x" onclick="closeEditEmployee()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body"><div class="form-sec" style="border-bottom:none">
+      <div class="form-group"><label class="label">Employee Name</label><input class="input" id="ee-name"></div>
+      <div class="form-grid">
+        <div class="form-group"><label class="label">Email</label><input class="input" id="ee-email"></div>
+        <div class="form-group"><label class="label">Phone</label><input class="input" id="ee-phone" maxlength="10"></div>
+        <div class="form-group"><label class="label">Department</label><select class="input" id="ee-dept"><option>Administration</option><option>Operations</option><option>Finance</option><option>Customer Support</option><option>Marketing</option></select></div>
+        <div class="form-group"><label class="label">Role</label><select class="input" id="ee-role"><option>Super Admin</option><option>Operations</option><option>Finance</option><option>Customer Support</option><option>Marketing</option><option>Custom Role</option></select></div>
+      </div>
+    </div></div>
+    <div class="modal-foot"><button class="btn btn-outline btn-sm" onclick="closeEditEmployee()">Cancel</button><button class="btn btn-primary btn-sm" onclick="saveEditEmployee()">Save Changes</button></div>
+  </div>
+</div>
+
+<!-- MODAL: DEACTIVATE EMPLOYEE -->
+<div class="modal-overlay" id="deactivate-emp-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head"><div><div class="modal-head-title">Deactivate Employee</div><div class="modal-head-sub">Revoke dashboard access</div></div><button class="modal-x" onclick="closeDeactivateEmp()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body"><div class="form-sec" style="border-bottom:none">
+      <p style="font-size:13.5px;color:#374151;line-height:1.6;margin-bottom:6px">You are about to deactivate <b id="de-name">this employee</b>.</p>
+      <p style="font-size:12.5px;color:#DC2626;line-height:1.5">They will immediately lose access to the dashboard.</p>
+    </div></div>
+    <div class="modal-foot"><button class="btn btn-outline btn-sm" onclick="closeDeactivateEmp()">Cancel</button><button class="btn btn-danger-soft btn-sm" onclick="confirmDeactivateEmp()">Deactivate</button></div>
+  </div>
+</div>
+
+<!-- MODAL: ASSIGN TEAM -->
+<div class="modal-overlay" id="assign-team-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head"><div><div class="modal-head-title">Assign Team</div><div class="modal-head-sub">Route ticket to department & team</div></div><button class="modal-x" onclick="closeAssignTeam()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body"><div class="form-sec" style="border-bottom:none">
+      <div class="form-group"><label class="label">Department</label><select class="input" id="at-dept"><option>Finance</option><option>Tech Support</option><option>Operations</option><option>Compliance</option><option>Customer Care</option></select></div>
+      <div class="form-group"><label class="label">Team</label><select class="input" id="at-team"><option>Finance Support</option><option>Tech Support</option><option>Operations</option><option>Compliance</option><option>Escalations</option><option>Customer Care</option></select></div>
+    </div></div>
+    <div class="modal-foot"><button class="btn btn-outline btn-sm" onclick="closeAssignTeam()">Cancel</button><button class="btn btn-primary btn-sm" onclick="saveAssignTeam()">Assign</button></div>
+  </div>
+</div>
+
+<!-- MODAL: CHANGE STATUS -->
+<div class="modal-overlay" id="change-status-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head"><div><div class="modal-head-title">Change Status</div><div class="modal-head-sub">Update ticket status</div></div><button class="modal-x" onclick="closeChangeStatus()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body"><div class="form-sec" style="border-bottom:none">
+      <label class="radio-row"><input type="radio" name="cs-status" value="open"><span class="radio-dot"></span><span>Open</span></label>
+      <label class="radio-row"><input type="radio" name="cs-status" value="under-review"><span class="radio-dot"></span><span>Under Review</span></label>
+      <label class="radio-row"><input type="radio" name="cs-status" value="in-progress"><span class="radio-dot"></span><span>In Progress</span></label>
+      <label class="radio-row"><input type="radio" name="cs-status" value="resolved"><span class="radio-dot"></span><span>Resolved</span></label>
+    </div></div>
+    <div class="modal-foot"><button class="btn btn-outline btn-sm" onclick="closeChangeStatus()">Cancel</button><button class="btn btn-primary btn-sm" onclick="saveChangeStatus()">Update Status</button></div>
+  </div>
+</div>
+
+<!-- MODAL: ADD COMMENT -->
+<div class="modal-overlay" id="comment-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head"><div><div class="modal-head-title">Add Comment</div><div class="modal-head-sub">Internal team comment</div></div><button class="modal-x" onclick="closeCommentModal()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body"><div class="form-sec" style="border-bottom:none">
+      <div class="form-group"><label class="label">Comment</label><textarea class="notes-area" id="cm-text" style="min-height:96px" placeholder="Write an internal comment..."></textarea></div>
+    </div></div>
+    <div class="modal-foot"><button class="btn btn-outline btn-sm" onclick="closeCommentModal()">Cancel</button><button class="btn btn-primary btn-sm" onclick="saveComment()">Save</button></div>
+  </div>
+</div>
+
+<!-- MODAL: RESOLVE TICKET -->
+<div class="modal-overlay" id="resolve-ticket-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head"><div><div class="modal-head-title">Resolve Ticket</div><div class="modal-head-sub">Close and document resolution</div></div><button class="modal-x" onclick="closeResolveTicket()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body"><div class="form-sec" style="border-bottom:none">
+      <div class="form-group"><label class="label">Resolution Notes *</label><textarea class="notes-area" id="rs-notes" style="min-height:88px" placeholder="Describe how the ticket was resolved..."></textarea></div>
+      <label class="login-check" style="margin-top:4px"><input type="checkbox" id="rs-notify" checked> Notify customer of resolution</label>
+    </div></div>
+    <div class="modal-foot"><button class="btn btn-outline btn-sm" onclick="closeResolveTicket()">Cancel</button><button class="btn btn-primary btn-sm" onclick="confirmResolveTicket()"><i data-lucide="check"></i> Resolve</button></div>
+  </div>
+</div>
+
+<!-- MODAL: UPDATE CUSTOMER -->
+<div class="modal-overlay" id="update-customer-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head"><div><div class="modal-head-title">Update Customer</div><div class="modal-head-sub" id="uc-sub">Send update</div></div><button class="modal-x" onclick="closeUpdateCustomer()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body"><div class="form-sec" style="border-bottom:none">
+      <div class="form-group"><label class="label">Message to customer</label><textarea class="notes-area" id="uc-text" style="min-height:96px" placeholder="Write an update for the customer..."></textarea></div>
+    </div></div>
+    <div class="modal-foot"><button class="btn btn-outline btn-sm" onclick="closeUpdateCustomer()">Cancel</button><button class="btn btn-primary btn-sm" onclick="saveUpdateCustomer()"><i data-lucide="send"></i> Send Update</button></div>
+  </div>
+</div>
+
+<!-- MODAL: BOOKING DETAILS -->
+<div class="modal-overlay" id="booking-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head"><div><div class="modal-head-title">Booking Details</div><div class="modal-head-sub" id="bk-sub">Booking</div></div><button class="modal-x" onclick="closeBookingModal()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body" id="booking-modal-body"></div>
+    <div class="modal-foot"><button class="btn btn-outline btn-sm" onclick="closeBookingModal()">Close</button></div>
+  </div>
+</div>
+
+<!-- MODAL: PAYOUT INFO (bank / txn / settlement / failure) -->
+<div class="modal-overlay" id="payout-info-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head"><div><div class="modal-head-title" id="pinfo-title">Details</div><div class="modal-head-sub" id="pinfo-sub">Payout</div></div><button class="modal-x" onclick="closePInfo()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body" id="pinfo-body" style="padding:10px 22px 18px"></div>
+    <div class="modal-foot"><button class="btn btn-outline btn-sm" onclick="closePInfo()">Close</button></div>
+  </div>
+</div>
+
+<!-- MODAL: PAYOUT INVOICE BUNDLE -->
+<div class="modal-overlay" id="payout-invoices-modal">
+  <div class="modal">
+    <div class="modal-head"><div><div class="modal-head-title">Invoice Bundle</div><div class="modal-head-sub" id="pinv-sub">Invoices</div></div><button class="modal-x" onclick="closePInvoices()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body" style="padding:8px 22px 16px">
+      <div class="table-wrap"><table>
+        <thead><tr><th>Invoice Number</th><th>Amount</th><th>Date</th><th>Status</th><th></th></tr></thead>
+        <tbody id="pinv-tbody"></tbody>
+      </table></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-outline btn-sm" onclick="closePInvoices()">Close</button><button class="btn btn-primary btn-sm" onclick="showNotif('Downloading invoice bundle (ZIP)','success')"><i data-lucide="download"></i> Download All</button></div>
+  </div>
+</div>
+
+<!-- MODAL: PAYOUT UPDATE BANK -->
+<div class="modal-overlay" id="payout-bank-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head"><div><div class="modal-head-title">Update Bank Details</div><div class="modal-head-sub" id="pbank-sub">Agency</div></div><button class="modal-x" onclick="closePBank()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body"><div class="form-sec" style="border-bottom:none">
+      <div class="form-group"><label class="label">Bank Name</label><input class="input" id="pb-name"></div>
+      <div class="form-group"><label class="label">Account Number</label><input class="input" id="pb-acc"></div>
+      <div class="form-group"><label class="label">IFSC Code</label><input class="input" id="pb-ifsc"></div>
+    </div></div>
+    <div class="modal-foot"><button class="btn btn-outline btn-sm" onclick="closePBank()">Cancel</button><button class="btn btn-primary btn-sm" onclick="savePBank()">Save & Re-verify</button></div>
+  </div>
+</div>
+
+<!-- MODAL: PENDING REASON DETAIL -->
+<div class="modal-overlay" id="rev-reason-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head"><div><div class="modal-head-title">Pending Reason</div><div class="modal-head-sub" id="rev-reason-sub">Details</div></div><button class="modal-x" onclick="closeRevReason()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body" id="rev-reason-body" style="padding:8px 22px 18px"></div>
+    <div class="modal-foot"><button class="btn btn-outline btn-sm" onclick="closeRevReason()">Close</button><button class="btn btn-primary btn-sm" onclick="closeRevReason();closePanel();navTo('payouts')"><i data-lucide="landmark"></i> Open Payout Management</button></div>
+  </div>
+</div>
+
+<!-- MODAL: REVENUE EXPORT -->
+<div class="modal-overlay" id="rev-export-modal">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-head"><div><div class="modal-head-title">Download Revenue Report</div><div class="modal-head-sub" id="rev-export-sub">Export</div></div><button class="modal-x" onclick="closeRevExport()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body" style="padding:18px 22px">
+      <div class="text-sm text-muted" style="margin-bottom:12px">Choose a format to export this agency's revenue report.</div>
+      <button class="qa-row" onclick="doRevExport('PDF')"><span class="qa-ic"><i data-lucide="file-text"></i></span>Export as PDF<i data-lucide="download" class="qa-chev"></i></button>
+      <div style="height:8px"></div>
+      <button class="qa-row" onclick="doRevExport('CSV')"><span class="qa-ic"><i data-lucide="table"></i></span>Export as CSV<i data-lucide="download" class="qa-chev"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: REVENUE INVOICES -->
+<div class="modal-overlay" id="rev-invoices-modal">
+  <div class="modal">
+    <div class="modal-head"><div><div class="modal-head-title">Invoice History</div><div class="modal-head-sub" id="rev-inv-sub">Invoices</div></div><button class="modal-x" onclick="closeRevInvoices()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body" style="padding:8px 22px 16px">
+      <div class="table-wrap"><table>
+        <thead><tr><th>Invoice Number</th><th>Amount</th><th>Date</th><th>Status</th><th></th></tr></thead>
+        <tbody id="rev-inv-tbody"></tbody>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: REVENUE SETTLEMENTS -->
+<div class="modal-overlay" id="rev-settlements-modal">
+  <div class="modal">
+    <div class="modal-head"><div><div class="modal-head-title">Settlement History</div><div class="modal-head-sub" id="rev-set-sub">Settlements</div></div><button class="modal-x" onclick="closeRevSettlements()"><i data-lucide="x"></i></button></div>
+    <div class="modal-body" style="padding:8px 22px 16px">
+      <div class="table-wrap"><table>
+        <thead><tr><th>Settlement Date</th><th>Amount</th><th>Status</th><th>Transaction Reference</th></tr></thead>
+        <tbody id="rev-set-tbody"></tbody>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: RIDE DETAILS -->
+<div class="modal-overlay" id="ride-modal">
+  <div class="modal modal-narrow">
+    <div class="modal-head">
+      <div><div class="modal-head-title">Ride Details</div><div class="modal-head-sub" id="ride-modal-sub">Ride</div></div>
+      <button class="modal-x" onclick="closeRideModal()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body" id="ride-modal-body"></div>
+    <div class="modal-foot" id="ride-modal-foot"></div>
+  </div>
+</div>
+
+<!-- MODAL: CALL DRIVER -->
+<div class="modal-overlay" id="call-modal">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-head">
+      <div><div class="modal-head-title">Call Driver</div><div class="modal-head-sub">Contact details</div></div>
+      <button class="modal-x" onclick="closeCallDriver()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body" style="padding:18px 22px">
+      <div class="contact-card">
+        <div class="cc-name" id="call-name">Driver</div>
+        <div class="cc-role">Driver on duty</div>
+        <div class="cc-line"><i data-lucide="phone"></i> <span id="call-phone">—</span></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline btn-sm" onclick="closeCallDriver()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="copyCallNumber()"><i data-lucide="copy"></i> Copy Number</button>
     </div>
   </div>
 </div>
@@ -2329,43 +2981,997 @@ function decideAmbulance(i,action){
   }
 }
 
-// ── RENDER REVENUE ──
-let revenueView='all';
-function parseAmt(s){return parseInt(String(s).replace(/[^0-9]/g,''))||0}
-
-function renderRevenue(){
-  const tbody=document.getElementById('revenue-tbody');
-  let list=revenueData.map((r,i)=>({...r,_i:i}));
-  if(revenueView==='pending')list=list.filter(r=>r.status==='pending'||r.status==='processing');
-  else if(revenueView==='settled')list=list.filter(r=>r.status==='paid');
-  else if(revenueView==='commission')list=list.sort((a,b)=>parseAmt(b.commission)-parseAmt(a.commission));
-  // highlight active KPI card
-  ['rev-kpi-commission','rev-kpi-payouts','rev-kpi-pending'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.outline='';});
-  const map={commission:'rev-kpi-commission',settled:'rev-kpi-payouts',pending:'rev-kpi-pending'};
-  if(map[revenueView]){const el=document.getElementById(map[revenueView]);if(el)el.style.outline='2px solid var(--primary)';}
-
-  if(!list.length){
-    tbody.innerHTML=`<tr><td colspan="8"><div class="empty-state"><div class="empty-icon"><i data-lucide="search-x"></i></div><div class="empty-state-title">No matching agencies</div><div class="empty-state-sub">Try a different filter.</div></div></td></tr>`;
-    return;
-  }
-  tbody.innerHTML=list.map(r=>`
-    <tr>
-      <td style="font-weight:600">${r.agency}</td>
-      <td>${r.city}</td>
-      <td>${r.rides.toLocaleString()}</td>
-      <td style="font-weight:600">${r.gross}</td>
-      <td style="color:var(--primary);font-weight:600">${r.commission}</td>
-      <td style="font-weight:700;color:var(--success)">${r.net}</td>
-      <td>${badge(r.status)}</td>
-      <td><button class="btn btn-outline btn-xs" onclick="openRevenueDrawer(${r._i})">Details</button></td>
-    </tr>`).join('');
+// ── DOCUMENT CENTER ──
+const DOC_ST={verified:'Verified',pending:'Pending',expired:'Expired',expiring:'Expiring Soon',reupload:'Re-upload Requested'};
+const documents=[
+  {name:'Driving License',ownerType:'Driver',owner:'Ravi Shankar',number:'MH01-2024-0012345',issue:'15 Jul 2021',expiry:'15 Jul 2026',status:'expiring',days:23,updated:'2 days ago',by:'Ravi Shankar',on:'15 Jul 2021',agency:'LifeLine Ambulance',assoc:'Ravi Shankar (Driver)',city:'Mumbai'},
+  {name:'Insurance Certificate',ownerType:'Ambulance',owner:'MH01-AB-1234',number:'INS-2023-778812',issue:'01 Jun 2023',expiry:'31 May 2026',status:'expired',days:-22,updated:'5 days ago',by:'LifeLine Ambulance',on:'01 Jun 2023',agency:'LifeLine Ambulance',assoc:'MH01-AB-1234 (Ambulance)',city:'Mumbai'},
+  {name:'GST Certificate',ownerType:'Agency',owner:'LifeLine Ambulance',number:'27AAACL1234C1Z5',issue:'10 Apr 2022',expiry:'—',status:'verified',days:9999,updated:'1 week ago',by:'Rahul Sharma',on:'10 Apr 2022',agency:'LifeLine Ambulance',assoc:'LifeLine Ambulance (Agency)',city:'Mumbai'},
+  {name:'Police Verification',ownerType:'Driver',owner:'Anil Mishra',number:'PV-2024-556677',issue:'12 Feb 2024',expiry:'12 Feb 2027',status:'pending',days:600,updated:'3 hours ago',by:'Falcon Medical',on:'12 Feb 2024',agency:'Falcon Medical',assoc:'Anil Mishra (Driver)',city:'Pune'},
+  {name:'Fitness Certificate',ownerType:'Ambulance',owner:'DL02-CD-5678',number:'FIT-2025-101122',issue:'05 Jan 2025',expiry:'05 Jul 2026',status:'expiring',days:13,updated:'Yesterday',by:'Metro Medic',on:'05 Jan 2025',agency:'Metro Medic',assoc:'DL02-CD-5678 (Ambulance)',city:'Delhi'},
+  {name:'Registration Certificate',ownerType:'Agency',owner:'RapidCare',number:'REG-KA-2023-4521',issue:'18 Mar 2023',expiry:'18 Mar 2028',status:'verified',days:9999,updated:'2 weeks ago',by:'Vikram Singh',on:'18 Mar 2023',agency:'RapidCare',assoc:'RapidCare (Agency)',city:'Bangalore'},
+  {name:'Aadhaar Card',ownerType:'Driver',owner:'Mohammed Iqbal',number:'XXXX-XXXX-8821',issue:'—',expiry:'—',status:'reupload',days:9999,updated:'1 hour ago',by:'Swift Ambulance',on:'10 Jan 2024',agency:'Swift Ambulance',assoc:'Mohammed Iqbal (Driver)',city:'Hyderabad'},
+  {name:'Ambulance RC',ownerType:'Ambulance',owner:'TN04-GH-3456',number:'RC-TN-2021-9087',issue:'22 Aug 2021',expiry:'22 Aug 2026',status:'verified',days:61,updated:'4 days ago',by:'CarePlus',on:'22 Aug 2021',agency:'CarePlus',assoc:'TN04-GH-3456 (Ambulance)',city:'Chennai'},
+  {name:'NOC Certificate',ownerType:'Agency',owner:'CarePlus',number:'NOC-2022-3344',issue:'30 Sep 2022',expiry:'30 Sep 2025',status:'expired',days:-265,updated:'1 month ago',by:'Ravi Kumar',on:'30 Sep 2022',agency:'CarePlus',assoc:'CarePlus (Agency)',city:'Chennai'},
+  {name:'Medical Certificate',ownerType:'Driver',owner:'Deepak Nair',number:'MED-2024-7788',issue:'08 Apr 2024',expiry:'08 Jul 2026',status:'expiring',days:16,updated:'6 days ago',by:'RapidCare',on:'08 Apr 2024',agency:'RapidCare',assoc:'Deepak Nair (Driver)',city:'Bangalore'},
+  {name:'GST Certificate',ownerType:'Agency',owner:'Metro Medic',number:'07AAACM5678D1Z3',issue:'14 May 2022',expiry:'—',status:'pending',days:9999,updated:'5 hours ago',by:'Priya Nair',on:'14 May 2022',agency:'Metro Medic',assoc:'Metro Medic (Agency)',city:'Delhi'},
+  {name:'Director ID',ownerType:'Agency',owner:'Falcon Medical',number:'XXXX-XXXX-2210',issue:'—',expiry:'—',status:'reupload',days:9999,updated:'2 hours ago',by:'Falcon Medical',on:'19 Sep 2023',agency:'Falcon Medical',assoc:'Falcon Medical (Agency)',city:'Pune'},
+  {name:'Driving License',ownerType:'Driver',owner:'Kiran Thakur',number:'MH01-2024-0067890',issue:'27 Jun 2022',expiry:'27 Jun 2026',status:'expiring',days:5,updated:'Today',by:'LifeLine Ambulance',on:'27 Jun 2022',agency:'LifeLine Ambulance',assoc:'Kiran Thakur (Driver)',city:'Mumbai'},
+  {name:'Insurance Certificate',ownerType:'Ambulance',owner:'KA03-EF-9012',number:'INS-2024-552201',issue:'11 Nov 2024',expiry:'11 Nov 2026',status:'verified',days:142,updated:'1 week ago',by:'RapidCare',on:'11 Nov 2024',agency:'RapidCare',assoc:'KA03-EF-9012 (Ambulance)',city:'Bangalore'},
+];
+let docSel=null;
+function seedDocHistory(d){
+  if(d.history)return;
+  d.history=[
+    {time:d.on+' · 09:12 AM',title:'Document uploaded',sub:'By '+d.by},
+    {time:d.on+' · 02:40 PM',title:'Verification started',sub:'By Neha Kulkarni · Support Lead'},
+  ];
+  if(d.status==='verified')d.history.push({time:'recent','title':'Document verified',sub:'By Rohan Desai · Operations'});
+  if(d.status==='reupload')d.history.push({time:'recent',title:'Re-upload requested',sub:'By Rohan Desai · Operations'});
+  if(d.status==='expired')d.history.push({time:'recent',title:'Marked expired',sub:'Auto-flagged by system'});
 }
 
-function revenueFilter(view){
-  revenueView=(revenueView===view)?'all':view; // toggle off if re-clicked
+function renderDocs(){
+  const cExpired=documents.filter(d=>d.status==='expired').length;
+  const c7=documents.filter(d=>d.status==='expiring'&&d.days<=7).length;
+  const cPending=documents.filter(d=>d.status==='pending').length;
+  const cReupload=documents.filter(d=>d.status==='reupload').length;
+  document.getElementById('doc-sum-total').textContent=documents.length;
+  document.getElementById('doc-sum-expired').textContent=cExpired;
+  document.getElementById('doc-sum-7').textContent=c7;
+  document.getElementById('doc-sum-pending').textContent=cPending;
+  document.getElementById('doc-sum-reupload').textContent=cReupload;
+  const q=(document.getElementById('doc-search')?.value||'').toLowerCase().trim();
+  const ft=document.getElementById('doc-type')?.value||'All Documents';
+  const fs=document.getElementById('doc-status')?.value||'All Status';
+  const fc=document.getElementById('doc-city')?.value||'All Cities';
+  const fa=document.getElementById('doc-agency')?.value||'All Agencies';
+  const typeMap={'Agency Documents':'Agency','Driver Documents':'Driver','Ambulance Documents':'Ambulance'};
+  const tbody=document.getElementById('documents-tbody');
+  const list=documents.map((d,i)=>({d,i})).filter(({d})=>{
+    const mq=!q||d.name.toLowerCase().includes(q)||d.owner.toLowerCase().includes(q)||d.number.toLowerCase().includes(q);
+    const mt=ft==='All Documents'||d.ownerType===typeMap[ft];
+    const ms=fs==='All Status'||DOC_ST[d.status]===fs;
+    const mc=fc==='All Cities'||d.city===fc;
+    const ma=fa==='All Agencies'||d.agency===fa;
+    return mq&&mt&&ms&&mc&&ma;
+  });
+  if(!list.length){tbody.innerHTML=`<tr><td colspan="8"><div class="empty-state"><div class="empty-icon"><i data-lucide="search-x"></i></div><div class="empty-state-title">No matching documents</div><div class="empty-state-sub">Try adjusting your filters.</div></div></td></tr>`;IC();return;}
+  tbody.innerHTML=list.map(({d,i})=>`
+    <tr class="row-clickable" onclick="openDoc(${i})">
+      <td style="font-weight:600">${d.name}</td>
+      <td>${d.ownerType}</td>
+      <td>${d.owner}</td>
+      <td class="text-sm" style="font-family:monospace">${d.number}</td>
+      <td class="text-sm ${d.status==='expired'?'':'text-muted'}" ${d.status==='expired'?'style="color:#DC2626;font-weight:600"':''}>${d.expiry}</td>
+      <td><span class="docst ${d.status}">${DOC_ST[d.status]}</span></td>
+      <td class="text-sm text-muted">${d.updated}</td>
+      <td><button class="btn btn-outline btn-xs" onclick="event.stopPropagation();openDoc(${i})">View →</button></td>
+    </tr>`).join('');
+  IC();
+}
+function docAlert(kind){
+  const map={expired:'Expired',exp7:'Expiring Soon',expiring:'Expiring Soon',pending:'Pending',reupload:'Re-upload Requested'};
+  const sel=document.getElementById('doc-status');
+  sel.value=map[kind]||'All Status';
+  renderDocs();
+  document.getElementById('documents-tbody').closest('.card').scrollIntoView({behavior:'smooth',block:'nearest'});
+  showNotif('Filtered: '+sel.value,'success');
+}
+
+function openDoc(i){
+  docSel=i;const d=documents[i];seedDocHistory(d);
+  const expired=d.status==='expired',pending=d.status==='pending';
+  document.getElementById('document-content').innerHTML=`
+    <div class="drawer-head">
+      <div class="drawer-avatar"><i data-lucide="file-text"></i></div>
+      <div style="flex:1;min-width:0"><div class="dh-title">${d.name}</div><div class="text-sm text-muted">${d.ownerType} · ${d.owner}</div></div>
+      <span class="docst ${d.status}">${DOC_ST[d.status]}</span>
+    </div>
+    <div class="drawer-tabs">
+      <div class="drawer-tab active" onclick="docTab(event,'overview')">Overview</div>
+      <div class="drawer-tab" onclick="docTab(event,'history')">History</div>
+      <div class="drawer-tab" onclick="docTab(event,'actions')">Actions</div>
+    </div>
+
+    <div class="drawer-tabpane active" data-pane="overview">
+      <div class="section-title">Document</div>
+      <div class="prof-grid">
+        <div class="prof-cell"><div class="k">Document Name</div><div class="v">${d.name}</div></div>
+        <div class="prof-cell"><div class="k">Owner</div><div class="v">${d.owner}</div></div>
+        <div class="prof-cell"><div class="k">Document Number</div><div class="v" style="font-family:monospace;font-size:12px">${d.number}</div></div>
+        <div class="prof-cell"><div class="k">Verification Status</div><div class="v">${DOC_ST[d.status]}</div></div>
+        <div class="prof-cell"><div class="k">Issue Date</div><div class="v">${d.issue}</div></div>
+        <div class="prof-cell"><div class="k">Expiry Date</div><div class="v" ${expired?'style="color:#DC2626;font-weight:600"':''}>${d.expiry}</div></div>
+        <div class="prof-cell"><div class="k">Uploaded By</div><div class="v">${d.by}</div></div>
+        <div class="prof-cell"><div class="k">Uploaded On</div><div class="v">${d.on}</div></div>
+      </div>
+      <div class="section-title">Association</div>
+      <div class="stat-row"><span class="text-sm text-muted">Associated Agency</span><span style="font-weight:600">${d.agency}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Associated ${d.ownerType==='Agency'?'Entity':d.ownerType}</span><span style="font-weight:600">${d.assoc}</span></div>
+    </div>
+
+    <div class="drawer-tabpane" data-pane="history">
+      <div class="timeline" style="margin-top:4px">
+        ${d.history.map((h,k)=>`<div class="tl-item ${k<d.history.length-1?'done':'active'}"><div class="tl-dot"></div><div class="tl-title">${h.title}</div><div class="tl-sub">${h.time} · ${h.sub}</div></div>`).join('')}
+      </div>
+    </div>
+
+    <div class="drawer-tabpane" data-pane="actions">
+      <div class="section-title">Document</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="showNotif('Opening ${d.name}','success')"><i data-lucide="eye"></i> View</button>
+        <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="showNotif('Document downloaded','success')"><i data-lucide="download"></i> Download</button>
+      </div>
+      <div class="section-title">Compliance Actions</div>
+      ${pending?`<div style="display:flex;gap:8px;margin-bottom:8px">
+        <button class="btn btn-primary btn-sm" style="flex:1;justify-content:center" onclick="docApprove(${i})"><i data-lucide="check"></i> Approve</button>
+        <button class="btn btn-danger-soft btn-sm" style="flex:1;justify-content:center" onclick="docReject(${i})"><i data-lucide="x"></i> Reject</button>
+      </div>`:''}
+      ${d.status!=='verified'&&!pending?`<button class="btn btn-primary btn-sm" style="width:100%;justify-content:center;margin-bottom:8px" onclick="docMarkVerified(${i})"><i data-lucide="badge-check"></i> Mark Verified</button>`:''}
+      <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center;margin-bottom:8px" onclick="openDocReupload(${i})"><i data-lucide="rotate-cw"></i> Request Re-upload</button>
+      <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center" onclick="openDocExpiry(${i})"><i data-lucide="calendar-clock"></i> Update Expiry Date</button>
+      ${expired?`<div class="section-title" style="color:#DC2626">Compliance</div>
+        <button class="btn btn-danger-soft btn-sm" style="width:100%;justify-content:center" onclick="docFlag(${i})"><i data-lucide="flag"></i> Flag Compliance Issue</button>`:''}
+    </div>`;
+  document.getElementById('document-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+  IC();
+}
+function docTab(ev,pane){
+  const root=document.getElementById('document-content');
+  root.querySelectorAll('.drawer-tab').forEach(t=>t.classList.remove('active'));
+  root.querySelectorAll('.drawer-tabpane').forEach(p=>p.classList.remove('active'));
+  ev.target.classList.add('active');
+  root.querySelector(`[data-pane="${pane}"]`).classList.add('active');
+  IC();
+}
+function docLog(d,title,sub){d.history.push({time:'just now',title,sub:sub||'By Arjun Mehta · Super Admin'});d.updated='just now';}
+function reopenDocActions(i){openDoc(i);setTimeout(()=>document.querySelectorAll('#document-content .drawer-tab')[2]?.click(),0);}
+function docMarkVerified(i){const d=documents[i];d.status='verified';docLog(d,'Document verified');renderDocs();reopenDocActions(i);showNotif(d.name+' marked verified','success');}
+function docApprove(i){const d=documents[i];d.status='verified';docLog(d,'Document approved');renderDocs();reopenDocActions(i);showNotif(d.name+' approved','success');}
+function docReject(i){const d=documents[i];d.status='reupload';docLog(d,'Document rejected — re-upload requested');renderDocs();reopenDocActions(i);showNotif(d.name+' rejected','warning');}
+function docFlag(i){const d=documents[i];docLog(d,'Compliance issue flagged','Escalated to Compliance team');renderDocs();reopenDocActions(i);showNotif('Compliance issue flagged for '+d.name,'warning');}
+
+let docModalIdx=null;
+function openDocReupload(i){docModalIdx=i;document.getElementById('dru-sub').textContent=documents[i].name+' · '+documents[i].owner;
+  document.getElementById('dru-reason').value='';document.getElementById('dru-comments').value='';
+  document.getElementById('doc-reupload-modal').classList.add('show');document.body.style.overflow='hidden';IC();}
+function closeDocReupload(){document.getElementById('doc-reupload-modal').classList.remove('show');document.body.style.overflow='';}
+function sendDocReupload(){const reason=document.getElementById('dru-reason').value;if(!reason){showNotif('Select a reason','warning');return;}
+  const d=documents[docModalIdx];d.status='reupload';docLog(d,'Re-upload requested',reason);
+  closeDocReupload();renderDocs();reopenDocActions(docModalIdx);showNotif('Re-upload requested — '+reason,'warning');}
+
+function openDocExpiry(i){docModalIdx=i;document.getElementById('dex-sub').textContent=documents[i].name+' · '+documents[i].owner;
+  document.getElementById('dex-date').value='';document.getElementById('doc-expiry-modal').classList.add('show');document.body.style.overflow='hidden';IC();}
+function closeDocExpiry(){document.getElementById('doc-expiry-modal').classList.remove('show');document.body.style.overflow='';}
+function saveDocExpiry(){const v=document.getElementById('dex-date').value;if(!v){showNotif('Pick a date','warning');return;}
+  const d=documents[docModalIdx];const dt=new Date(v+'T00:00');
+  d.expiry=dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  // recompute status relative to today (22 Jun 2026)
+  const today=new Date('2026-06-22T00:00');const days=Math.round((dt-today)/86400000);d.days=days;
+  d.status=days<0?'expired':days<=30?'expiring':'verified';
+  docLog(d,'Expiry date updated','New expiry: '+d.expiry);
+  closeDocExpiry();renderDocs();reopenDocActions(docModalIdx);showNotif('Expiry updated to '+d.expiry,'success');}
+
+// ── EMPLOYEE MANAGEMENT ──
+const EMP_MODULES=[['agencies','Agency Management'],['onboarding','Onboarding Review'],['drivers-q','Driver Verification'],['ambulance-q','Ambulance Queue'],['gps-tracking','GPS Tracking'],['tickets','Tickets & Queries'],['revenue','Revenue & Commission'],['payouts','Payout Management'],['analytics','Reports'],['users','Users / Customers'],['settings','Pricing & Settings'],['employees','Employee Management']];
+const PERM_TYPES=['View','Create','Edit','Delete','Approve'];
+// derive a high-level access level from granular perms
+function accessLevel(perms){
+  const n=perms.length;
+  if(n===0)return ['No Access','none'];
+  if(n>=5)return ['Full Access','full'];
+  if(n===1&&perms[0]==='View')return ['View Only','view'];
+  if(perms.includes('Approve')||perms.includes('Delete'))return ['Manage','manage'];
+  return ['Manage','manage'];
+}
+// role → allowed module screen-keys (sidebar visibility). null = full access
+const ROLE_ACCESS={
+  'Super Admin':null,
+  'Operations':['agencies','onboarding','drivers-q','ambulance-q','gps-tracking','drivers'],
+  'Finance':['revenue','payouts','analytics'],
+  'Customer Support':['tickets','users','analytics'],
+  'Marketing':['analytics','users'],
+  'Custom Role':['agencies','tickets'],
+};
+const ALWAYS_VISIBLE=['dashboard','employees','settings'];
+const empRoleModules={ // role → EMP_MODULES keys allowed (for permission seeding)
+  'Super Admin':EMP_MODULES.map(m=>m[0]),
+  'Operations':['agencies','onboarding','drivers-q','ambulance-q','gps-tracking'],
+  'Finance':['revenue','payouts','analytics'],
+  'Customer Support':['tickets','analytics'],
+  'Marketing':['analytics'],
+  'Custom Role':['agencies','tickets'],
+};
+const employees=[
+  {name:'Arjun Mehta',empId:'EMP-1001',email:'arjun@medurun.in',phone:'9820000001',dept:'Administration',role:'Super Admin',status:'online',last:'Active now',created:'02 Jan 2024',by:'System'},
+  {name:'Neha Kulkarni',empId:'EMP-1004',email:'neha@medurun.in',phone:'9820000004',dept:'Customer Support',role:'Customer Support',status:'online',last:'2 min ago',created:'14 Feb 2024',by:'Arjun Mehta'},
+  {name:'Rohan Desai',empId:'EMP-1007',email:'rohan@medurun.in',phone:'9820000007',dept:'Operations',role:'Operations',status:'online',last:'12 min ago',created:'21 Mar 2024',by:'Arjun Mehta'},
+  {name:'Kavya Rao',empId:'EMP-1009',email:'kavya@medurun.in',phone:'9820000009',dept:'Finance',role:'Finance',status:'offline',last:'3 hours ago',created:'05 Apr 2024',by:'Arjun Mehta'},
+  {name:'Imran Shaikh',empId:'EMP-1012',email:'imran@medurun.in',phone:'9820000012',dept:'Operations',role:'Operations',status:'offline',last:'Yesterday',created:'19 May 2024',by:'Rohan Desai'},
+  {name:'Sara Pinto',empId:'EMP-1015',email:'sara@medurun.in',phone:'9820000015',dept:'Marketing',role:'Marketing',status:'offline',last:'2 days ago',created:'08 Jun 2024',by:'Arjun Mehta'},
+  {name:'Vikram Joshi',empId:'EMP-1018',email:'vikram@medurun.in',phone:'9820000018',dept:'Finance',role:'Finance',status:'suspended',last:'1 week ago',created:'22 Jun 2024',by:'Kavya Rao'},
+  {name:'Pending Invite',empId:'EMP-1021',email:'newhire@medurun.in',phone:'—',dept:'Customer Support',role:'Customer Support',status:'invited',last:'—',created:'20 Jun 2026',by:'Arjun Mehta'},
+];
+let empSel=null,empCounter=1021,empRolePreview=false;
+const EMP_ST={online:['Online','active'],offline:['Offline','inactive'],suspended:['Suspended','rejected'],invited:['Invited','pending']};
+function empStatusBadge(s){const[l,c]=EMP_ST[s];return `<span class="badge ${c}">${l}</span>`;}
+
+function seedEmpPerms(e){
+  if(e.perms)return;
+  const allowed=empRoleModules[e.role]||['analytics'];
+  const full=e.role==='Super Admin';
+  e.perms={};
+  EMP_MODULES.forEach(([k])=>{
+    if(full)e.perms[k]=[...PERM_TYPES];
+    else if(allowed.includes(k))e.perms[k]=k==='analytics'?['View']:['View','Create','Edit'];
+    else e.perms[k]=[];
+  });
+}
+
+function renderEmployees(){
+  document.getElementById('emp-sum-total').textContent=employees.length;
+  document.getElementById('emp-sum-online').textContent=employees.filter(e=>e.status==='online').length;
+  document.getElementById('emp-sum-roles').textContent=new Set(employees.map(e=>e.role)).size;
+  document.getElementById('emp-sum-invites').textContent=employees.filter(e=>e.status==='invited').length;
+  const q=(document.getElementById('emp-search')?.value||'').toLowerCase().trim();
+  const fr=document.getElementById('emp-role')?.value||'All Roles';
+  const fd=document.getElementById('emp-dept')?.value||'All Departments';
+  const fs=document.getElementById('emp-status')?.value||'All Status';
+  const tbody=document.getElementById('employees-tbody');
+  const list=employees.map((e,i)=>({e,i})).filter(({e})=>{
+    const mq=!q||e.name.toLowerCase().includes(q)||e.empId.toLowerCase().includes(q)||e.email.toLowerCase().includes(q);
+    const mr=fr==='All Roles'||e.role===fr;
+    const md=fd==='All Departments'||e.dept===fd;
+    const ms=fs==='All Status'||EMP_ST[e.status][0]===fs;
+    return mq&&mr&&md&&ms;
+  });
+  if(!list.length){tbody.innerHTML=`<tr><td colspan="8"><div class="empty-state"><div class="empty-icon"><i data-lucide="search-x"></i></div><div class="empty-state-title">No matching employees</div><div class="empty-state-sub">Try adjusting your filters.</div></div></td></tr>`;IC();return;}
+  tbody.innerHTML=list.map(({e,i})=>`
+    <tr class="row-clickable" onclick="openEmployee(${i})">
+      <td><div style="display:flex;align-items:center;gap:10px"><div class="avatar" style="width:30px;height:30px;background:var(--primary);font-size:11px">${e.name.charAt(0)}</div><div><div style="font-weight:600">${e.name}</div><div class="text-sm text-muted">${e.email}</div></div></div></td>
+      <td class="text-sm" style="font-family:monospace">${e.empId}</td>
+      <td>${e.role}</td>
+      <td>${e.dept}</td>
+      <td>${empStatusBadge(e.status)}</td>
+      <td class="text-sm text-muted">${e.last}</td>
+      <td class="text-sm text-muted">${e.by}</td>
+      <td><button class="btn btn-outline btn-xs" onclick="event.stopPropagation();openEmployee(${i})">View →</button></td>
+    </tr>`).join('');
+  IC();
+}
+
+function openEmployee(i){
+  empSel=i;const e=employees[i];seedEmpPerms(e);
+  document.getElementById('employee-content').innerHTML=`
+    <div class="drawer-head">
+      <div class="drawer-avatar">${e.name.charAt(0)}</div>
+      <div style="flex:1;min-width:0"><div class="dh-title">${e.name}</div><div class="text-sm text-muted">${e.role} · ${e.dept}</div></div>
+      ${empStatusBadge(e.status)}
+    </div>
+    <div class="drawer-tabs">
+      <div class="drawer-tab active" onclick="empTab(event,'overview')">Overview</div>
+      <div class="drawer-tab" onclick="empTab(event,'permissions')">Permissions</div>
+      <div class="drawer-tab" onclick="empTab(event,'activity')">Activity</div>
+    </div>
+
+    <div class="drawer-tabpane active" data-pane="overview">
+      <div class="section-title">Employee</div>
+      <div class="prof-grid">
+        <div class="prof-cell"><div class="k">Employee Name</div><div class="v">${e.name}</div></div>
+        <div class="prof-cell"><div class="k">Employee ID</div><div class="v" style="font-family:monospace">${e.empId}</div></div>
+        <div class="prof-cell"><div class="k">Email</div><div class="v">${e.email}</div></div>
+        <div class="prof-cell"><div class="k">Phone</div><div class="v">${e.phone}</div></div>
+        <div class="prof-cell"><div class="k">Department</div><div class="v">${e.dept}</div></div>
+        <div class="prof-cell"><div class="k">Role</div><div class="v">${e.role}</div></div>
+        <div class="prof-cell"><div class="k">Status</div><div class="v">${EMP_ST[e.status][0]}</div></div>
+        <div class="prof-cell"><div class="k">Created Date</div><div class="v">${e.created}</div></div>
+        <div class="prof-cell"><div class="k">Created By</div><div class="v">${e.by}</div></div>
+        <div class="prof-cell"><div class="k">Last Login</div><div class="v">${e.last}</div></div>
+      </div>
+      <div class="section-title">Account Actions</div>
+      <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center" onclick="openEditEmployee(${i})"><i data-lucide="pencil"></i> Edit Employee</button>
+      <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center;margin-top:8px" onclick="resetEmpPassword(${i})"><i data-lucide="key-round"></i> Reset Password</button>
+      <div class="section-title" style="color:#DC2626">Danger Zone</div>
+      ${e.status==='suspended'
+        ?`<button class="btn btn-outline btn-sm" style="width:100%;justify-content:center" onclick="reactivateEmp(${i})"><i data-lucide="circle-check"></i> Reactivate Employee</button>`
+        :`<button class="btn btn-danger-soft btn-sm" style="width:100%;justify-content:center" onclick="openDeactivateEmp(${i})"><i data-lucide="ban"></i> Deactivate Employee</button>`}
+    </div>
+
+    <div class="drawer-tabpane" data-pane="permissions">
+      ${permSummaryHTML(e)}
+      <div class="section-title">Module Access</div>
+      ${EMP_MODULES.map(([k,label])=>{const[lvl,cls]=accessLevel(e.perms[k]);return `
+        <div class="mod-card">
+          <span class="mod-dot ${cls}"></span>
+          <div class="mod-name">${label}</div>
+          <span class="access-badge ${cls}">${lvl}</span>
+        </div>`;}).join('')}
+      <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center;margin-top:14px" onclick="openEditPermissions(${i})"><i data-lucide="sliders-horizontal"></i> Edit Permissions</button>
+    </div>
+
+    <div class="drawer-tabpane" data-pane="activity">
+      <div class="timeline" style="margin-top:4px">
+        <div class="tl-item active"><div class="tl-dot"></div><div class="tl-title">Logged in</div><div class="tl-sub">${e.last} · ${e.dept} workstation</div></div>
+        <div class="tl-item done"><div class="tl-dot"></div><div class="tl-title">Approved agency · RapidCare Emergency</div><div class="tl-sub">22 Jun 2026 · 11:20 AM</div></div>
+        <div class="tl-item done"><div class="tl-dot"></div><div class="tl-title">Resolved ticket · TKT-10286</div><div class="tl-sub">21 Jun 2026 · 04:15 PM</div></div>
+        <div class="tl-item done"><div class="tl-dot"></div><div class="tl-title">Updated pricing · ALS base fare</div><div class="tl-sub">20 Jun 2026 · 02:48 PM</div></div>
+        <div class="tl-item done"><div class="tl-dot"></div><div class="tl-title">Generated revenue report · May 2026</div><div class="tl-sub">19 Jun 2026 · 10:05 AM</div></div>
+        <div class="tl-item done"><div class="tl-dot"></div><div class="tl-title">Created employee · EMP-1018</div><div class="tl-sub">22 Jun 2024 · 09:30 AM</div></div>
+      </div>
+    </div>`;
+  const foot=document.getElementById('employee-foot');foot.innerHTML='';foot.style.display='none';
+  document.getElementById('employee-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+  IC();
+}
+function empTab(ev,pane){
+  const root=document.getElementById('employee-content');
+  root.querySelectorAll('.drawer-tab').forEach(t=>t.classList.remove('active'));
+  root.querySelectorAll('.drawer-tabpane').forEach(p=>p.classList.remove('active'));
+  ev.target.classList.add('active');
+  root.querySelector(`[data-pane="${pane}"]`).classList.add('active');
+}
+function permSummaryHTML(e){
+  let accessible=0,full=0,view=0,restricted=0;
+  EMP_MODULES.forEach(([k])=>{const[,cls]=accessLevel(e.perms[k]);
+    if(cls==='none')restricted++;else accessible++;
+    if(cls==='full')full++;if(cls==='view')view++;});
+  const cell=(n,l)=>`<div class="perm-sum-cell"><div class="perm-sum-val">${n}</div><div class="perm-sum-label">${l}</div></div>`;
+  return `<div class="perm-summary">${cell(accessible,'Accessible')}${cell(full,'Full Access')}${cell(view,'View Only')}${cell(restricted,'Restricted')}</div>`;
+}
+// granular editing happens only inside the modal
+let permModalIdx=null,permDraft=null;
+function openEditPermissions(i){
+  permModalIdx=i;const e=employees[i];
+  permDraft={};EMP_MODULES.forEach(([k])=>permDraft[k]=[...e.perms[k]]);
+  renderPermModal();
+  document.getElementById('perm-modal').classList.add('show');document.body.style.overflow='hidden';IC();
+}
+function renderPermModal(){
+  document.getElementById('perm-modal-sub').textContent=employees[permModalIdx].name+' · '+employees[permModalIdx].role;
+  document.getElementById('perm-modal-body').innerHTML=EMP_MODULES.map(([k,label])=>{
+    const[lvl,cls]=accessLevel(permDraft[k]);
+    return `<div class="perm-edit-row">
+      <div class="perm-edit-head"><div class="perm-name">${label}</div><span class="access-badge ${cls}">${lvl}</span></div>
+      <div class="perm-checks">
+        ${PERM_TYPES.map(p=>`<label class="perm-check ${permDraft[k].includes(p)?'on':''}" onclick="togglePermDraft('${k}','${p}');return false"><span class="perm-check-box"><i data-lucide="check"></i></span>${p}</label>`).join('')}
+      </div>
+    </div>`;}).join('');
+  IC();
+}
+function togglePermDraft(k,p){
+  const arr=permDraft[k];const idx=arr.indexOf(p);
+  if(idx<0)arr.push(p);else arr.splice(idx,1);
+  renderPermModal();
+}
+function closePermModal(){document.getElementById('perm-modal').classList.remove('show');document.body.style.overflow='';}
+function savePermModal(){
+  const e=employees[permModalIdx];EMP_MODULES.forEach(([k])=>e.perms[k]=[...permDraft[k]]);
+  closePermModal();openEmployee(permModalIdx);
+  setTimeout(()=>document.querySelectorAll('#employee-content .drawer-tab')[1]?.click(),0);
+  showNotif('Permissions updated for '+e.name,'success');
+}
+
+function openEditEmployee(i){empSel=i;const e=employees[i];
+  document.getElementById('ee-name').value=e.name;document.getElementById('ee-email').value=e.email;
+  document.getElementById('ee-phone').value=e.phone==='—'?'':e.phone;document.getElementById('ee-dept').value=e.dept;document.getElementById('ee-role').value=e.role;
+  document.getElementById('edit-employee-modal').classList.add('show');document.body.style.overflow='hidden';IC();}
+function closeEditEmployee(){document.getElementById('edit-employee-modal').classList.remove('show');document.body.style.overflow='';}
+function saveEditEmployee(){const e=employees[empSel];const g=id=>document.getElementById(id).value.trim();
+  if(!g('ee-name')||!g('ee-email')){showNotif('Name and email required','warning');return;}
+  e.name=g('ee-name');e.email=g('ee-email');e.phone=g('ee-phone')||'—';e.dept=document.getElementById('ee-dept').value;
+  const newRole=document.getElementById('ee-role').value;if(newRole!==e.role){e.role=newRole;e.perms=null;seedEmpPerms(e);}
+  closeEditEmployee();renderEmployees();openEmployee(empSel);showNotif('Employee updated','success');}
+
+function resetEmpPassword(i){showNotif('Temporary password sent to '+employees[i].email,'success');}
+
+function openDeactivateEmp(i){empSel=i;document.getElementById('de-name').textContent=employees[i].name;
+  document.getElementById('deactivate-emp-modal').classList.add('show');document.body.style.overflow='hidden';IC();}
+function closeDeactivateEmp(){document.getElementById('deactivate-emp-modal').classList.remove('show');document.body.style.overflow='';}
+function confirmDeactivateEmp(){employees[empSel].status='suspended';closeDeactivateEmp();renderEmployees();openEmployee(empSel);showNotif('Employee deactivated','warning');}
+function reactivateEmp(i){employees[i].status='offline';renderEmployees();openEmployee(i);showNotif('Employee reactivated','success');}
+
+// add employee + success
+function openAddEmployee(){['ae-name','ae-email','ae-phone'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('ae-dept').value='';document.getElementById('ae-role').value='';
+  document.getElementById('add-employee-modal').classList.add('show');document.body.style.overflow='hidden';IC();}
+function closeAddEmployee(){document.getElementById('add-employee-modal').classList.remove('show');document.body.style.overflow='';}
+let lastCred='';
+function createEmployee(){const g=id=>document.getElementById(id).value.trim();
+  const name=g('ae-name'),email=g('ae-email'),phone=g('ae-phone'),dept=document.getElementById('ae-dept').value,role=document.getElementById('ae-role').value;
+  if(!name||!email||!phone||!dept||!role){showNotif('Fill all required fields','warning');return;}
+  empCounter+=Math.max(1,(empCounter%3)+1);const empId='EMP-'+empCounter;
+  const pwd='Med'+empCounter+'#'+(role.charAt(0))+'x';
+  employees.unshift({name,empId,email,phone,dept,role,status:'invited',last:'—',created:'22 Jun 2026',by:'Arjun Mehta'});
+  renderEmployees();closeAddEmployee();
+  lastCred='Employee ID: '+empId+'\nTemporary Password: '+pwd;
+  document.getElementById('es-sub').textContent=name+' · '+role;
+  document.getElementById('es-id').textContent=empId;
+  document.getElementById('es-pwd').textContent=pwd;
+  document.getElementById('emp-success-modal').classList.add('show');document.body.style.overflow='hidden';IC();}
+function closeEmpSuccess(){document.getElementById('emp-success-modal').classList.remove('show');document.body.style.overflow='';}
+function copyCredentials(){if(navigator.clipboard)navigator.clipboard.writeText(lastCred).catch(()=>{});showNotif('Credentials copied','success');}
+function sendInvitation(){closeEmpSuccess();showNotif('Invitation email sent','success');}
+
+// ── TICKETS & QUERIES ──
+const tickets=[
+  {id:'TKT-10293',user:'Priya Mehta',cid:'CUST-90231',phone:'9820111222',booking:'BK-90231',category:'Billing',priority:'high',status:'open',dept:'Finance',created:'22 Jun 2026',
+   issue:'Charged twice for ride BK-90231. Requesting refund for the duplicate transaction.',team:'Finance Support',live:false},
+  {id:'TKT-10292',user:'Ravi Shankar',cid:'DRV-1042',phone:'9820123456',booking:'BK-90228',category:'Driver App',priority:'urgent',status:'in-progress',dept:'Tech Support',created:'22 Jun 2026',
+   issue:'Driver app crashes when accepting emergency rides. Unable to go online.',team:'Tech Support',live:true},
+  {id:'TKT-10291',user:'Karthik Reddy',cid:'CUST-90228',phone:'9848444555',booking:'BK-90228',category:'Ride Issue',priority:'urgent',status:'open',dept:'Operations',created:'22 Jun 2026',
+   issue:'Ambulance reached late during emergency. Need urgent review of dispatch.',team:'Operations',live:true},
+  {id:'TKT-10290',user:'Sunita Sharma',cid:'CUST-90220',phone:'9820555666',booking:'BK-90220',category:'Safety / SOS',priority:'urgent',status:'under-review',dept:'Operations',created:'21 Jun 2026',
+   issue:'SOS triggered mid-ride, requesting incident report and follow-up.',team:'Operations',live:true},
+  {id:'TKT-10289',user:'Metro Medic',cid:'AGN-2',phone:'9845234567',booking:'—',category:'Payout',priority:'medium',status:'under-review',dept:'Finance',created:'21 Jun 2026',
+   issue:'Monthly payout not received for May cycle. Settlement pending.',team:'Finance Support',live:false},
+  {id:'TKT-10288',user:'Ananya Iyer',cid:'CUST-90215',phone:'9845333444',booking:'BK-90215',category:'Billing',priority:'low',status:'open',dept:'Finance',created:'20 Jun 2026',
+   issue:'Invoice GST details incorrect, need corrected invoice.',team:'Finance Support',live:false},
+  {id:'TKT-10287',user:'Mohammed Iqbal',cid:'DRV-1088',phone:'9848456789',booking:'—',category:'Verification',priority:'medium',status:'in-progress',dept:'Compliance',created:'20 Jun 2026',
+   issue:'Police verification document rejected, needs re-review.',team:'Compliance',live:false},
+  {id:'TKT-10286',user:'Rahul Gupta',cid:'CUST-90208',phone:'9911222333',booking:'BK-90208',category:'Ride Issue',priority:'high',status:'resolved',dept:'Operations',created:'19 Jun 2026',
+   issue:'Wrong drop location recorded. Resolved with corrected fare.',team:'Operations',live:false},
+  {id:'TKT-10285',user:'CarePlus EMS',cid:'AGN-6',phone:'9979567890',booking:'—',category:'Onboarding',priority:'low',status:'resolved',dept:'Compliance',created:'19 Jun 2026',
+   issue:'NOC document upload failing. Resolved after portal fix.',team:'Compliance',live:false},
+];
+const TK_STATUS={open:['Open','pending'],'under-review':['Under Review','review'],'in-progress':['In Progress','processing'],resolved:['Resolved','verified']};
+const TK_PRIO={urgent:'Urgent',high:'High',medium:'Medium',low:'Low'};
+let ticketSel=null;
+
+function tkStatusBadge(s){const[label,cls]=TK_STATUS[s];return `<span class="badge ${cls}">${label}</span>`;}
+
+function renderTickets(){
+  document.getElementById('tk-sum-open').textContent=tickets.filter(t=>t.status==='open').length;
+  document.getElementById('tk-sum-review').textContent=tickets.filter(t=>t.status==='under-review').length;
+  document.getElementById('tk-sum-progress').textContent=tickets.filter(t=>t.status==='in-progress').length;
+  document.getElementById('tk-sum-resolved').textContent=tickets.filter(t=>t.status==='resolved').length;
+  const q=(document.getElementById('tk-search')?.value||'').toLowerCase().trim();
+  const fs=document.getElementById('tk-status')?.value||'All Status';
+  const fp=document.getElementById('tk-priority')?.value||'All Priority';
+  const tbody=document.getElementById('tickets-tbody');
+  const list=tickets.map((t,i)=>({t,i})).filter(({t})=>{
+    const mq=!q||t.id.toLowerCase().includes(q)||t.user.toLowerCase().includes(q)||t.category.toLowerCase().includes(q);
+    const ms=fs==='All Status'||TK_STATUS[t.status][0]===fs;
+    const mp=fp==='All Priority'||TK_PRIO[t.priority]===fp;
+    return mq&&ms&&mp;
+  });
+  if(!list.length){tbody.innerHTML=`<tr><td colspan="7"><div class="empty-state"><div class="empty-icon"><i data-lucide="search-x"></i></div><div class="empty-state-title">No matching tickets</div><div class="empty-state-sub">Try adjusting your filters.</div></div></td></tr>`;IC();return;}
+  tbody.innerHTML=list.map(({t,i})=>`
+    <tr class="row-clickable" onclick="openTicket(${i})">
+      <td style="font-weight:600;font-family:monospace">${t.id}</td>
+      <td>${t.user}</td>
+      <td>${t.category}</td>
+      <td><span class="prio ${t.priority}">${TK_PRIO[t.priority]}</span></td>
+      <td>${tkStatusBadge(t.status)}</td>
+      <td>${t.dept}</td>
+      <td class="text-sm text-muted">${t.created}</td>
+    </tr>`).join('');
+  IC();
+}
+
+// seed audit history once per ticket
+function seedTicket(t){
+  if(t._seeded)return;t._seeded=true;
+  const d=t.created;
+  t.timeline=[
+    {time:d+' 10:32 AM',title:'Ticket created',sub:'Raised by '+t.user},
+    {time:d+' 10:40 AM',title:'Assigned to '+t.dept,sub:'Auto-routed by category: '+t.category},
+    {time:d+' 11:15 AM',title:'Status changed to Under Review',sub:'By Neha Kulkarni · Support Lead'},
+  ];
+  if(t.priority==='urgent')t.timeline.push({time:d+' 11:40 AM',title:'Escalated to '+t.dept+' Lead',sub:'Priority: Urgent'});
+  if(t.status==='in-progress')t.timeline.push({time:d+' 12:05 PM',title:'Resolution initiated',sub:'In progress'});
+  if(t.status==='resolved')t.timeline.push({time:d+' 02:20 PM',title:'Ticket resolved',sub:'Closed by '+t.team});
+  t.comments=[
+    {name:'Neha Kulkarni',role:'Support Lead',time:d+' 11:16 AM',text:'Reviewed the issue, routing to '+t.team+' for action.'},
+    {name:'Arjun Mehta',role:'Super Admin',time:d+' 11:50 AM',text:'Please prioritise — customer impacted on '+(t.booking==='—'?'account':t.booking)+'.'},
+  ];
+  t.activity=[
+    {time:d+' 10:32 AM',icon:'plus',text:'Ticket created via customer app'},
+    {time:d+' 10:33 AM',icon:'phone',text:'Inbound call logged · 2m 14s'},
+    {time:d+' 10:40 AM',icon:'shuffle',text:'Routed to '+t.dept+' department'},
+    {time:d+' 10:41 AM',icon:'users',text:'Assigned to team: '+t.team},
+    {time:d+' 11:15 AM',icon:'user-check',text:'Ownership: Neha Kulkarni'},
+    {time:d+' 11:30 AM',icon:'mail',text:'Acknowledgement email sent to customer'},
+  ];
+}
+
+function openTicket(i){
+  ticketSel=i;const t=tickets[i];seedTicket(t);
+  document.getElementById('ticket-content').innerHTML=`
+    <div class="drawer-head">
+      <div class="drawer-avatar" style="font-family:monospace;font-size:12px">${t.id.split('-')[1].slice(0,3)}</div>
+      <div style="flex:1;min-width:0"><div class="dh-title" style="font-family:monospace">${t.id}</div><div class="text-sm text-muted">${t.category} · ${t.created}</div></div>
+      ${tkStatusBadge(t.status)}
+    </div>
+    <div class="drawer-tabs">
+      <div class="drawer-tab active" onclick="ticketTab(event,'overview')">Overview</div>
+      <div class="drawer-tab" onclick="ticketTab(event,'timeline')">Timeline</div>
+      <div class="drawer-tab" onclick="ticketTab(event,'comments')">Comments</div>
+      <div class="drawer-tab" onclick="ticketTab(event,'activity')">Activity Log</div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div class="drawer-tabpane active" data-pane="overview">
+      <div class="section-title">Ticket Details</div>
+      <div class="prof-grid">
+        <div class="prof-cell"><div class="k">Ticket ID</div><div class="v" style="font-family:monospace">${t.id}</div></div>
+        <div class="prof-cell"><div class="k">Category</div><div class="v">${t.category}</div></div>
+        <div class="prof-cell"><div class="k">Priority</div><div class="v"><span class="prio ${t.priority}">${TK_PRIO[t.priority]}</span></div></div>
+        <div class="prof-cell"><div class="k">Status</div><div class="v">${TK_STATUS[t.status][0]}</div></div>
+        <div class="prof-cell"><div class="k">Assigned Department</div><div class="v">${t.dept}</div></div>
+        <div class="prof-cell"><div class="k">Assigned Team</div><div class="v">${t.team}</div></div>
+      </div>
+      <div class="section-title">Customer</div>
+      <div class="contact-card">
+        <div class="cc-name">${t.user}</div>
+        <div class="cc-role">Customer ID · ${t.cid}</div>
+        <div class="cc-line"><i data-lucide="phone"></i> ${t.phone}</div>
+        <div class="cc-line"><i data-lucide="ticket"></i> Booking ${t.booking}</div>
+      </div>
+      ${t.booking!=='—'?`<button class="btn btn-outline btn-sm" style="width:100%;justify-content:center;margin-top:10px" onclick="openBookingModal(${i})"><i data-lucide="external-link"></i> View Booking</button>`:''}
+      <div class="section-title">Issue Description</div>
+      <p style="font-size:13px;line-height:1.6;color:#374151">${t.issue}</p>
+      ${t.status==='resolved'?`
+      <div class="section-title">Resolution Summary</div>
+      <div class="stat-row"><span class="text-sm text-muted">Resolved By</span><span style="font-weight:600">${t._resolvedBy||'Arjun Mehta'}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Resolution Date & Time</span><span style="font-weight:600">${t._resolvedAt||(t.created+' · 02:20 PM')}</span></div>
+      <div style="margin-top:8px"><div class="text-sm text-muted" style="margin-bottom:4px">Resolution Notes</div><p style="font-size:13px;line-height:1.6;color:#374151">${t._resolution||'Resolved.'}</p></div>`:''}
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="drawer-tabpane" data-pane="timeline">
+      <div class="timeline" style="margin-top:4px">
+        ${t.timeline.map((e,k)=>`<div class="tl-item ${k<t.timeline.length-1?'done':(t.status==='resolved'?'done':'active')}"><div class="tl-dot"></div><div class="tl-title">${e.title}</div><div class="tl-sub">${e.time} · ${e.sub}</div></div>`).join('')}
+      </div>
+    </div>
+
+    <!-- COMMENTS -->
+    <div class="drawer-tabpane" data-pane="comments">
+      ${t.comments.map(c=>`
+        <div class="tk-comment">
+          <div class="tk-comment-head"><span class="tk-comment-name">${c.name}</span><span class="tk-comment-role">${c.role}</span><span class="tk-comment-time">${c.time}</span></div>
+          <div class="tk-comment-body">${c.text}</div>
+        </div>`).join('')||'<div class="text-sm text-muted" style="padding:8px 0">No comments yet.</div>'}
+      <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center;margin-top:12px" onclick="openCommentModal(${i})"><i data-lucide="message-square-plus"></i> Add Comment</button>
+    </div>
+
+    <!-- ACTIVITY LOG -->
+    <div class="drawer-tabpane" data-pane="activity">
+      ${t.activity.map(a=>`
+        <div class="tk-log">
+          <span class="tk-log-ic"><i data-lucide="${a.icon}"></i></span>
+          <div style="flex:1;min-width:0"><div class="tk-log-text">${a.text}</div><div class="tk-log-time">${a.time}</div></div>
+        </div>`).join('')}
+    </div>`;
+  document.getElementById('ticket-foot').innerHTML=ticketFooter(i,t);
+  document.getElementById('ticket-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+  IC();
+}
+function ticketTab(e,pane){
+  const root=document.getElementById('ticket-content');
+  root.querySelectorAll('.drawer-tab').forEach(t=>t.classList.remove('active'));
+  root.querySelectorAll('.drawer-tabpane').forEach(p=>p.classList.remove('active'));
+  e.target.classList.add('active');
+  root.querySelector(`[data-pane="${pane}"]`).classList.add('active');
+}
+
+// state-aware footer: only actions relevant to the current stage
+function ticketFooter(i,t){
+  const O=(label,icon,fn)=>`<button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="${fn}"><i data-lucide="${icon}"></i> ${label}</button>`;
+  const P=(label,icon,fn)=>`<button class="btn btn-primary" style="width:100%;justify-content:center" onclick="${fn}"><i data-lucide="${icon}"></i> ${label}</button>`;
+  if(t.status==='open'){
+    return `<div style="display:flex;gap:8px">${O('Assign Team','users',`openAssignTeam(${i})`)}${O('Change Status','refresh-cw',`openChangeStatus(${i})`)}</div>
+      <div style="display:flex;gap:8px">${O('Add Comment','message-square',`openCommentModal(${i})`)}</div>
+      ${P('Start Review','play',`startReview(${i})`)}`;
+  }
+  if(t.status==='under-review'){
+    return `<div style="display:flex;gap:8px">${O('Assign Team','users',`openAssignTeam(${i})`)}${O('Change Status','refresh-cw',`openChangeStatus(${i})`)}</div>
+      <div style="display:flex;gap:8px">${O('Add Comment','message-square',`openCommentModal(${i})`)}${O('Escalate','trending-up',`escalateTicket(${i})`)}</div>
+      ${P('Move to In Progress','arrow-right',`moveInProgress(${i})`)}`;
+  }
+  if(t.status==='in-progress'){
+    return `<div style="display:flex;gap:8px">${O('Add Comment','message-square',`openCommentModal(${i})`)}${O('Reassign Team','users',`openAssignTeam(${i})`)}</div>
+      <div style="display:flex;gap:8px">${O('Update Customer','send',`openUpdateCustomer(${i})`)}</div>
+      ${P('Resolve Ticket','check',`openResolveTicket(${i})`)}`;
+  }
+  // resolved — no workflow actions
+  return `<div style="display:flex;gap:8px">
+      ${O('Reopen Ticket','rotate-ccw',`reopenTicket(${i})`)}
+      ${O('View Audit Trail','history',`viewAudit(${i})`)}
+    </div>`;
+}
+function startReview(i){const t=tickets[i];t.status='under-review';
+  t.timeline.push({time:t.created+' · now',title:'Review started',sub:'By Arjun Mehta · Super Admin'});
+  t.activity.unshift({time:'just now',icon:'play',text:'Review started'});
+  renderTickets();openTicket(i);showNotif(t.id+' → Under Review','success');}
+function moveInProgress(i){const t=tickets[i];t.status='in-progress';
+  t.timeline.push({time:t.created+' · now',title:'Moved to In Progress',sub:'Resolution initiated'});
+  t.activity.unshift({time:'just now',icon:'arrow-right',text:'Status → In Progress'});
+  renderTickets();openTicket(i);showNotif(t.id+' → In Progress','success');}
+function escalateTicket(i){const t=tickets[i];t.priority='urgent';
+  t.timeline.push({time:t.created+' · now',title:'Escalated to '+t.dept+' Lead',sub:'Priority raised to Urgent'});
+  t.activity.unshift({time:'just now',icon:'trending-up',text:'Escalated to '+t.dept+' Lead'});
+  renderTickets();openTicket(i);showNotif(t.id+' escalated','warning');}
+function reopenTicket(i){const t=tickets[i];t.status='in-progress';t._resolution='';t._resolvedAt='';t._resolvedBy='';
+  t.timeline.push({time:t.created+' · now',title:'Ticket reopened',sub:'By Arjun Mehta · Super Admin'});
+  t.activity.unshift({time:'just now',icon:'rotate-ccw',text:'Ticket reopened'});
+  renderTickets();openTicket(i);showNotif(t.id+' reopened','warning');}
+function viewAudit(i){openTicket(i);setTimeout(()=>document.querySelectorAll('#ticket-content .drawer-tab')[3]?.click(),0);}
+
+// ── TICKET ACTION MODALS ──
+let tkModalIdx=null;
+function openAssignTeam(i){tkModalIdx=i;const t=tickets[i];
+  document.getElementById('at-dept').value=t.dept;document.getElementById('at-team').value=t.team;
+  document.getElementById('assign-team-modal').classList.add('show');document.body.style.overflow='hidden';IC();}
+function closeAssignTeam(){document.getElementById('assign-team-modal').classList.remove('show');document.body.style.overflow='';}
+function saveAssignTeam(){const t=tickets[tkModalIdx];const dept=document.getElementById('at-dept').value,team=document.getElementById('at-team').value;
+  t.dept=dept;t.team=team;
+  t.timeline.push({time:t.created+' · now',title:'Re-assigned to '+dept,sub:'Team: '+team});
+  t.activity.unshift({time:'just now',icon:'users',text:'Team assignment → '+team+' ('+dept+')'});
+  closeAssignTeam();renderTickets();openTicket(tkModalIdx);showNotif('Assigned to '+team,'success');}
+
+function openChangeStatus(i){tkModalIdx=i;
+  document.querySelectorAll('input[name="cs-status"]').forEach(r=>r.checked=(r.value===tickets[i].status));
+  document.getElementById('change-status-modal').classList.add('show');document.body.style.overflow='hidden';IC();}
+function closeChangeStatus(){document.getElementById('change-status-modal').classList.remove('show');document.body.style.overflow='';}
+function saveChangeStatus(){const sel=document.querySelector('input[name="cs-status"]:checked');if(!sel){showNotif('Select a status','warning');return;}
+  const t=tickets[tkModalIdx];t.status=sel.value;
+  t.timeline.push({time:t.created+' · now',title:'Status changed to '+TK_STATUS[sel.value][0],sub:'By Arjun Mehta · Super Admin'});
+  t.activity.unshift({time:'just now',icon:'refresh-cw',text:'Status → '+TK_STATUS[sel.value][0]});
+  closeChangeStatus();renderTickets();openTicket(tkModalIdx);showNotif(t.id+' → '+TK_STATUS[sel.value][0],'success');}
+
+function openCommentModal(i){tkModalIdx=i;document.getElementById('cm-text').value='';
+  document.getElementById('comment-modal').classList.add('show');document.body.style.overflow='hidden';IC();}
+function closeCommentModal(){document.getElementById('comment-modal').classList.remove('show');document.body.style.overflow='';}
+function saveComment(){const txt=document.getElementById('cm-text').value.trim();if(!txt){showNotif('Enter a comment','warning');return;}
+  const t=tickets[tkModalIdx];
+  t.comments.push({name:'Arjun Mehta',role:'Super Admin',time:'just now',text:txt});
+  t.activity.unshift({time:'just now',icon:'message-square',text:'Comment added by Arjun Mehta'});
+  closeCommentModal();openTicket(tkModalIdx);
+  setTimeout(()=>{document.querySelector('#ticket-content .drawer-tab:nth-child(3)')?.click();},0);
+  showNotif('Comment added','success');}
+
+function openResolveTicket(i){tkModalIdx=i;document.getElementById('rs-notes').value='';document.getElementById('rs-notify').checked=true;
+  document.getElementById('resolve-ticket-modal').classList.add('show');document.body.style.overflow='hidden';IC();}
+function closeResolveTicket(){document.getElementById('resolve-ticket-modal').classList.remove('show');document.body.style.overflow='';}
+function confirmResolveTicket(){const notes=document.getElementById('rs-notes').value.trim();if(!notes){showNotif('Resolution notes are required','warning');return;}
+  const notify=document.getElementById('rs-notify').checked;const t=tickets[tkModalIdx];
+  t.status='resolved';t._resolution=notes;t._resolvedBy='Arjun Mehta';t._resolvedAt=t.created+' · 02:20 PM';
+  t.timeline.push({time:t.created+' · now',title:'Ticket resolved',sub:notes.slice(0,60)});
+  t.activity.unshift({time:'just now',icon:'check',text:'Ticket resolved by Arjun Mehta'});
+  if(notify)t.activity.unshift({time:'just now',icon:'mail',text:'Resolution notification sent to '+t.user});
+  closeResolveTicket();renderTickets();openTicket(tkModalIdx);
+  showNotif(t.id+' resolved'+(notify?' · customer notified':''),'success');}
+
+function openUpdateCustomer(i){tkModalIdx=i;document.getElementById('uc-text').value='';
+  document.getElementById('uc-sub').textContent='To '+tickets[i].user+' · '+tickets[i].phone;
+  document.getElementById('update-customer-modal').classList.add('show');document.body.style.overflow='hidden';IC();}
+function closeUpdateCustomer(){document.getElementById('update-customer-modal').classList.remove('show');document.body.style.overflow='';}
+function saveUpdateCustomer(){const txt=document.getElementById('uc-text').value.trim();if(!txt){showNotif('Enter a message','warning');return;}
+  const t=tickets[tkModalIdx];
+  t.timeline.push({time:t.created+' · now',title:'Customer update sent',sub:txt.slice(0,60)});
+  t.activity.unshift({time:'just now',icon:'send',text:'Customer update sent to '+t.user});
+  closeUpdateCustomer();openTicket(tkModalIdx);showNotif('Customer update sent','success');}
+
+function openBookingModal(i){const t=tickets[i];
+  document.getElementById('bk-sub').textContent=t.booking+' · '+t.user;
+  document.getElementById('booking-modal-body').innerHTML=`
+    <div class="form-sec" style="border-bottom:none;padding-top:8px"><div class="prof-grid">
+      <div class="prof-cell"><div class="k">Booking ID</div><div class="v" style="font-family:monospace">${t.booking}</div></div>
+      <div class="prof-cell"><div class="k">Customer</div><div class="v">${t.user}</div></div>
+      <div class="prof-cell"><div class="k">Phone</div><div class="v">${t.phone}</div></div>
+      <div class="prof-cell"><div class="k">Status</div><div class="v">Completed</div></div>
+      <div class="prof-cell"><div class="k">Pickup</div><div class="v">Andheri East</div></div>
+      <div class="prof-cell"><div class="k">Destination</div><div class="v">City General Hospital</div></div>
+      <div class="prof-cell"><div class="k">Fare</div><div class="v">₹2,140</div></div>
+      <div class="prof-cell"><div class="k">Date</div><div class="v">${t.created}</div></div>
+    </div></div>`;
+  document.getElementById('booking-modal').classList.add('show');document.body.style.overflow='hidden';IC();}
+function closeBookingModal(){document.getElementById('booking-modal').classList.remove('show');document.body.style.overflow='';}
+
+// ── GPS TRACKING ──
+const gpsVehicles=[
+  {reg:'MH01-AB-1234',driver:'Ravi Shankar',phone:'9820123456',agency:'LifeLine Ambulance',city:'Mumbai',status:'onride',updated:'12 sec ago',location:'Andheri East, Mumbai',rideId:'RID-48211',customer:'Priya Mehta',booking:'BK-90231',x:24,y:30},
+  {reg:'DL02-CD-5678',driver:'Suresh Kumar',phone:'9845234567',agency:'Metro Medic',city:'Delhi',status:'available',updated:'8 sec ago',location:'Connaught Place, Delhi',x:52,y:22},
+  {reg:'KA03-EF-9012',driver:'Deepak Nair',phone:'9845678901',agency:'RapidCare',city:'Bangalore',status:'available',updated:'20 sec ago',location:'Koramangala, Bangalore',x:70,y:46},
+  {reg:'TN04-GH-3456',driver:'Mohammed Iqbal',phone:'9848456789',agency:'Swift Ambulance',city:'Hyderabad',status:'onride',updated:'5 sec ago',location:'Banjara Hills, Hyderabad',rideId:'RID-48207',customer:'Karthik Reddy',booking:'BK-90228',x:44,y:58},
+  {reg:'MH02-KL-2468',driver:'Anil Mishra',phone:'9820345678',agency:'Falcon Medical',city:'Pune',status:'sos',updated:'2 sec ago',location:'Hinjewadi, Pune',rideId:'RID-48199',customer:'Sunita Sharma',booking:'BK-90220',x:33,y:44},
+  {reg:'GJ05-IJ-7890',driver:'Ramesh Patel',phone:'9979567890',agency:'Medivac Pro',city:'Mumbai',status:'available',updated:'15 sec ago',location:'Bandra West, Mumbai',x:18,y:64},
+  {reg:'DL08-MN-1357',driver:'Santosh Yadav',phone:'9911789012',agency:'NovaCare',city:'Delhi',status:'offline',updated:'6 min ago',location:'Last seen: Saket, Delhi',x:60,y:70},
+  {reg:'MH07-OP-2469',driver:'Kiran Thakur',phone:'9820890123',agency:'LifeLine Ambulance',city:'Mumbai',status:'onride',updated:'10 sec ago',location:'Powai, Mumbai',rideId:'RID-48215',customer:'Ashok Jain',booking:'BK-90235',x:80,y:28},
+  {reg:'KA09-QR-3580',driver:'Vijay Nair',phone:'9791666777',agency:'RapidCare',city:'Bangalore',status:'available',updated:'25 sec ago',location:'Whitefield, Bangalore',x:88,y:60},
+  {reg:'TN11-ST-4691',driver:'Rahul Gupta',phone:'9911222333',agency:'CarePlus',city:'Hyderabad',status:'offline',updated:'12 min ago',location:'Last seen: Gachibowli',x:50,y:84},
+];
+const GPS_ST={available:'Available',onride:'On Ride',offline:'Offline',sos:'SOS / Issue'};
+const GPS_TYPES=['ALS','BLS','ICU','BLS','ALS','BLS','BLS','ICU','BLS','ALS'];
+let gpsSelected=null;
+
+function renderGps(){
+  // summary
+  const online=gpsVehicles.filter(v=>v.status!=='offline').length;
+  document.getElementById('gps-sum-online').textContent=online;
+  document.getElementById('gps-sum-onride').textContent=gpsVehicles.filter(v=>v.status==='onride').length;
+  document.getElementById('gps-sum-available').textContent=gpsVehicles.filter(v=>v.status==='available').length;
+  document.getElementById('gps-sum-offline').textContent=gpsVehicles.filter(v=>v.status==='offline').length;
+  // markers
+  document.getElementById('gps-markers').innerHTML=gpsVehicles.map((v,i)=>`
+    <div class="gps-marker ${v.status} ${gpsSelected===i?'sel':''}" style="left:${v.x}%;top:${v.y}%" title="${v.reg}" onclick="openGpsVehicle(${i})">
+      <div class="gps-pin ${v.status}"></div>
+    </div>`).join('');
+  renderGpsList();
+}
+function renderGpsList(){
+  const q=(document.getElementById('gps-search')?.value||'').toLowerCase().trim();
+  const fs=document.getElementById('gps-status')?.value||'All Status';
+  const fc=document.getElementById('gps-city')?.value||'All Cities';
+  const list=gpsVehicles.map((v,i)=>({v,i})).filter(({v})=>{
+    const mq=!q||v.reg.toLowerCase().includes(q)||v.driver.toLowerCase().includes(q)||v.agency.toLowerCase().includes(q);
+    const ms=fs==='All Status'||GPS_ST[v.status]===fs;
+    const mc=fc==='All Cities'||v.city===fc;
+    return mq&&ms&&mc;
+  });
+  const el=document.getElementById('gps-list');
+  if(!list.length){el.innerHTML=`<div class="empty-state" style="padding:32px 16px"><div class="empty-state-title">No vehicles</div><div class="empty-state-sub">Adjust filters.</div></div>`;return;}
+  el.innerHTML=list.map(({v,i})=>`
+    <div class="gps-row ${gpsSelected===i?'sel':''}" onclick="openGpsVehicle(${i})">
+      <span class="gps-row-dot ${v.status}"></span>
+      <div class="gps-row-main">
+        <div class="gps-row-reg">${v.reg}</div>
+        <div class="gps-row-sub">${v.driver} · ${v.city}</div>
+      </div>
+      <div class="gps-row-meta">
+        <div class="gps-status-text ${v.status}">${GPS_ST[v.status]}</div>
+        <div class="gps-row-time">${v.updated}</div>
+      </div>
+    </div>`).join('');
+}
+function openGpsVehicle(i){
+  gpsSelected=i;
+  const v=gpsVehicles[i];const onride=v.status==='onride'||v.status==='sos';
+  const type=v.type||GPS_TYPES[i%GPS_TYPES.length];
+  document.getElementById('gps-content').innerHTML=`
+    <div class="drawer-head">
+      <div class="drawer-avatar"><i data-lucide="ambulance"></i></div>
+      <div style="flex:1;min-width:0"><div class="dh-title" style="font-family:monospace">${v.reg}</div><div class="text-sm text-muted">${v.agency} · ${type}</div></div>
+      <span class="gps-status-text ${v.status}" style="font-size:12.5px">${GPS_ST[v.status]}</span>
+    </div>
+    <div style="padding:2px 22px 18px">
+      <div class="section-title">Vehicle</div>
+      <div class="prof-grid">
+        <div class="prof-cell"><div class="k">Ambulance Number</div><div class="v" style="font-family:monospace">${v.reg}</div></div>
+        <div class="prof-cell"><div class="k">Type</div><div class="v">${type}</div></div>
+        <div class="prof-cell"><div class="k">Agency</div><div class="v">${v.agency}</div></div>
+        <div class="prof-cell"><div class="k">Current Status</div><div class="v">${GPS_ST[v.status]}</div></div>
+      </div>
+      <div class="section-title">Driver</div>
+      <div class="prof-grid">
+        <div class="prof-cell"><div class="k">Driver Name</div><div class="v">${v.driver}</div></div>
+        <div class="prof-cell"><div class="k">Driver Phone</div><div class="v">${v.phone}</div></div>
+      </div>
+      <div class="section-title">Location</div>
+      <div class="stat-row"><span class="text-sm text-muted">Current Location</span><span style="font-weight:600">${v.location}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Last Updated</span><span style="font-weight:600">${v.updated}</span></div>
+      ${onride?`
+      <div class="section-title">Active Ride</div>
+      <div class="stat-row"><span class="text-sm text-muted">Ride ID</span><span style="font-weight:600;font-family:monospace">${v.rideId}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Booking ID</span><span style="font-weight:600;font-family:monospace">${v.booking}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Customer Name</span><span style="font-weight:600">${v.customer}</span></div>`
+      :'<div class="section-title">Active Ride</div><div class="text-sm text-muted" style="padding:2px 0">No active ride — vehicle is '+GPS_ST[v.status].toLowerCase()+'.</div>'}
+    </div>`;
+  document.getElementById('gps-foot').innerHTML=`
+    <button class="btn btn-primary" style="width:100%;justify-content:center" ${onride?'':'disabled'} onclick="openRideModal(${i})"><i data-lucide="navigation"></i> View Ride</button>
+    <div class="foot-label">Profiles</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="gpsOpenDriver(${i})"><i data-lucide="user"></i> View Driver Profile</button>
+      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="gpsOpenAmbulance(${i})"><i data-lucide="ambulance"></i> View Ambulance Profile</button>
+    </div>
+    <div class="foot-label" style="color:#DC2626">Emergency</div>
+    <button class="btn btn-danger-soft btn-sm" style="width:100%;justify-content:center" onclick="openCallDriver(${i})"><i data-lucide="phone"></i> Call Driver</button>`;
+  document.getElementById('gps-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+  renderGps();
+  IC();
+}
+
+// GPS fleet is operational-only. Profiles open the APPROVED operational record
+// for the selected vehicle — never the onboarding/verification queues.
+function gpsOpenDriver(i){
+  const v=gpsVehicles[i];
+  // match an ACTIVE (approved/operational) Driver Overview record by name
+  let idx=driversData.findIndex(d=>d.name===v.driver&&d.status==='active');
+  if(idx<0){
+    driversData.push({name:v.driver,phone:v.phone,agency:v.agency,city:v.city,
+      license:v.license||('GPS-'+(2024)+'-'+(1000+i*7)),rides:Math.floor(180+i*43),
+      rating:(4.5+(i%4)*0.1).toFixed(1),status:'active',
+      email:v.driver.toLowerCase().replace(/[^a-z]+/g,'.')+'@medurun.in',
+      experience:(3+i%7)+' years',joined:'12 Mar 2024'});
+    idx=driversData.length-1;
+  }
+  document.getElementById('gps-panel').classList.remove('open');
+  openDriverDetail(idx); // Driver Overview operational profile drawer
+}
+// operational ambulance profile (read-only) — NOT the verification review drawer
+function gpsOpenAmbulance(i){
+  const v=gpsVehicles[i];
+  const type=v.type||GPS_TYPES[i%GPS_TYPES.length];
+  const desc={BLS:'Basic life support',ALS:'Advanced life support',ICU:'Critical care equipped',Neonatal:'Neonatal specialized'};
+  document.getElementById('amb-profile-content').innerHTML=`
+    <div class="drawer-head">
+      <div class="drawer-avatar"><i data-lucide="ambulance"></i></div>
+      <div style="flex:1;min-width:0"><div class="dh-title" style="font-family:monospace">${v.reg}</div><div class="text-sm text-muted">${v.agency} · ${type}</div></div>
+      <span class="badge verified">Operational</span>
+    </div>
+    <div style="padding:2px 22px 18px">
+      <div class="section-title">Ambulance Details</div>
+      <div class="prof-grid">
+        <div class="prof-cell"><div class="k">Ambulance Number</div><div class="v" style="font-family:monospace">${v.reg}</div></div>
+        <div class="prof-cell"><div class="k">Type</div><div class="v">${type}</div></div>
+        <div class="prof-cell"><div class="k">Agency</div><div class="v">${v.agency}</div></div>
+        <div class="prof-cell"><div class="k">City</div><div class="v">${v.city}</div></div>
+        <div class="prof-cell"><div class="k">Verification</div><div class="v">Approved</div></div>
+        <div class="prof-cell"><div class="k">Fleet Status</div><div class="v">${GPS_ST[v.status]}</div></div>
+      </div>
+      <div class="section-title">Operations</div>
+      <div class="stat-row"><span class="text-sm text-muted">Equipment</span><span style="font-weight:600">${desc[type]||'Standard'}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">GPS Device</span><span style="font-weight:600;font-family:monospace">GPS-${1000+i*7}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Last Service</span><span style="font-weight:600">04 Jun 2026</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Current Location</span><span style="font-weight:600">${v.location}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Last Updated</span><span style="font-weight:600">${v.updated}</span></div>
+    </div>`;
+  document.getElementById('amb-profile-foot').innerHTML=`
+    <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center" onclick="closePanel()">Close</button>`;
+  document.getElementById('gps-panel').classList.remove('open');
+  document.getElementById('amb-profile-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+  IC();
+}
+
+// ── RIDE DETAILS MODAL (centered) ──
+function openRideModal(i){
+  const v=gpsVehicles[i];
+  const fares=['₹2,140','₹1,860','₹3,420','₹2,760'];
+  document.getElementById('ride-modal-body').innerHTML=`
+    <div class="form-sec" style="border-bottom:none;padding-top:8px">
+      <div class="prof-grid">
+        <div class="prof-cell"><div class="k">Ride ID</div><div class="v" style="font-family:monospace">${v.rideId}</div></div>
+        <div class="prof-cell"><div class="k">Booking ID</div><div class="v" style="font-family:monospace">${v.booking}</div></div>
+        <div class="prof-cell"><div class="k">Ride Status</div><div class="v">${v.status==='sos'?'SOS / Issue':'On Ride'}</div></div>
+        <div class="prof-cell"><div class="k">Customer Name</div><div class="v">${v.customer}</div></div>
+        <div class="prof-cell"><div class="k">Customer Phone</div><div class="v">${v.phone}</div></div>
+        <div class="prof-cell"><div class="k">Driver</div><div class="v">${v.driver}</div></div>
+        <div class="prof-cell"><div class="k">Ambulance</div><div class="v" style="font-family:monospace">${v.reg}</div></div>
+        <div class="prof-cell"><div class="k">Pickup Location</div><div class="v">${v.location}</div></div>
+        <div class="prof-cell"><div class="k">Destination</div><div class="v">City General Hospital</div></div>
+        <div class="prof-cell"><div class="k">Fare</div><div class="v">${fares[i%fares.length]}</div></div>
+        <div class="prof-cell"><div class="k">Start Time</div><div class="v">14:32</div></div>
+        <div class="prof-cell" style="grid-column:1/-1"><div class="k">Estimated Arrival</div><div class="v">14:48 · ~6 min away</div></div>
+      </div>
+    </div>`;
+  document.getElementById('ride-modal-foot').innerHTML=`
+    <button class="btn btn-outline btn-sm" onclick="closeRideModal()">Close</button>
+    <button class="btn btn-outline btn-sm" onclick="showNotif('Opening customer ${v.customer}','success')"><i data-lucide="user"></i> View Customer</button>
+    <button class="btn btn-primary btn-sm" onclick="showNotif('Tracking live route','success')"><i data-lucide="route"></i> Track Live Route</button>`;
+  document.getElementById('ride-modal-sub').textContent=v.rideId+' · '+v.customer;
+  document.getElementById('ride-modal').classList.add('show');
+  document.body.style.overflow='hidden';IC();
+}
+function closeRideModal(){document.getElementById('ride-modal').classList.remove('show');document.body.style.overflow='';}
+
+// ── CALL DRIVER MODAL ──
+let callDriverPhone='';
+function openCallDriver(i){
+  const v=gpsVehicles[i];callDriverPhone=v.phone;
+  document.getElementById('call-name').textContent=v.driver;
+  document.getElementById('call-phone').textContent=v.phone;
+  document.getElementById('call-modal').classList.add('show');
+  document.body.style.overflow='hidden';IC();
+}
+function closeCallDriver(){document.getElementById('call-modal').classList.remove('show');document.body.style.overflow='';}
+function copyCallNumber(){
+  if(navigator.clipboard)navigator.clipboard.writeText(callDriverPhone).catch(()=>{});
+  closeCallDriver();showNotif('Number copied — '+callDriverPhone,'success');
+}
+
+// ── RENDER REVENUE ──
+function parseAmt(s){return parseInt(String(s).replace(/[^0-9]/g,''))||0}
+function fmtINR(n){
+  if(n>=1e7)return '₹'+(n/1e7).toFixed(2)+'Cr';
+  if(n>=1e5)return '₹'+(n/1e5).toFixed(2)+'L';
+  return '₹'+Math.round(n).toLocaleString('en-IN');
+}
+const REV_REASONS=['Awaiting Finance Approval','Missing Invoice','Bank Details Verification Pending'];
+const REV_ACTIONS={
+  'Awaiting Finance Approval':'Finance team must approve the settlement before payout can be released.',
+  'Missing Invoice':'Upload invoice before payout can be released.',
+  'Bank Details Verification Pending':'Verify the agency bank account before initiating transfer.',
+};
+const REV_REASON_DETAIL={
+  'Awaiting Finance Approval':{since:'19 Jun 2026',owner:'Kavya Rao · Finance',steps:['Finance reviews monthly settlement batch','Approval recorded in payout ledger','Settlement moves to Processing']},
+  'Missing Invoice':{since:'18 Jun 2026',owner:'Neha Kulkarni · Compliance',steps:['Agency uploads the pending GST invoice','Compliance verifies invoice details','Payout is queued for the next cycle']},
+  'Bank Details Verification Pending':{since:'17 Jun 2026',owner:'Imran Shaikh · Operations',steps:['Agency confirms bank account & IFSC','Penny-drop verification completed','Account marked verified for payouts']},
+};
+let revPeriod='monthly';
+const REV_MULT={monthly:1,quarterly:3,yearly:12};
+const REV_PLABEL={monthly:'Monthly · June 2026',quarterly:'Quarterly · Apr–Jun 2026',yearly:'Yearly · 2026 YTD'};
+const REV_TLABELS={monthly:['Jan','Feb','Mar','Apr','May','Jun'],quarterly:['Q1','Q2','Q3','Q4'],yearly:['2022','2023','2024','2025','2026']};
+let revSortKey=null,revSortDir=-1;
+function setRevPeriod(p){
+  const norm={month:'monthly',quarter:'quarterly',year:'yearly',monthly:'monthly',quarterly:'quarterly',yearly:'yearly'};
+  revPeriod=norm[p]||'monthly';
+  document.querySelectorAll('#rev-period .rh-chip').forEach(c=>c.classList.toggle('active',c.textContent.toLowerCase()===revPeriod));
+  const ps=document.getElementById('rev-f-period');if(ps)ps.value=revPeriod.replace('ly','').replace('month','Month').replace('quarter','Quarter').replace('year','Year');
   renderRevenue();
-  const labels={pending:'Showing pending settlements',settled:'Showing settled agencies',commission:'Sorted by highest commission'};
-  if(revenueView!=='all')showNotif(labels[view],'success');
+  showNotif('Revenue view: '+revPeriod.charAt(0).toUpperCase()+revPeriod.slice(1),'success');
+}
+function revSort(key){
+  if(revSortKey===key)revSortDir*=-1;else{revSortKey=key;revSortDir=-1;}
+  renderRevenue();
+}
+
+function renderRevenue(){
+  const mult=REV_MULT[revPeriod];
+  // KPIs
+  let gGross=0,gComm=0,gRides=0;
+  revenueData.forEach(r=>{gGross+=parseAmt(r.gross);gComm+=parseAmt(r.commission);gRides+=r.rides;});
+  gGross*=mult;gComm*=mult;gRides*=mult;
+  const avg=gRides?Math.round(gGross/gRides):0;
+  document.getElementById('rev-kpi-total').textContent=fmtINR(gGross);
+  document.getElementById('rev-kpi-comm').textContent=fmtINR(gComm);
+  document.getElementById('rev-kpi-rides').textContent=gRides.toLocaleString('en-IN');
+  document.getElementById('rev-kpi-avg').textContent='₹'+avg.toLocaleString('en-IN');
+  document.getElementById('rev-period-label').textContent=REV_PLABEL[revPeriod];
+  document.getElementById('rev-table-note').textContent=revPeriod==='monthly'?'June 2026':revPeriod==='quarterly'?'Apr–Jun 2026':'2026 YTD';
+  document.getElementById('rev-trend-note').textContent=revPeriod==='monthly'?'Last 6 months':revPeriod==='quarterly'?'Last 4 quarters':'Last 5 years';
+  document.getElementById('rev-trend-labels').innerHTML=REV_TLABELS[revPeriod].map(l=>`<span>${l}</span>`).join('');
+
+  // table (filter + sort + period scale)
+  const tbody=document.getElementById('revenue-tbody');
+  const q=(document.getElementById('rev-f-search')?.value||'').toLowerCase().trim();
+  const fc=document.getElementById('rev-f-city')?.value||'All Cities';
+  const fs=document.getElementById('rev-f-status')?.value||'All Status';
+  const stMap={Paid:'paid',Processing:'processing',Pending:'pending'};
+  let list=revenueData.map((r,i)=>({r,i})).filter(({r})=>{
+    const mq=!q||r.agency.toLowerCase().includes(q)||r.city.toLowerCase().includes(q);
+    const mc=fc==='All Cities'||r.city===fc;
+    const ms=fs==='All Status'||r.status===stMap[fs];
+    return mq&&mc&&ms;
+  });
+  if(revSortKey){
+    list.sort((a,b)=>{
+      const va=revSortKey==='rides'?a.r.rides:parseAmt(a.r[revSortKey]);
+      const vb=revSortKey==='rides'?b.r.rides:parseAmt(b.r[revSortKey]);
+      return (va-vb)*revSortDir;
+    });
+  }
+  // sort header indicators
+  document.querySelectorAll('#screen-revenue th.rev-sort').forEach(th=>th.classList.remove('sorted'));
+  if(!list.length){
+    tbody.innerHTML=`<tr><td colspan="8"><div class="empty-state"><div class="empty-icon"><i data-lucide="search-x"></i></div><div class="empty-state-title">No matching agencies</div><div class="empty-state-sub">Try adjusting your filters.</div></div></td></tr>`;
+  }else{
+  tbody.innerHTML=list.map(({r,i})=>`
+    <tr class="row-clickable" onclick="openRevenueDrawer(${i})">
+      <td style="font-weight:600">${r.agency}</td>
+      <td>${r.city}</td>
+      <td>${(r.rides*mult).toLocaleString('en-IN')}</td>
+      <td style="font-weight:600">${fmtINR(parseAmt(r.gross)*mult)}</td>
+      <td style="color:var(--primary);font-weight:600">${fmtINR(parseAmt(r.commission)*mult)}</td>
+      <td style="font-weight:700;color:var(--success)">${fmtINR(parseAmt(r.net)*mult)}</td>
+      <td>${badge(r.status)}</td>
+      <td><button class="btn btn-outline btn-xs" onclick="event.stopPropagation();openRevenueDrawer(${i})">Details</button></td>
+    </tr>`).join('');
+  }
+
+  // Revenue by City
+  const byCity={};
+  revenueData.forEach(r=>{byCity[r.city]=(byCity[r.city]||0)+parseAmt(r.gross)*mult;});
+  const cities=Object.entries(byCity).sort((a,b)=>b[1]-a[1]);
+  const max=cities[0][1];
+  document.getElementById('rev-city-chart').innerHTML=cities.map(([c,v])=>`
+    <div class="chart-bar-row"><div class="chart-label">${c}</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:${Math.round(v/max*100)}%"></div></div><div class="chart-val">${fmtINR(v)}</div></div>`).join('');
+  IC();
 }
 
 function openRevenueDrawer(i){
@@ -2373,107 +3979,159 @@ function openRevenueDrawer(i){
   const gross=parseAmt(r.gross),comm=parseAmt(r.commission),net=parseAmt(r.net);
   const completed=Math.round(r.rides*0.95),cancelled=r.rides-completed;
   const avgFare=Math.round(gross/r.rides).toLocaleString('en-IN');
-  const months=['Jun 2026','May 2026','Apr 2026','Mar 2026'];
-  const settle=[
-    {m:'Jun 2026',s:r.status,d:r.status==='paid'?'18 Jun 2026':'—'},
-    {m:'May 2026',s:'paid',d:'15 May 2026'},
-    {m:'Apr 2026',s:'paid',d:'16 Apr 2026'},
-    {m:'Mar 2026',s:'paid',d:'15 Mar 2026'},
-  ];
+  const paid=r.status==='paid';
+  const outstanding=paid?0:net;
+  const totalInv=Math.max(1,Math.round(r.rides/30));
+  const paidInv=paid?totalInv:Math.round(totalInv*0.75);
+  const pendInv=totalInv-paidInv;
   const fmt=n=>'₹'+n.toLocaleString('en-IN');
-  const commHist=[
-    {m:'Jun 2026',rev:gross,c:comm,n:net},
-    {m:'May 2026',rev:Math.round(gross*0.92),c:Math.round(comm*0.92),n:Math.round(net*0.92)},
-    {m:'Apr 2026',rev:Math.round(gross*0.85),c:Math.round(comm*0.85),n:Math.round(net*0.85)},
-  ];
-  // trend bars (relative heights)
-  const trend=[62,70,78,85,92,100];
+
+  const reason=REV_REASONS[i%REV_REASONS.length];
+  const financial=`
+      <div class="section-title">Financial Summary</div>
+      <div class="stat-row"><span class="text-sm text-muted">Gross Revenue</span><span style="font-weight:700;font-size:14px">${r.gross}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Platform Commission</span><span style="font-weight:600;color:var(--primary)">− ${r.commission}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Net Payout</span><span style="font-weight:700;font-size:14px;color:var(--success)">${r.net}</span></div>`;
+  const invoiceRide=`
+      <div class="section-title">Invoice Summary</div>
+      <div class="prof-grid">
+        <div class="prof-cell"><div class="k">Total Invoices</div><div class="v">${totalInv}</div></div>
+        <div class="prof-cell"><div class="k">Paid Invoices</div><div class="v" style="color:var(--success)">${paidInv}</div></div>
+        <div class="prof-cell" style="grid-column:1/-1"><div class="k">Pending Invoices</div><div class="v" style="color:${pendInv?'var(--warning)':'var(--text)'}">${pendInv}</div></div>
+      </div>
+      <div class="section-title">Ride Performance</div>
+      <div class="prof-grid">
+        <div class="prof-cell"><div class="k">Total Rides</div><div class="v">${r.rides.toLocaleString()}</div></div>
+        <div class="prof-cell"><div class="k">Completed</div><div class="v">${completed.toLocaleString()}</div></div>
+        <div class="prof-cell"><div class="k">Cancelled</div><div class="v">${cancelled.toLocaleString()}</div></div>
+        <div class="prof-cell"><div class="k">Average Fare</div><div class="v">₹${avgFare}</div></div>
+      </div>`;
+  let banner='',statusBody='',foot='';
+  if(r.status==='paid'){
+    banner=`<div class="st-banner green"><div class="st-banner-ic"><i data-lucide="check-circle"></i></div><div><div class="st-banner-title">Settlement Paid</div><div class="st-banner-msg">Net payout has been settled to the agency.</div></div></div>`;
+    statusBody=`<div class="section-title">Settlement Information</div>
+      <div class="stat-row"><span class="text-sm text-muted">Settlement Date</span><span style="font-weight:600">18 Jun 2026</span></div>
+      ${invoiceRide}`;
+    foot=`<button class="btn btn-primary btn-sm" style="width:100%;justify-content:center" onclick="openRevExport(${i})"><i data-lucide="download"></i> Download Revenue Report</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="openRevInvoices(${i})"><i data-lucide="file-text"></i> View Invoices</button>
+        <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="openRevSettlements(${i})"><i data-lucide="history"></i> Settlement History</button>
+      </div>`;
+  }else if(r.status==='processing'){
+    banner=`<div class="st-banner blue"><div class="st-banner-ic"><i data-lucide="loader"></i></div><div><div class="st-banner-title">Settlement Processing</div><div class="st-banner-msg">Payment has been initiated and is awaiting bank confirmation.</div></div></div>`;
+    statusBody=`<div class="section-title">Settlement Information</div>
+      <div class="stat-row"><span class="text-sm text-muted">Settlement Initiated</span><span style="font-weight:600">21 Jun 2026</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Expected Completion</span><span style="font-weight:600">24 Jun 2026</span></div>`;
+    foot=`<button class="btn btn-primary btn-sm" style="width:100%;justify-content:center" onclick="openRevSettlements(${i})"><i data-lucide="git-commit-horizontal"></i> View Settlement Timeline</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="openRevInvoices(${i})"><i data-lucide="file-text"></i> View Invoices</button>
+        <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="openRevExport(${i})"><i data-lucide="download"></i> Report</button>
+      </div>`;
+  }else{ // pending
+    banner=`<div class="st-banner yellow"><div class="st-banner-ic"><i data-lucide="alert-circle"></i></div><div><div class="st-banner-title">Settlement Pending</div><div class="st-banner-msg">Agency payout has not been released yet. Action required.</div></div></div>`;
+    const action=REV_ACTIONS[reason];
+    statusBody=`<div class="section-title">Settlement Information</div>
+      <div class="stat-row"><span class="text-sm text-muted">Outstanding Amount</span><span style="font-weight:700;color:var(--warning)">${r.net}</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Due Date</span><span style="font-weight:600">30 Jun 2026</span></div>
+      <div class="stat-row"><span class="text-sm text-muted">Settlement Cycle</span><span style="font-weight:600">Jun 2026 · Monthly</span></div>
+      <div class="section-title">Pending Reason</div>
+      <div class="reason-row" onclick="openRevReason(${i})">
+        <div><div style="font-size:13px;font-weight:600">${reason}</div><div class="text-sm text-muted" style="margin-top:2px">Tap for details &amp; resolution steps</div></div>
+        <i data-lucide="chevron-right"></i>
+      </div>
+      <div class="required-action"><i data-lucide="info"></i><div><div class="ra-title">Required Action</div><div class="ra-msg">${action}</div></div></div>`;
+    foot=`<div style="display:flex;gap:8px">
+        <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="openRevInvoices(${i})"><i data-lucide="file-text"></i> View Invoices</button>
+        <button class="btn btn-primary btn-sm" style="flex:1;justify-content:center" onclick="closePanel();navTo('payouts')"><i data-lucide="landmark"></i> Open Payout Management</button>
+      </div>`;
+  }
 
   document.getElementById('revenue-content').innerHTML=`
     <div class="drawer-head">
       <div class="drawer-avatar">${r.agency.charAt(0)}</div>
       <div style="flex:1;min-width:0">
         <div class="dh-title">${r.agency}</div>
-        <div class="text-sm text-muted">${r.city}</div>
+        <div class="text-sm text-muted">${r.city} · 15% commission</div>
       </div>
       ${badge(r.status)}
     </div>
-    <!-- metrics row -->
     <div class="drawer-metrics">
       <div class="drawer-metric"><div class="drawer-metric-val">${r.gross}</div><div class="drawer-metric-label">Gross</div></div>
       <div class="drawer-metric"><div class="drawer-metric-val">${r.commission}</div><div class="drawer-metric-label">Commission</div></div>
       <div class="drawer-metric"><div class="drawer-metric-val">${r.net}</div><div class="drawer-metric-label">Net Payout</div></div>
     </div>
-
-    <div style="padding:2px 22px 18px">
-      <!-- 1. agency summary -->
-      <div class="section-title" style="margin:10px 0 6px">Agency Summary</div>
-      <div class="stat-row"><span class="text-sm text-muted">Agency Name</span><span style="font-weight:600">${r.agency}</span></div>
-      <div class="stat-row"><span class="text-sm text-muted">City</span><span style="font-weight:600">${r.city}</span></div>
-      <div class="stat-row"><span class="text-sm text-muted">Settlement Status</span>${badge(r.status)}</div>
-      <div class="stat-row"><span class="text-sm text-muted">Commission Rate</span><span style="font-weight:600">15%</span></div>
-
-      <!-- 2. revenue breakdown -->
-      <div class="section-title" style="margin:18px 0 6px">Revenue Breakdown</div>
-      <div class="stat-row"><span class="text-sm text-muted">Gross Revenue</span><span style="font-weight:700">${r.gross}</span></div>
-      <div class="stat-row"><span class="text-sm text-muted">Platform Commission</span><span style="font-weight:600;color:var(--primary)">− ${r.commission}</span></div>
-      <div class="stat-row"><span class="text-sm text-muted">Net Payout</span><span style="font-weight:700;color:var(--success)">${r.net}</span></div>
-
-      <!-- 3. ride analytics -->
-      <div class="section-title" style="margin:18px 0 6px">Ride Analytics</div>
-      <div class="prof-grid">
-        <div class="prof-cell"><div class="k">Total Rides</div><div class="v">${r.rides.toLocaleString()}</div></div>
-        <div class="prof-cell"><div class="k">Completed</div><div class="v">${completed.toLocaleString()}</div></div>
-        <div class="prof-cell"><div class="k">Cancelled</div><div class="v">${cancelled.toLocaleString()}</div></div>
-        <div class="prof-cell"><div class="k">Average Fare</div><div class="v">₹${avgFare}</div></div>
-      </div>
-
-      <!-- 4. revenue trend -->
-      <div class="section-title" style="margin:18px 0 8px">Revenue Trend</div>
-      <div style="display:flex;align-items:flex-end;gap:8px;height:64px">
-        ${trend.map((h,k)=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
-          <div style="width:100%;height:${h*0.5}px;background:${k===trend.length-1?'var(--primary)':'#C7D2FE'};border-radius:4px 4px 0 0"></div>
-        </div>`).join('')}
-      </div>
-      <div style="display:flex;gap:8px;margin-top:4px">
-        ${['Jan','Feb','Mar','Apr','May','Jun'].map(m=>`<div style="flex:1;text-align:center;font-size:10px;color:var(--muted)">${m}</div>`).join('')}
-      </div>
-
-      <!-- 5. settlement history -->
-      <div class="section-title" style="margin:18px 0 6px">Settlement History</div>
-      <table style="font-size:12.5px">
-        <thead><tr><th style="padding:6px 0">Month</th><th style="padding:6px 0">Status</th><th style="padding:6px 0;text-align:right">Paid Date</th></tr></thead>
-        <tbody>${settle.map(s=>`<tr><td style="padding:8px 0;border-bottom:1px solid #F1F5F9">${s.m}</td><td style="padding:8px 0;border-bottom:1px solid #F1F5F9">${badge(s.s)}</td><td style="padding:8px 0;border-bottom:1px solid #F1F5F9;text-align:right">${s.d}</td></tr>`).join('')}</tbody>
-      </table>
-
-      <!-- 6. commission history -->
-      <div class="section-title" style="margin:18px 0 6px">Commission History</div>
-      <table style="font-size:12.5px">
-        <thead><tr><th style="padding:6px 0">Revenue</th><th style="padding:6px 0;text-align:right">Commission</th><th style="padding:6px 0;text-align:right">Net Payout</th></tr></thead>
-        <tbody>${commHist.map(h=>`<tr><td style="padding:8px 0;border-bottom:1px solid #F1F5F9">${fmt(h.rev)}</td><td style="padding:8px 0;border-bottom:1px solid #F1F5F9;text-align:right;color:var(--primary)">${fmt(h.c)}</td><td style="padding:8px 0;border-bottom:1px solid #F1F5F9;text-align:right;color:var(--success);font-weight:600">${fmt(h.n)}</td></tr>`).join('')}</tbody>
-      </table>
+    <div style="padding:14px 22px 18px" class="rev-drawer-body">
+      ${banner}
+      ${financial}
+      ${statusBody}
     </div>`;
 
-  const pending=(r.status==='pending'||r.status==='processing');
-  document.getElementById('revenue-foot').innerHTML=`
-    ${pending?`<button class="btn btn-primary" style="width:100%;justify-content:center" onclick="markPaidRevenue(${i})"><i data-lucide="check"></i> Mark as Paid</button>`:''}
-    <div style="display:flex;gap:8px">
-      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="showNotif('Downloading report','success')"><i data-lucide="download"></i> Report</button>
-      <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="showNotif('Opening invoices','success')"><i data-lucide="file-text"></i> Invoices</button>
-    </div>
-    <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center" onclick="showNotif('Opening payout history','success')"><i data-lucide="history"></i> View Payout History</button>`;
-
+  document.getElementById('revenue-foot').innerHTML=foot;
   document.getElementById('revenue-panel').classList.add('open');
   document.getElementById('overlay').classList.add('show');
   IC();
 }
 
-function markPaidRevenue(i){
-  revenueData[i].status='paid';
-  renderRevenue();
-  openRevenueDrawer(i);
-  showNotif('"'+revenueData[i].agency+'" marked as paid','success');
+// ── REVENUE DRAWER MODALS ──
+function openRevExport(i){
+  document.getElementById('rev-export-sub').textContent=revenueData[i].agency+' · revenue report';
+  document.getElementById('rev-export-modal').classList.add('show');document.body.style.overflow='hidden';IC();
 }
+function closeRevExport(){document.getElementById('rev-export-modal').classList.remove('show');document.body.style.overflow='';}
+function doRevExport(fmt){closeRevExport();showNotif('Revenue report exported ('+fmt+')','success');}
+
+function openRevInvoices(i){
+  const r=revenueData[i];const base=parseAmt(r.gross);const paid=r.status==='paid';
+  document.getElementById('rev-inv-sub').textContent=r.agency+' · invoice history';
+  const months=['Jun 2026','May 2026','Apr 2026','Mar 2026','Feb 2026'];
+  const sts=[paid?'paid':'pending','paid','paid','paid','paid'];
+  document.getElementById('rev-inv-tbody').innerHTML=months.map((m,k)=>`
+    <tr>
+      <td style="font-weight:600;font-family:monospace">INV-2026${String(6-k).padStart(2,'0')}-${(i*7+k).toString().padStart(3,'0')}</td>
+      <td style="font-weight:600">${fmtINR(Math.round(base*(0.9+k*0.03)))}</td>
+      <td class="text-sm text-muted">${m}</td>
+      <td>${badge(sts[k])}</td>
+      <td><button class="btn btn-outline btn-xs" onclick="showNotif('Downloading invoice PDF','success')"><i data-lucide="download"></i> PDF</button></td>
+    </tr>`).join('');
+  document.getElementById('rev-invoices-modal').classList.add('show');document.body.style.overflow='hidden';IC();
+}
+function closeRevInvoices(){document.getElementById('rev-invoices-modal').classList.remove('show');document.body.style.overflow='';}
+
+function openRevSettlements(i){
+  const r=revenueData[i];const net=parseAmt(r.net);const paid=r.status==='paid';
+  document.getElementById('rev-set-sub').textContent=r.agency+' · settlement history';
+  const rows=[
+    {d:paid?'18 Jun 2026':'Pending',a:net,s:r.status,ref:paid?'TXN-2026-0061123':'—'},
+    {d:'15 May 2026',a:Math.round(net*0.92),s:'paid',ref:'TXN-2026-0051098'},
+    {d:'16 Apr 2026',a:Math.round(net*0.85),s:'paid',ref:'TXN-2026-0041077'},
+    {d:'15 Mar 2026',a:Math.round(net*0.8),s:'paid',ref:'TXN-2026-0031055'},
+  ];
+  document.getElementById('rev-set-tbody').innerHTML=rows.map(x=>`
+    <tr>
+      <td class="text-sm">${x.d}</td>
+      <td style="font-weight:600">${fmtINR(x.a)}</td>
+      <td>${badge(x.s)}</td>
+      <td class="text-sm text-muted" style="font-family:monospace">${x.ref}</td>
+    </tr>`).join('');
+  document.getElementById('rev-settlements-modal').classList.add('show');document.body.style.overflow='hidden';IC();
+}
+function closeRevSettlements(){document.getElementById('rev-settlements-modal').classList.remove('show');document.body.style.overflow='';}
+
+function openRevReason(i){
+  const r=revenueData[i];const reason=REV_REASONS[i%REV_REASONS.length];const d=REV_REASON_DETAIL[reason];
+  document.getElementById('rev-reason-sub').textContent=r.agency+' · settlement blocked';
+  document.getElementById('rev-reason-body').innerHTML=`
+    <div class="st-banner yellow" style="margin:6px 0 14px"><div class="st-banner-ic"><i data-lucide="alert-circle"></i></div><div><div class="st-banner-title">${reason}</div><div class="st-banner-msg">${REV_ACTIONS[reason]}</div></div></div>
+    <div class="stat-row"><span class="text-sm text-muted">Blocked Since</span><span style="font-weight:600">${d.since}</span></div>
+    <div class="stat-row"><span class="text-sm text-muted">Required Action</span><span style="font-weight:600">${REV_ACTIONS[reason]}</span></div>
+    <div class="stat-row"><span class="text-sm text-muted">Assigned Owner</span><span style="font-weight:600">${d.owner}</span></div>
+    <div class="section-title" style="margin:16px 0 8px">Resolution Steps</div>
+    <div class="timeline" style="margin-top:2px">
+      ${d.steps.map((s,k)=>`<div class="tl-item ${k===0?'active':'pending'}"><div class="tl-dot"></div><div class="tl-title">Step ${k+1}</div><div class="tl-sub">${s}</div></div>`).join('')}
+    </div>`;
+  document.getElementById('rev-reason-modal').classList.add('show');document.body.style.overflow='hidden';IC();
+}
+function closeRevReason(){document.getElementById('rev-reason-modal').classList.remove('show');document.body.style.overflow='';}
 
 // ── RENDER DRIVERS ──
 function renderDrivers(){
@@ -2894,7 +4552,7 @@ function toggleBlockUser(i){
 function renderPayouts(){
   const tbody=document.getElementById('payouts-tbody');
   tbody.innerHTML=payoutsData.map((p,i)=>`
-    <tr id="payout-row-${i}">
+    <tr id="payout-row-${i}" class="row-clickable" onclick="openPayout(${i})">
       <td style="font-weight:600">${p.agency}</td>
       <td>${p.city}</td>
       <td>${p.gross}</td>
@@ -2902,29 +4560,177 @@ function renderPayouts(){
       <td style="font-weight:700;color:var(--success)">${p.net}</td>
       <td class="text-sm text-muted">${p.bank}</td>
       <td id="payout-status-${i}">${badge(p.status)}</td>
-      <td>
-        ${p.status==='pending'||p.status==='failed'?`<button class="btn btn-primary btn-xs" onclick="markPaid(${i})">Mark Paid</button>`:
-          p.status==='processing'?`<button class="btn btn-outline btn-xs" onclick="markPaid(${i})">Complete</button>`:
-          `<button class="btn btn-outline btn-xs">Receipt</button>`}
-      </td>
+      <td><button class="btn btn-outline btn-xs" onclick="event.stopPropagation();openPayout(${i})">Manage →</button></td>
     </tr>`).join('');
+  IC();
 }
 
-function markPaid(i){
-  document.getElementById(`payout-status-${i}`).innerHTML=badge('paid');
-  const td=document.querySelector(`#payout-row-${i} td:last-child`);
-  td.innerHTML=`<button class="btn btn-outline btn-xs">Receipt</button>`;
-  payoutsData[i].status='paid';
-  showNotif('Payout marked as paid','success');
+// status-aware payout operations drawer
+let payoutSel=null;
+const PAYOUT_FAIL_REASONS=['Invalid account number','IFSC mismatch','Account frozen by bank','Beneficiary name mismatch'];
+const row=(k,v,mono)=>`<div class="stat-row"><span class="text-sm text-muted">${k}</span><span style="font-weight:600${mono?';font-family:monospace':''}">${v}</span></div>`;
+function openPayout(i){
+  payoutSel=i;const p=payoutsData[i];
+  const txn='TXN-2026-00'+(611+i)+'2';
+  const cycle='Jun 2026 · Monthly';
+  const failReason=PAYOUT_FAIL_REASONS[i%PAYOUT_FAIL_REASONS.length];
+  let banner='',details='',foot='';
+
+  if(p.status==='pending'){
+    banner=['yellow','alert-circle','Payout Pending','Awaiting finance approval before release.'];
+    details=`<div class="section-title">Payout Details</div>
+      ${row('Net Payable',`<span style="color:var(--success);font-size:14px">${p.net}</span>`)}
+      ${row('Settlement Cycle',cycle)}
+      ${row('Bank Account',p.bank,1)}
+      ${row('Pending Reason',`<span style="color:#A16207">Awaiting Finance Approval</span>`)}
+      ${row('Due Date','30 Jun 2026')}`;
+    foot=`<button class="btn btn-primary btn-sm" style="width:100%;justify-content:center" onclick="payoutAction(${i},'approve')"><i data-lucide="check"></i> Approve & Start Transfer</button>
+      <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center" onclick="pBank(${i})"><i data-lucide="landmark"></i> View Bank Details</button>`;
+  }else if(p.status==='processing'){
+    banner=['blue','loader','Transfer Processing','Awaiting bank confirmation.'];
+    details=`<div class="section-title">Transfer Details</div>
+      ${row('Transfer Initiated','21 Jun 2026 · 02:14 PM')}
+      ${row('Transaction Reference',txn,1)}
+      ${row('Bank Account',p.bank,1)}
+      ${row('Settlement Cycle',cycle)}`;
+    foot=`<button class="btn btn-primary btn-sm" style="width:100%;justify-content:center" onclick="payoutAction(${i},'paid')"><i data-lucide="check"></i> Confirm Transfer</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="pTxn(${i})"><i data-lucide="hash"></i> Transaction Ref</button>
+        <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="payoutAction(${i},'retry')"><i data-lucide="rotate-cw"></i> Retry Transfer</button>
+      </div>`;
+  }else if(p.status==='paid'){
+    banner=['green','check-circle','Payout Completed','Funds settled successfully.'];
+    details=`<div class="section-title">Settlement Details</div>
+      ${row('Settlement Date','18 Jun 2026')}
+      ${row('Transaction Reference',txn,1)}
+      ${row('Bank Account',p.bank,1)}
+      ${row('Settlement Cycle',cycle)}
+      ${row('Net Payable',`<span style="color:var(--success);font-size:14px">${p.net}</span>`)}`;
+    foot=`<button class="btn btn-primary btn-sm" style="width:100%;justify-content:center" onclick="pReceipt(${i})"><i data-lucide="download"></i> Download Receipt</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="pSettle(${i})"><i data-lucide="file-text"></i> Settlement Details</button>
+        <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="pInvoices(${i})"><i data-lucide="files"></i> Invoice Bundle</button>
+      </div>`;
+  }else{ // failed
+    banner=['red','x-circle','Transfer Failed','Action required.'];
+    details=`<div class="section-title">Failure Details</div>
+      ${row('Failure Reason',`<span style="color:#DC2626">${failReason}</span>`)}
+      ${row('Last Attempt','21 Jun 2026 · 02:14 PM')}
+      ${row('Bank Account',p.bank,1)}
+      ${row('Settlement Cycle',cycle)}
+      ${row('Net Payable',`<span style="color:var(--success);font-size:14px">${p.net}</span>`)}`;
+    foot=`<button class="btn btn-primary btn-sm" style="width:100%;justify-content:center" onclick="payoutAction(${i},'retry')"><i data-lucide="rotate-cw"></i> Retry Transfer</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="pFail(${i})"><i data-lucide="info"></i> Failure Reason</button>
+        <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="pUpdateBank(${i})"><i data-lucide="landmark"></i> Update Bank</button>
+      </div>`;
+  }
+  const [bc,bi,bt,bm]=banner;
+  document.getElementById('payout-content').innerHTML=`
+    <div class="drawer-head">
+      <div class="drawer-avatar">${p.agency.charAt(0)}</div>
+      <div style="flex:1;min-width:0"><div class="dh-title">${p.agency}</div><div class="text-sm text-muted">${p.city} · ${p.bank}</div></div>
+      ${badge(p.status)}
+    </div>
+    <div class="drawer-metrics">
+      <div class="drawer-metric"><div class="drawer-metric-val">${p.gross}</div><div class="drawer-metric-label">Gross</div></div>
+      <div class="drawer-metric"><div class="drawer-metric-val">${p.commission}</div><div class="drawer-metric-label">Commission</div></div>
+      <div class="drawer-metric"><div class="drawer-metric-val">${p.net}</div><div class="drawer-metric-label">Net Payable</div></div>
+    </div>
+    <div style="padding:14px 22px 18px" class="rev-drawer-body">
+      <div class="st-banner ${bc}"><div class="st-banner-ic"><i data-lucide="${bi}"></i></div><div><div class="st-banner-title">${bt}</div><div class="st-banner-msg">${bm}</div></div></div>
+      ${details}
+    </div>`;
+  document.getElementById('payout-foot').innerHTML=foot;
+  document.getElementById('payout-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+  IC();
+}
+function payoutAction(i,to){
+  const map={approve:'processing',paid:'paid',retry:'processing'};
+  const labels={approve:'Approved — transfer started',paid:'Transfer confirmed — payout paid',retry:'Retrying transfer'};
+  payoutsData[i].status=map[to];
+  renderPayouts();openPayout(i);
+  showNotif(labels[to],to==='retry'?'warning':'success');
 }
 
-function markAllPaid(){
-  payoutsData.forEach((_,i)=>{
-    if(payoutsData[i].status==='pending'||payoutsData[i].status==='failed'){payoutsData[i].status='paid'}
-  });
-  renderPayouts();
-  showNotif('All pending payouts marked as paid','success');
+// ── PAYOUT ACTION MODALS ──
+const pRow=(k,v,mono)=>`<div class="stat-row"><span class="text-sm text-muted">${k}</span><span style="font-weight:600${mono?';font-family:monospace':''}">${v}</span></div>`;
+function bankParts(p){const m=p.bank.match(/(\w+)\s*••(\d+)/)||[];return {name:m[1]||'Bank',last4:m[2]||'0000'};}
+function pInfo(title,sub,bodyHTML){
+  document.getElementById('pinfo-title').textContent=title;
+  document.getElementById('pinfo-sub').textContent=sub;
+  document.getElementById('pinfo-body').innerHTML=bodyHTML;
+  document.getElementById('payout-info-modal').classList.add('show');document.body.style.overflow='hidden';IC();
 }
+function closePInfo(){document.getElementById('payout-info-modal').classList.remove('show');document.body.style.overflow='';}
+function pBank(i){const p=payoutsData[i];const b=bankParts(p);
+  pInfo('Bank Details',p.agency,`
+    ${pRow('Account Holder',p.agency)}
+    ${pRow('Bank Name',b.name)}
+    ${pRow('Account Number','••••••'+b.last4,1)}
+    ${pRow('IFSC Code',b.name.toUpperCase().slice(0,4)+'0'+(2000+i*7),1)}
+    ${pRow('Branch',p.city+' Main')}
+    ${pRow('Account Type','Current')}`);
+}
+function pTxn(i){const p=payoutsData[i];const txn='TXN-2026-00'+(611+i)+'2';
+  pInfo('Transaction Reference',p.agency,`
+    ${pRow('Reference ID',txn,1)}
+    ${pRow('UTR Number','HDFCN'+(52600000+i*131),1)}
+    ${pRow('Initiated','21 Jun 2026 · 02:14 PM')}
+    ${pRow('Amount',`<span style="color:var(--success)">${p.net}</span>`)}
+    ${pRow('Mode','NEFT')}
+    ${pRow('Status',badge(p.status))}`);
+}
+function pSettle(i){const p=payoutsData[i];const txn='TXN-2026-00'+(611+i)+'2';
+  pInfo('Settlement Details',p.agency,`
+    ${pRow('Settlement Date','18 Jun 2026')}
+    ${pRow('Reference ID',txn,1)}
+    ${pRow('Gross Earnings',p.gross)}
+    ${pRow('Platform Commission',`<span style="color:var(--primary)">− ${p.commission}</span>`)}
+    ${pRow('Net Settled',`<span style="color:var(--success);font-weight:700">${p.net}</span>`)}
+    ${pRow('Settlement Cycle','Jun 2026 · Monthly')}`);
+}
+function pFail(i){const p=payoutsData[i];const reason=PAYOUT_FAIL_REASONS[i%PAYOUT_FAIL_REASONS.length];
+  pInfo('Failure Details',p.agency,`
+    <div class="st-banner red" style="margin:4px 0 12px"><div class="st-banner-ic"><i data-lucide="x-circle"></i></div><div><div class="st-banner-title">Transfer Failed</div><div class="st-banner-msg">${reason}</div></div></div>
+    ${pRow('Error Code','E'+(4090+i))}
+    ${pRow('Failure Reason',`<span style="color:#DC2626">${reason}</span>`)}
+    ${pRow('Last Attempt','21 Jun 2026 · 02:14 PM')}
+    ${pRow('Attempts','2 of 3')}
+    ${pRow('Suggested Fix','Verify & update bank account details')}`);
+}
+function pReceipt(i){showNotif('Payout receipt (PDF) downloaded — '+payoutsData[i].agency,'success');}
+
+function pInvoices(i){const p=payoutsData[i];const base=parseAmt(p.gross);
+  document.getElementById('pinv-sub').textContent=p.agency+' · linked invoices';
+  const months=['Jun 2026','May 2026','Apr 2026','Mar 2026'];
+  document.getElementById('pinv-tbody').innerHTML=months.map((m,k)=>`
+    <tr>
+      <td style="font-weight:600;font-family:monospace">INV-2026${String(6-k).padStart(2,'0')}-${(i*7+k).toString().padStart(3,'0')}</td>
+      <td style="font-weight:600">${fmtINR(Math.round(base*(0.9+k*0.03)))}</td>
+      <td class="text-sm text-muted">${m}</td>
+      <td>${badge('paid')}</td>
+      <td><button class="btn btn-outline btn-xs" onclick="showNotif('Downloading invoice PDF','success')"><i data-lucide="download"></i> PDF</button></td>
+    </tr>`).join('');
+  document.getElementById('payout-invoices-modal').classList.add('show');document.body.style.overflow='hidden';IC();
+}
+function closePInvoices(){document.getElementById('payout-invoices-modal').classList.remove('show');document.body.style.overflow='';}
+
+function pUpdateBank(i){const p=payoutsData[i];const b=bankParts(p);
+  document.getElementById('pbank-sub').textContent=p.agency;
+  document.getElementById('pb-name').value=b.name;
+  document.getElementById('pb-acc').value='000000'+b.last4;
+  document.getElementById('pb-ifsc').value=b.name.toUpperCase().slice(0,4)+'0'+(2000+i*7);
+  document.getElementById('payout-bank-modal').classList.add('show');document.body.style.overflow='hidden';IC();
+}
+function closePBank(){document.getElementById('payout-bank-modal').classList.remove('show');document.body.style.overflow='';}
+function savePBank(){const name=document.getElementById('pb-name').value.trim();const acc=document.getElementById('pb-acc').value.trim();
+  if(!name||!acc||acc.length<4){showNotif('Enter valid bank details','warning');return;}
+  payoutsData[payoutSel].bank=name.toUpperCase().slice(0,5)+' ••'+acc.slice(-4);
+  closePBank();renderPayouts();openPayout(payoutSel);showNotif('Bank details updated','success');
+}
+
 
 // ── RENDER CITY TOGGLES ──
 function renderCityToggles(){
@@ -3330,7 +5136,7 @@ function showNotif(msg,type='success'){
 }
 
 // ── NAVIGATION ──
-const pageTitles={dashboard:'Dashboard',agencies:'Agency Management',onboarding:'Onboarding Review','drivers-q':'Driver Verification Queue','ambulance-q':'Ambulance Queue',revenue:'Revenue & Commission',drivers:'Driver Overview',users:'Users / Customers',analytics:'Platform Analytics',settings:'Platform Settings',payouts:'Payout Management'};
+const pageTitles={dashboard:'Dashboard',agencies:'Agency Management',onboarding:'Onboarding Review','drivers-q':'Driver Verification Queue','ambulance-q':'Ambulance Queue','gps-tracking':'GPS Tracking',tickets:'Tickets & Queries',documents:'Document Center',revenue:'Revenue & Commission',drivers:'Driver Overview',users:'Users / Customers',employees:'Employee Management',analytics:'Platform Analytics',settings:'Platform Settings',payouts:'Payout Management'};
 
 function navigate(screen,el){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -3340,6 +5146,7 @@ function navigate(screen,el){
   document.getElementById('page-title').textContent=pageTitles[screen]||screen;
 }
 
+function gpsFromDashboard(){navTo('gps-tracking');}
 // navigate from dashboard quick actions (finds matching sidebar item)
 function navTo(screen){
   const it=[...document.querySelectorAll('.sb-item')].find(x=>{
@@ -3420,6 +5227,10 @@ function initAll(){
   renderUsers();
   renderPayouts();
   renderCityToggles();
+  renderGps();
+  renderTickets();
+  renderEmployees();
+  renderDocs();
   IC();
 }
 </script>
