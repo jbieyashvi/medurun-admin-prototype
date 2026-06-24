@@ -4598,8 +4598,7 @@ function openPayout(i){
       ${row('Bank Account',p.bank,1)}
       ${row('Pending Reason',`<span style="color:#A16207">Awaiting Finance Approval</span>`)}
       ${row('Due Date','30 Jun 2026')}`;
-    foot=`<button class="btn btn-primary btn-sm" style="width:100%;justify-content:center" onclick="payoutAction(${i},'approve')"><i data-lucide="check"></i> Approve & Start Transfer</button>
-      <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center" onclick="pBank(${i})"><i data-lucide="landmark"></i> View Bank Details</button>`;
+    foot=`<button class="btn btn-primary btn-sm" style="width:100%;justify-content:center" onclick="payoutAction(${i},'approve')"><i data-lucide="check"></i> Approve & Start Transfer</button>`;
   }else if(p.status==='processing'){
     banner=['blue','loader','Transfer Processing','Awaiting bank confirmation.'];
     details=`<div class="section-title">Transfer Details</div>
@@ -4621,10 +4620,7 @@ function openPayout(i){
       ${row('Settlement Cycle',cycle)}
       ${row('Net Payable',`<span style="color:var(--success);font-size:14px">${p.net}</span>`)}`;
     foot=`<button class="btn btn-primary btn-sm" style="width:100%;justify-content:center" onclick="pReceipt(${i})"><i data-lucide="download"></i> Download Receipt</button>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="pSettle(${i})"><i data-lucide="file-text"></i> Settlement Details</button>
-        <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="pInvoices(${i})"><i data-lucide="files"></i> Invoice Bundle</button>
-      </div>`;
+      <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center" onclick="pInvoices(${i})"><i data-lucide="files"></i> Invoice Bundle</button>`;
   }else{ // failed
     banner=['red','x-circle','Transfer Failed','Action required.'];
     details=`<div class="section-title">Failure Details</div>
@@ -4634,10 +4630,7 @@ function openPayout(i){
       ${row('Settlement Cycle',cycle)}
       ${row('Net Payable',`<span style="color:var(--success);font-size:14px">${p.net}</span>`)}`;
     foot=`<button class="btn btn-primary btn-sm" style="width:100%;justify-content:center" onclick="payoutAction(${i},'retry')"><i data-lucide="rotate-cw"></i> Retry Transfer</button>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="pFail(${i})"><i data-lucide="info"></i> Failure Reason</button>
-        <button class="btn btn-outline btn-sm" style="flex:1;justify-content:center" onclick="pUpdateBank(${i})"><i data-lucide="landmark"></i> Update Bank</button>
-      </div>`;
+      <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center" onclick="pUpdateBank(${i})"><i data-lucide="landmark"></i> Update Bank Details</button>`;
   }
   const [bc,bi,bt,bm]=banner;
   document.getElementById('payout-content').innerHTML=`
