@@ -101,7 +101,8 @@ export function DriverOverview(_: ModuleProps) {
                 <div className="modal-x" style={{ width: 30, height: 30, border: "1px solid var(--border)", color: "#64748B" }}><Icon name="FileText" size={14} /></div>
                 <div style={{ flex: 1 }}><div style={{ fontSize: 13, fontWeight: 600 }}>{d.name}</div><div style={{ fontSize: 11.5, color: "#9CA3AF", marginTop: 1 }}>{d.required ? "Required" : "Optional"} · Verified document</div></div>
                 <StatusBadge status="verified" label="Verified" />
-                <button className="modal-x" style={{ width: 28, height: 28 }} title="Download" onClick={() => notify("Document downloaded")}><Icon name="Download" size={13} /></button>
+                <button className="modal-x" style={{ width: 28, height: 28 }} title="View" onClick={() => notify("Opening " + d.name)}><Icon name="Eye" size={13} /></button>
+                <button className="modal-x" style={{ width: 28, height: 28 }} title="Download" onClick={() => notify("Downloading " + d.name)}><Icon name="Download" size={13} /></button>
               </div>
             ))}
             {tab === "activity" && <Timeline items={[
