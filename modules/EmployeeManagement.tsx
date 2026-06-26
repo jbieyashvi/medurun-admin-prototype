@@ -64,7 +64,8 @@ export function EmployeeManagement(_: ModuleProps) {
         />
       </div>
 
-      <SideDrawer open={!!e} onClose={() => setSel(null)} title="Employee Details">
+      <SideDrawer open={!!e} onClose={() => setSel(null)} title="Employee Details"
+        footer={e && tab === "permissions" ? <button className="btn btn-primary btn-sm" style={{ width: "100%" }} onClick={openPerm}>Edit Permissions</button> : undefined}>
         {e && <>
           <DrawerHead avatar={initials(e.name)} title={e.name} sub={`${e.role} · ${e.dept}`} right={<StatusBadge status={EMP_ST[e.status][1]} label={EMP_ST[e.status][0]} />} />
           <Tabs tabs={[["overview", "Overview"], ["permissions", "Permissions"], ["activity", "Activity"]]} active={tab} onChange={setTab} />
@@ -96,7 +97,6 @@ export function EmployeeManagement(_: ModuleProps) {
                   <span style={{ fontSize: 11, fontWeight: 600, padding: "2px 10px", borderRadius: 20, color: col, background: col + "1f" }}>{lvl}</span>
                 </div>
               ); })}
-              <button className="btn btn-primary btn-sm" style={{ width: "100%", marginTop: 14 }} onClick={openPerm}>Edit Permissions</button>
             </>}
             {tab === "activity" && <Timeline items={[
               { title: "Logged in", sub: `${e.last} · ${e.dept} workstation`, active: true },
