@@ -5,11 +5,11 @@ export type Employee = {
 };
 
 export const EMP_MODULES: [string, string][] = [
-  ["agencies", "Agency Management"], ["onboarding", "Onboarding Review"],
-  ["drivers-q", "Driver Verification"], ["ambulance-q", "Ambulance Queue"],
+  ["agencies", "Agency Data"], ["onboarding", "Onboarding Review"],
+  ["drivers-q", "Driver Verification"], ["ambulance-q", "Ambulance Data"],
   ["gps", "GPS Tracking"], ["tickets", "Tickets & Queries"],
   ["revenue", "Revenue & Commission"], ["payouts", "Payout Management"],
-  ["reports", "Reports"], ["users", "Users / Customers"],
+  ["reports", "Reports"], ["users", "Customer Data"],
   ["settings", "Pricing & Settings"], ["employees", "Employee Management"],
 ];
 export const PERM_TYPES = ["View", "Create", "Edit", "Delete", "Approve"];

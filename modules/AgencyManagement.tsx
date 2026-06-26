@@ -61,7 +61,7 @@ export function AgencyManagement(_: ModuleProps) {
 
   return (
     <div>
-      <PageHeader title="Agency Management" sub={`${rows.length} agencies across all cities`}
+      <PageHeader title="Agency Data" sub={`${rows.length} agencies across all cities`}
         action={<button className="btn btn-primary" onClick={openAdd}>+ Add Agency</button>} />
 
       <div className="card" style={{ padding: 0 }}>

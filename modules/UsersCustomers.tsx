@@ -19,7 +19,7 @@ export function UsersCustomers(_: ModuleProps) {
 
   return (
     <div>
-      <PageHeader title="Users / Customers" sub="92,341 registered users" />
+      <PageHeader title="Customer Data" sub="92,341 registered users" />
       <Summary>
         <StatCard icon="Users" value="92,341" label="Total Users" />
         <StatCard icon="CircleDot" value="34,127" label="Active (30d)" />

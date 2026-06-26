@@ -45,7 +45,7 @@ export function DriverOverview(_: ModuleProps) {
 
   return (
     <div>
-      <PageHeader title="Driver Overview" sub={`${rows.length} drivers`} />
+      <PageHeader title="Driver Data" sub={`${rows.length} drivers`} />
       <Summary>
         <StatCard icon="CircleCheck" value={rows.filter((d) => d.status === "active").length} label="Active" />
         <StatCard icon="Clock" value="248" label="Pending" />

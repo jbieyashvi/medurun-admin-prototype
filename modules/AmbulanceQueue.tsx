@@ -60,7 +60,7 @@ export function AmbulanceQueue(_: ModuleProps) {
 
   return (
     <div>
-      <PageHeader title="Ambulance Verification Queue" sub="Review and verify ambulance registrations" />
+      <PageHeader title="Ambulance Data" sub="Review and verify ambulance registrations" />
       <Summary>
         <StatCard icon="Clock" value={ambulanceQueue.filter((a) => effStatus(a) === "pending").length} label="Pending Verification" />
         <StatCard icon="TriangleAlert" value={ambulanceQueue.filter((a) => effStatus(a) === "correction").length} label="Correction Required" />
