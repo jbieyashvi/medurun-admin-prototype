@@ -91,13 +91,15 @@ export function AgencyManagement(_: ModuleProps) {
         headerAction={<button className="btn btn-primary btn-sm" onClick={openEdit}><Icon name="Pencil" size={13} /> Edit Agency</button>}
         footer={sel && <>
           <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: ".6px", textTransform: "uppercase", color: "#9CA3AF", marginBottom: -2 }}>Quick Actions</div>
-          {([["FileText", "View Invoices", () => setModal("invoices")], ["Route", "View Rides", () => setModal("rides")]] as [string, string, () => void][]).map(([ic, label, on]) => (
-            <button key={label} onClick={on} style={{ width: "100%", display: "flex", alignItems: "center", gap: 11, padding: "9px 12px", border: "1px solid var(--border)", borderRadius: 9, background: "#fff", cursor: "pointer", textAlign: "left", font: "inherit" }}>
-              <div className="modal-x" style={{ width: 30, height: 30, background: "var(--primary-light)", border: "none", color: "var(--primary)" }}><Icon name={ic} size={14} /></div>
-              <span style={{ flex: 1, fontSize: 13, fontWeight: 600 }}>{label}</span>
-              <Icon name="ChevronRight" size={16} className="text-muted" />
-            </button>
-          ))}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
+            {([["FileText", "View Invoices", () => setModal("invoices")], ["Route", "View Rides", () => setModal("rides")]] as [string, string, () => void][]).map(([ic, label, on]) => (
+              <button key={label} onClick={on} style={{ display: "flex", alignItems: "center", gap: 11, padding: "9px 12px", border: "1px solid var(--border)", borderRadius: 9, background: "#fff", cursor: "pointer", textAlign: "left", font: "inherit" }}>
+                <div className="modal-x" style={{ width: 30, height: 30, background: "var(--primary-light)", border: "none", color: "var(--primary)" }}><Icon name={ic} size={14} /></div>
+                <span style={{ flex: 1, fontSize: 13, fontWeight: 600 }}>{label}</span>
+                <Icon name="ChevronRight" size={16} className="text-muted" />
+              </button>
+            ))}
+          </div>
           <div style={{ borderTop: "1px solid var(--border)", paddingTop: 9, display: "flex", alignItems: "center", gap: 8 }}>
             {sel.status === "offboarded"
               ? <button className="btn btn-ghost btn-sm" style={{ flex: 1 }} onClick={() => { const u = { ...sel, status: "active" as const, offReason: undefined, offNote: undefined, offAt: undefined }; setRows(rows.map((r) => r.id === sel.id ? u : r)); setSel(u); notify("Agency reactivated"); }}>Reactivate</button>

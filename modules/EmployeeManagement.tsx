@@ -1,6 +1,9 @@
 "use client";
 import { useMemo, useState } from "react";
 import { employees as seed, EMP_MODULES, PERM_TYPES, EMP_ST, accessLevel, seedPerms, Employee } from "@/data/employees";
+
+const HIDDEN_PERM_MODULES = new Set(["gps", "tickets", "feedback", "documents"]);
+const VISIBLE_EMP_MODULES = EMP_MODULES.filter(([k]) => !HIDDEN_PERM_MODULES.has(k));
 import { DataTable, FilterRow, Search, Select } from "@/components/DataTable";
 import { SideDrawer, Modal, StatusBadge, useToast } from "@/components/ui";
 import { PageHeader, Summary, DrawerHead, ProfGrid, Tabs, Timeline, Sec } from "./shared";
@@ -29,7 +32,7 @@ export function EmployeeManagement(_: ModuleProps) {
 
   const summary = e ? (() => {
     let acc = 0, full = 0, view = 0, rest = 0;
-    EMP_MODULES.forEach(([k]) => { const [, c] = accessLevel(e.perms![k]); c === "none" ? rest++ : acc++; if (c === "full") full++; if (c === "view") view++; });
+    VISIBLE_EMP_MODULES.forEach(([k]) => { const [, c] = accessLevel(e.perms![k]); c === "none" ? rest++ : acc++; if (c === "full") full++; if (c === "view") view++; });
     return [acc, full, view, rest];
   })() : [0, 0, 0, 0];
 
@@ -90,7 +93,7 @@ export function EmployeeManagement(_: ModuleProps) {
                 ))}
               </div>
               <Sec>Module Access</Sec>
-              {EMP_MODULES.map(([k, label]) => { const [lvl, c] = accessLevel(e.perms![k]); const col: any = { full: "#10B981", manage: "#635BFF", view: "#F59E0B", none: "#94A3B8" }[c]; return (
+              {VISIBLE_EMP_MODULES.map(([k, label]) => { const [lvl, c] = accessLevel(e.perms![k]); const col: any = { full: "#10B981", manage: "#635BFF", view: "#F59E0B", none: "#94A3B8" }[c]; return (
                 <div key={k} style={{ display: "flex", alignItems: "center", gap: 11, border: "1px solid var(--border)", borderRadius: 9, padding: "10px 13px", marginBottom: 7 }}>
                   <span style={{ width: 8, height: 8, borderRadius: "50%", background: col }} />
                   <div style={{ flex: 1, fontSize: 13, fontWeight: 600 }}>{label}</div>
@@ -110,7 +113,7 @@ export function EmployeeManagement(_: ModuleProps) {
 
       <Modal open={permModal} onClose={() => setPermModal(false)} title="Edit Permissions" sub={e?.name}
         footer={<><button className="btn btn-outline btn-sm" onClick={() => setPermModal(false)}>Cancel</button><button className="btn btn-primary btn-sm" onClick={savePerm}>Save Permissions</button></>}>
-        {EMP_MODULES.map(([k, label]) => (
+        {VISIBLE_EMP_MODULES.map(([k, label]) => (
           <div key={k} style={{ padding: "13px 0", borderBottom: "1px solid #F1F5F9" }}>
             <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 9 }}>{label}</div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
