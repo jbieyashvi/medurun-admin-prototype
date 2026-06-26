@@ -35,7 +35,7 @@ export function DriverVerification(_: ModuleProps) {
 
   const open = (d: QueueDriver) => {
     const seed = parseInt(d.docs); const o: Record<string, { status: DocStatus; reason?: string }> = {};
-    DRIVER_DOCS.forEach((doc, i) => (o[doc] = { status: i < seed ? "verified" : "pending" })); setDocMap(o); setSel(d);
+    DRIVER_DOCS.forEach((doc, i) => (o[doc.name] = { status: i < seed ? "verified" : "pending" })); setDocMap(o); setSel(d);
   };
   const verified = Object.values(docMap).filter((x) => x.status === "verified").length;
   const verifyDoc = (name: string) => { setDocMap((m) => ({ ...m, [name]: { status: "verified" } })); if (sel) append(sel.name, {}, { title: "Document verified", sub: name + " · by Arjun Mehta", time: nowStamp() }); };
@@ -75,7 +75,7 @@ export function DriverVerification(_: ModuleProps) {
             { key: "phone", label: "Phone", className: "text-sm" },
             { key: "agency", label: "Agency" },
             { key: "city", label: "City" },
-            { key: "docs", label: "Documents", render: (d) => `${d.docs.replace("/5", "")}/6` },
+            { key: "docs", label: "Documents", render: (d) => `${d.docs.replace("/5", "")}/${DRIVER_DOCS.length}` },
             { key: "status", label: "Status", render: (d) => <StatusBadge status={ST[effStatus(d)][1]} label={ST[effStatus(d)][0]} /> },
             { key: "submitted", label: "Submitted", className: "text-sm text-muted" },
             { key: "x", label: "", render: () => <button className="btn btn-outline btn-xs">Review →</button> },
@@ -101,7 +101,7 @@ export function DriverVerification(_: ModuleProps) {
             <ProfGrid items={[["Name", sel.name], ["Phone", sel.phone], ["Agency", sel.agency], ["City", sel.city]]} />
             <Sec>Document Review · {verified}/{DRIVER_DOCS.length} verified</Sec>
             <DocVerification
-              docs={DRIVER_DOCS.map((d) => ({ name: d, uploadDate: sel.submitted, status: docMap[d]?.status || "pending", reason: docMap[d]?.reason }))}
+              docs={DRIVER_DOCS.map((d) => ({ name: d.name, uploadDate: sel.submitted, status: docMap[d.name]?.status || "pending", reason: docMap[d.name]?.reason, required: d.required }))}
               onVerify={verifyDoc}
               onCorrection={correctDoc}
             />

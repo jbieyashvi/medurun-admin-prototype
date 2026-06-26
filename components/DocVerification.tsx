@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Modal, StatusBadge, useToast, Icon } from "./ui";
 
 export type DocStatus = "verified" | "pending" | "reupload" | "rejected";
-export type DocItem = { name: string; uploadDate: string; status: DocStatus; reason?: string; required?: boolean };
+export type DocItem = { name: string; uploadDate: string; status: DocStatus; reason?: string; required?: boolean; requiredLabel?: string };
 
 export const DOC_STATUS_META: Record<DocStatus, [string, string, string]> = {
   verified: ["Verified", "Check", "verified"],
@@ -52,7 +52,7 @@ export function DocVerification({
                 <div style={{ display: "flex", alignItems: "center", gap: 7, minWidth: 0 }}>
                   <span style={{ fontSize: 13, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} title={d.name}>{d.name}</span>
                   {d.required !== undefined && (
-                    <span style={{ flexShrink: 0, fontSize: 9.5, fontWeight: 700, letterSpacing: ".5px", textTransform: "uppercase", padding: "2px 7px", borderRadius: 20, background: d.required ? "#FEF2F2" : "#F1F5F9", color: d.required ? "#DC2626" : "#64748B" }}>{d.required ? "Required" : "Optional"}</span>
+                    <span style={{ flexShrink: 0, fontSize: 9.5, fontWeight: 700, letterSpacing: ".5px", textTransform: "uppercase", padding: "2px 7px", borderRadius: 20, background: d.required ? "#FEF2F2" : "#F1F5F9", color: d.required ? "#DC2626" : "#64748B" }}>{d.requiredLabel || (d.required ? "Required" : "Optional")}</span>
                   )}
                 </div>
                 <div style={{ fontSize: 11.5, color: "#9CA3AF", marginTop: 1, whiteSpace: "nowrap" }}>Uploaded {d.uploadDate}</div>

@@ -2,19 +2,38 @@ export type Equip = { oxygen: boolean; aed: boolean; stretcher: boolean; monitor
 export type Ambulance = {
   reg: string; type: string; agency: string; city: string; year: string;
   equip: Equip; status: "pending" | "approved" | "rejected" | "flagged";
+  missingDocs?: string[];
 };
 
 export const ambulanceQueue: Ambulance[] = [
-  { reg: "MH01-AB-1234", type: "BLS", agency: "LifeLine Ambulance", city: "Mumbai", year: "2023", equip: { oxygen: true, aed: true, stretcher: true, monitor: true }, status: "pending" },
-  { reg: "DL02-CD-5678", type: "ALS", agency: "Metro Medic", city: "Delhi", year: "2022", equip: { oxygen: false, aed: true, stretcher: true, monitor: true }, status: "pending" },
-  { reg: "KA03-EF-9012", type: "ICU", agency: "RapidCare", city: "Bangalore", year: "2024", equip: { oxygen: true, aed: true, stretcher: true, monitor: true }, status: "pending" },
-  { reg: "TN04-GH-3456", type: "BLS", agency: "CarePlus", city: "Chennai", year: "2021", equip: { oxygen: true, aed: false, stretcher: true, monitor: true }, status: "pending" },
-  { reg: "GJ05-IJ-7890", type: "Neonatal", agency: "Medivac Pro", city: "Ahmedabad", year: "2023", equip: { oxygen: true, aed: true, stretcher: true, monitor: true }, status: "pending" },
-  { reg: "MH02-KL-2468", type: "ALS", agency: "Falcon Medical", city: "Pune", year: "2020", equip: { oxygen: false, aed: false, stretcher: true, monitor: false }, status: "pending" },
+  { reg: "MH01-AB-1234", type: "BLS", agency: "LifeLine Ambulance", city: "Mumbai", year: "2023", equip: { oxygen: true, aed: true, stretcher: true, monitor: true }, status: "pending", missingDocs: [] },
+  { reg: "DL02-CD-5678", type: "ALS", agency: "Metro Medic", city: "Delhi", year: "2022", equip: { oxygen: false, aed: true, stretcher: true, monitor: true }, status: "pending", missingDocs: ["Insurance"] },
+  { reg: "KA03-EF-9012", type: "ICU", agency: "RapidCare", city: "Bangalore", year: "2024", equip: { oxygen: true, aed: true, stretcher: true, monitor: true }, status: "pending", missingDocs: [] },
+  { reg: "TN04-GH-3456", type: "BLS", agency: "CarePlus", city: "Chennai", year: "2021", equip: { oxygen: true, aed: false, stretcher: true, monitor: true }, status: "pending", missingDocs: ["PUC (Pollution Certificate)"] },
+  { reg: "GJ05-IJ-7890", type: "Neonatal", agency: "Medivac Pro", city: "Ahmedabad", year: "2023", equip: { oxygen: true, aed: true, stretcher: true, monitor: true }, status: "pending", missingDocs: ["Road Tax Certificate"] },
+  { reg: "MH02-KL-2468", type: "ALS", agency: "Falcon Medical", city: "Pune", year: "2020", equip: { oxygen: false, aed: false, stretcher: true, monitor: false }, status: "pending", missingDocs: ["Registration Certificate (RC)", "Fitness Certificate"] },
 ];
 
-export const AMB_DOCS = ["Registration Certificate (RC)", "Insurance", "Fitness Certificate"];
-export const AMB_PHOTOS = ["Front View", "Rear View", "Interior View"];
+export type AmbDoc = { name: string; required: boolean; requiredLabel?: string };
+export const AMB_DOCS: AmbDoc[] = [
+  { name: "Registration Certificate (RC)", required: true },
+  { name: "Insurance", required: true },
+  { name: "PUC (Pollution Certificate)", required: true },
+  { name: "Road Tax Certificate", required: true },
+  { name: "Fitness Certificate", required: true },
+  { name: "Calibration Certificate", required: false, requiredLabel: "Conditional" },
+];
+
+export const AMB_PHOTO_GROUPS: { section: string; items: string[] }[] = [
+  { section: "Exterior Photos", items: ["Front Side", "Right Side", "Left Side", "Rear Side", "Odometer"] },
+  { section: "Interior Photos", items: ["Interior with all Lights & Fans", "Stretcher", "Attender's Seat", "Oxygen Chamber"] },
+];
+export const AMB_PHOTOS: string[] = AMB_PHOTO_GROUPS.flatMap((g) => g.items);
+
+export const AMB_VIDEOS: string[] = [
+  "Equipment in Switch-On Condition",
+  "Siren & Glowing Blinkers with Horn",
+];
 
 export type GpsVehicle = {
   reg: string; driver: string; phone: string; agency: string; city: string;

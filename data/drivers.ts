@@ -30,7 +30,14 @@ export const driverQueue: QueueDriver[] = [
   { name: "Kiran Thakur", phone: "9820890123", agency: "LifeLine Ambulance", city: "Mumbai", docs: "5/5", status: "pending", submitted: "15 Jun 2026" },
 ];
 
-export const DRIVER_DOCS = ["Driving License", "Aadhaar Card", "PAN Card", "Medical Certificate", "Police Verification", "Profile Photo"];
+export type DriverDoc = { name: string; required: boolean };
+export const DRIVER_DOCS: DriverDoc[] = [
+  { name: "Driving Licence", required: true },
+  { name: "PAN Card", required: true },
+  { name: "Aadhaar Card / Voter ID", required: true },
+  { name: "Bank Passbook", required: true },
+  { name: "Passport Size Photo", required: false },
+];
 
 export type Customer = {
   name: string; phone: string; city: string; rides: number; spent: string; last: string;

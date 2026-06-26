@@ -97,9 +97,9 @@ export function DriverOverview(_: ModuleProps) {
               <ProfGrid items={[["Total Rides", sel.rides], ["Completed", Math.round(sel.rides * 0.94)], ["Cancelled", sel.rides - Math.round(sel.rides * 0.94)], ["Avg Rating", "★ " + sel.rating]]} />
             </>}
             {tab === "documents" && DRIVER_DOCS.map((d) => (
-              <div key={d} style={{ display: "flex", alignItems: "center", gap: 11, padding: "9px 12px", border: "1px solid var(--border)", borderRadius: 9, marginBottom: 7 }}>
+              <div key={d.name} style={{ display: "flex", alignItems: "center", gap: 11, padding: "9px 12px", border: "1px solid var(--border)", borderRadius: 9, marginBottom: 7 }}>
                 <div className="modal-x" style={{ width: 30, height: 30, border: "1px solid var(--border)", color: "#64748B" }}><Icon name="FileText" size={14} /></div>
-                <div style={{ flex: 1 }}><div style={{ fontSize: 13, fontWeight: 600 }}>{d}</div><div style={{ fontSize: 11.5, color: "#9CA3AF", marginTop: 1 }}>Verified document</div></div>
+                <div style={{ flex: 1 }}><div style={{ fontSize: 13, fontWeight: 600 }}>{d.name}</div><div style={{ fontSize: 11.5, color: "#9CA3AF", marginTop: 1 }}>{d.required ? "Required" : "Optional"} · Verified document</div></div>
                 <StatusBadge status="verified" label="Verified" />
                 <button className="modal-x" style={{ width: 28, height: 28 }} title="Download" onClick={() => notify("Document downloaded")}><Icon name="Download" size={13} /></button>
               </div>
