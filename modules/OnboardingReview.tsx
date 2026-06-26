@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { onboardingApps as SEED, ALL_DOCS } from "@/data/agencies";
+import { onboardingApps as SEED, ALL_DOCS, AGENCY_DOC_GROUPS } from "@/data/agencies";
 import { DataTable, FilterRow, Search, Select } from "@/components/DataTable";
 import { SideDrawer, Modal, StatusBadge, useToast, Icon } from "@/components/ui";
 import { DocVerification } from "@/components/DocVerification";
@@ -14,7 +14,7 @@ type App = (typeof SEED)[number];
 type DocState = { st: "verified" | "pending" | "reupload" | "rejected"; reason?: string };
 type OnbState = { status?: string; reason?: string; note?: string; notes?: string; by?: string; date?: string; docs: Record<string, DocState>; activity: ActivityEntry[] };
 
-const DOC_REASONS: Record<string, string> = { "Ambulance RC": "Image not readable", "NOC Certificate": "Expired document" };
+const DOC_REASONS: Record<string, string> = { "Undertaking (Seal, Stamp & Sign)": "Image not readable", "Organogram": "Expired document" };
 const REUPLOAD_REASONS = ["Incorrect document", "Expired document", "Unreadable upload", "Missing information", "Other"];
 const wait = (s: string) => Math.max(0, 22 - parseInt(s));
 const DOC_META: Record<string, [string, string, string]> = {
@@ -116,7 +116,7 @@ export function OnboardingReview(_: ModuleProps) {
             { key: "phone", label: "Phone", className: "text-sm" },
             { key: "submitted", label: "Submitted", className: "text-sm text-muted" },
             { key: "wait", label: "Waiting", render: (a) => <span className="badge pending">{wait(a.submitted)} days</span> },
-            { key: "docs", label: "Documents", render: (a) => `${Object.values(docState(a)).filter((d) => d.st === "verified").length}/5` },
+            { key: "docs", label: "Documents", render: (a) => `${Object.values(docState(a)).filter((d) => d.st === "verified").length}/${ALL_DOCS.length}` },
             { key: "status", label: "Status", render: (a) => <StatusBadge status={dispStatus(a)[1]} label={dispStatus(a)[0]} /> },
             { key: "x", label: "", render: () => <button className="btn btn-outline btn-xs">Review →</button> },
           ]}
@@ -140,18 +140,23 @@ export function OnboardingReview(_: ModuleProps) {
 
             <Sec>Application Details</Sec>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 16px" }}>
-              {([["Contact Person", sel.contact], ["Phone", sel.phone], ["City", sel.city], ["Submitted Date", sel.submitted]] as [string, string][]).map(([k, v]) => (
+              {([["Contact Person", sel.contact], ["Official Email ID", sel.email], ["Mobile Number", sel.phone], ["City", sel.city], ["Submitted Date", sel.submitted]] as [string, string][]).map(([k, v]) => (
                 <div key={k} style={{ padding: "9px 0", borderBottom: "1px solid #F1F5F9" }}><div style={{ fontSize: 11, color: "#9CA3AF" }}>{k}</div><div style={{ fontSize: 14, fontWeight: 500, marginTop: 2 }}>{v}</div></div>
               ))}
             </div>
 
             <Sec>Document Review</Sec>
             <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12.5, color: "var(--muted)", marginBottom: 12 }}><Icon name="Shield" size={14} /> {verifiedCount} of {ALL_DOCS.length} documents verified</div>
-            <DocVerification
-              docs={ALL_DOCS.map((doc) => { const d = docState(sel)[doc] || { st: "pending" as const }; return { name: doc, uploadDate: sel.submitted, status: d.st, reason: d.reason }; })}
-              onVerify={markVerified}
-              onCorrection={requestDocCorrection}
-            />
+            {AGENCY_DOC_GROUPS.map((g) => (
+              <div key={g.section}>
+                <div style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: ".5px", color: "#64748B", margin: "14px 0 6px" }}>{g.section}</div>
+                <DocVerification
+                  docs={g.docs.map((d) => { const ds = docState(sel)[d.name] || { st: "pending" as const }; return { name: d.name, uploadDate: sel.submitted, status: ds.st, reason: ds.reason, required: d.required }; })}
+                  onVerify={markVerified}
+                  onCorrection={requestDocCorrection}
+                />
+              </div>
+            ))}
 
             <Sec>Internal Review Notes</Sec>
             <textarea className="input" value={notesDraft} onChange={(e) => setNotesDraft(e.target.value)} placeholder="Add notes for internal reviewers..." />

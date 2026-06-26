@@ -20,13 +20,27 @@ export const agencies: Agency[] = [
 ];
 
 export const onboardingApps = [
-  { id: 1, name: "SkyMedic Healthcare", city: "Pune", contact: "Arjun Tiwari", phone: "9820112233", docs: 5, status: "pending", submitted: "18 Jun 2026" },
-  { id: 2, name: "RapidCare Emergency", city: "Bangalore", contact: "Vikram Singh", phone: "9845033456", docs: 3, status: "pending", submitted: "16 Jun 2026" },
-  { id: 3, name: "CareFirst EMS", city: "Jaipur", contact: "Meena Sharma", phone: "9783223344", docs: 2, status: "flagged", submitted: "12 Jun 2026" },
-  { id: 4, name: "QuickAid Services", city: "Lucknow", contact: "Dhruv Verma", phone: "9839334455", docs: 5, status: "pending", submitted: "10 Jun 2026" },
-  { id: 5, name: "AidFirst Services", city: "Mumbai", contact: "Mohan Desai", phone: "9820077890", docs: 2, status: "flagged", submitted: "8 Jun 2026" },
-  { id: 6, name: "SafeLife Ambulance", city: "Nagpur", contact: "Rekha Joshi", phone: "9822445566", docs: 4, status: "pending", submitted: "6 Jun 2026" },
-  { id: 7, name: "MedRush Emergency", city: "Indore", contact: "Rohit Gupta", phone: "9826556677", docs: 5, status: "pending", submitted: "4 Jun 2026" },
+  { id: 1, name: "SkyMedic Healthcare", city: "Pune", contact: "Arjun Tiwari", phone: "9820112233", email: "arjun@skymedic.com", docs: 5, status: "pending", submitted: "18 Jun 2026" },
+  { id: 2, name: "RapidCare Emergency", city: "Bangalore", contact: "Vikram Singh", phone: "9845033456", email: "vikram@rapidcare.com", docs: 3, status: "pending", submitted: "16 Jun 2026" },
+  { id: 3, name: "CareFirst EMS", city: "Jaipur", contact: "Meena Sharma", phone: "9783223344", email: "meena@carefirst.com", docs: 2, status: "flagged", submitted: "12 Jun 2026" },
+  { id: 4, name: "QuickAid Services", city: "Lucknow", contact: "Dhruv Verma", phone: "9839334455", email: "dhruv@quickaid.com", docs: 5, status: "pending", submitted: "10 Jun 2026" },
+  { id: 5, name: "AidFirst Services", city: "Mumbai", contact: "Mohan Desai", phone: "9820077890", email: "mohan@aidfirst.com", docs: 2, status: "flagged", submitted: "8 Jun 2026" },
+  { id: 6, name: "SafeLife Ambulance", city: "Nagpur", contact: "Rekha Joshi", phone: "9822445566", email: "rekha@safelife.com", docs: 4, status: "pending", submitted: "6 Jun 2026" },
+  { id: 7, name: "MedRush Emergency", city: "Indore", contact: "Rohit Gupta", phone: "9826556677", email: "rohit@medrush.com", docs: 5, status: "pending", submitted: "4 Jun 2026" },
 ];
 
-export const ALL_DOCS = ["Registration Certificate", "GST Certificate", "Ambulance RC", "NOC Certificate", "Director ID"];
+export const AGENCY_DOC_GROUPS: { section: string; docs: { name: string; required: boolean }[] }[] = [
+  { section: "Registration & Statutory", docs: [
+    { name: "GST Certificate", required: true },
+    { name: "PAN Card", required: true },
+    { name: "Incorporation Certificate", required: false },
+    { name: "MSME Certificate", required: false },
+    { name: "EPF & ESIC Certificate", required: false },
+  ]},
+  { section: "Governance", docs: [
+    { name: "Undertaking (Seal, Stamp & Sign)", required: true },
+    { name: "Organogram", required: true },
+  ]},
+];
+
+export const ALL_DOCS: string[] = AGENCY_DOC_GROUPS.flatMap((g) => g.docs.map((d) => d.name));

@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
-import { agencies as SEED, Agency } from "@/data/agencies";
+import { agencies as SEED, Agency, AGENCY_DOC_GROUPS } from "@/data/agencies";
 import { drivers as ALL_DRIVERS } from "@/data/drivers";
 import { DataTable, FilterRow, Search, Select } from "@/components/DataTable";
 import { SideDrawer, Modal, StatusBadge, useToast, Icon } from "@/components/ui";
@@ -8,7 +8,6 @@ import { PageHeader, DrawerHead, Metrics, Sec, Tabs, Timeline, Row } from "./sha
 import { initials, fmtINR, parseAmt } from "@/lib/format";
 import type { ModuleProps } from "./registry";
 
-const AGENCY_DOCS = ["Registration Certificate", "GST Certificate", "Ambulance RC", "NOC Certificate", "Director ID"];
 const OFFBOARD_REASONS = ["Contract ended", "Compliance issue", "Poor service quality", "Payment dispute", "Agency requested removal", "Other"];
 
 export function AgencyManagement(_: ModuleProps) {
@@ -22,6 +21,16 @@ export function AgencyManagement(_: ModuleProps) {
   const [f, setF] = useState({ name: "", contact: "", phone: "", email: "", city: "Mumbai", type: "Private", reg: "", gst: "", bls: 0, als: 0, icu: 0, neo: 0, bankName: "", accHolder: "", accNo: "", ifsc: "" });
   const [removeText, setRemoveText] = useState("");
   const [suspendReason, setSuspendReason] = useState(""); const [suspendNote, setSuspendNote] = useState("");
+  const [docFiles, setDocFiles] = useState<Record<string, string>>({});
+
+  const pickDocFile = (key: string) => {
+    if (typeof window === "undefined") return;
+    const inp = document.createElement("input");
+    inp.type = "file"; inp.accept = "application/pdf,image/*";
+    inp.onchange = () => { const f = inp.files?.[0]; if (f) setDocFiles((p) => ({ ...p, [key]: f.name })); };
+    inp.click();
+  };
+  const removeDocFile = (key: string) => setDocFiles((p) => { const c = { ...p }; delete c[key]; return c; });
 
   const filtered = useMemo(() => rows.filter((a) =>
     (!q || a.name.toLowerCase().includes(q.toLowerCase()) || a.city.toLowerCase().includes(q.toLowerCase())) &&
@@ -32,14 +41,14 @@ export function AgencyManagement(_: ModuleProps) {
   const ambTypes = sel ? [["BLS", Math.round(sel.ambulances * 0.4)], ["ALS", Math.round(sel.ambulances * 0.3)], ["ICU", Math.round(sel.ambulances * 0.18)], ["Neonatal", Math.round(sel.ambulances * 0.12)]] as [string, number][] : [];
   const sampleDrivers = sel ? ALL_DRIVERS.slice(0, Math.min(4, Math.max(1, Math.round(sel.drivers / 18) || 3))) : [];
 
-  const openAdd = () => { setF({ name: "", contact: "", phone: "", email: "", city: "Mumbai", type: "Private", reg: "", gst: "", bls: 0, als: 0, icu: 0, neo: 0, bankName: "", accHolder: "", accNo: "", ifsc: "" }); setModal("add"); };
+  const openAdd = () => { setF({ name: "", contact: "", phone: "", email: "", city: "Mumbai", type: "Private", reg: "", gst: "", bls: 0, als: 0, icu: 0, neo: 0, bankName: "", accHolder: "", accNo: "", ifsc: "" }); setDocFiles({}); setModal("add"); };
   const fleetTotal = f.bls + f.als + f.icu + f.neo;
   const createAgency = () => {
     if (!f.name || !f.contact || !f.phone || !f.email) { notify("Fill all required fields", "warning"); return; }
     setRows([{ id: Math.max(...rows.map((r) => r.id)) + 1, name: f.name, city: f.city, status: "pending", ambulances: fleetTotal, drivers: 0, revenue: "—", rating: "—", contact: f.contact, phone: f.phone, email: f.email, established: "2026", type: f.type }, ...rows]);
     setModal(null); notify(`"${f.name}" submitted — sent to Onboarding Review Queue`);
   };
-  const openEdit = () => { if (sel) { setF({ name: sel.name, contact: sel.contact, phone: sel.phone, email: sel.email, city: sel.city, type: sel.type || "Private", reg: "", gst: "", bls: 0, als: 0, icu: 0, neo: 0, bankName: "", accHolder: "", accNo: "", ifsc: "" }); setModal("edit"); } };
+  const openEdit = () => { if (sel) { setF({ name: sel.name, contact: sel.contact, phone: sel.phone, email: sel.email, city: sel.city, type: sel.type || "Private", reg: "", gst: "", bls: 0, als: 0, icu: 0, neo: 0, bankName: "", accHolder: "", accNo: "", ifsc: "" }); setDocFiles({}); setModal("edit"); } };
   const saveEdit = () => { if (!sel) return; const u = { ...sel, name: f.name, contact: f.contact, phone: f.phone, email: f.email, city: f.city, type: f.type }; setRows(rows.map((r) => r.id === sel.id ? u : r)); setSel(u); setModal(null); notify("Agency details updated"); };
   const confirmOffboard = () => {
     if (!suspendReason) { notify("Select an offboarding reason", "warning"); return; }
@@ -113,18 +122,30 @@ export function AgencyManagement(_: ModuleProps) {
               <Row k="Documents">{sel.status === "active" ? "5/5 verified" : "3/5 verified"}</Row>
               <Row k="KYC Status"><StatusBadge status={sel.status === "active" ? "verified" : "pending"} label={sel.status === "active" ? "Verified" : "Pending"} /></Row>
             </>}
-            {tab === "documents" && AGENCY_DOCS.map((d, i) => {
-              const ok = sel.status === "active" || i < 3;
-              return <div key={d} style={{ display: "flex", alignItems: "center", gap: 11, padding: "9px 12px", border: "1px solid var(--border)", borderRadius: 9, marginBottom: 7 }}>
-                <div className="modal-x" style={{ width: 34, height: 34, background: "var(--primary-light)", border: "none", color: "var(--primary)" }}><Icon name="FileText" size={15} /></div>
-                <div style={{ flex: 1, minWidth: 0, fontSize: 13, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{d}</div>
-                <StatusBadge status={ok ? "verified" : "pending"} label={ok ? "verified" : "awaiting"} />
-                {ok ? <>
-                  <button className="modal-x" style={{ width: 28, height: 28 }} title="View" onClick={() => { setDocName(d); setModal("doc"); }}><Icon name="Eye" size={13} /></button>
-                  <button className="modal-x" style={{ width: 28, height: 28 }} title="Download" onClick={() => notify("Downloading " + d)}><Icon name="Download" size={13} /></button>
-                </> : <button className="modal-x" style={{ width: 28, height: 28 }} title="Request" onClick={() => notify("Requested " + d, "warning")}><Icon name="RotateCw" size={13} /></button>}
-              </div>;
-            })}
+            {tab === "documents" && (() => {
+              let idx = -1;
+              return AGENCY_DOC_GROUPS.map((g) => (
+                <div key={g.section}>
+                  <Sec>{g.section}</Sec>
+                  {g.docs.map((d) => {
+                    idx++;
+                    const ok = sel.status === "active" || idx < 3;
+                    return <div key={d.name} style={{ display: "flex", alignItems: "center", gap: 11, padding: "9px 12px", border: "1px solid var(--border)", borderRadius: 9, marginBottom: 7 }}>
+                      <div className="modal-x" style={{ width: 34, height: 34, background: "var(--primary-light)", border: "none", color: "var(--primary)" }}><Icon name="FileText" size={15} /></div>
+                      <div style={{ flex: 1, minWidth: 0, display: "flex", alignItems: "center", gap: 7 }}>
+                        <span style={{ fontSize: 13, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{d.name}</span>
+                        <span style={{ flexShrink: 0, fontSize: 9.5, fontWeight: 700, letterSpacing: ".5px", textTransform: "uppercase", padding: "2px 7px", borderRadius: 20, background: d.required ? "#FEF2F2" : "#F1F5F9", color: d.required ? "#DC2626" : "#64748B" }}>{d.required ? "Required" : "Optional"}</span>
+                      </div>
+                      <StatusBadge status={ok ? "verified" : "pending"} label={ok ? "verified" : "awaiting"} />
+                      {ok ? <>
+                        <button className="modal-x" style={{ width: 28, height: 28 }} title="View" onClick={() => { setDocName(d.name); setModal("doc"); }}><Icon name="Eye" size={13} /></button>
+                        <button className="modal-x" style={{ width: 28, height: 28 }} title="Download" onClick={() => notify("Downloading " + d.name)}><Icon name="Download" size={13} /></button>
+                      </> : <button className="modal-x" style={{ width: 28, height: 28 }} title="Request" onClick={() => notify("Requested " + d.name, "warning")}><Icon name="RotateCw" size={13} /></button>}
+                    </div>;
+                  })}
+                </div>
+              ));
+            })()}
             {tab === "drivers" && <>
               {sampleDrivers.map((d) => (
                 <div key={d.name} style={{ display: "flex", alignItems: "center", gap: 11, padding: "10px 0", borderBottom: "1px solid #F1F5F9" }}>
@@ -172,8 +193,8 @@ export function AgencyManagement(_: ModuleProps) {
         <div className="dsec">Primary Contact</div>
         <div className="form-group"><label className="label">Contact Person *</label><input className="input" value={f.contact} onChange={(e) => setF({ ...f, contact: e.target.value })} placeholder="Full name" /></div>
         <div className="grid2">
-          <div className="form-group"><label className="label">Phone Number *</label><input className="input" maxLength={10} value={f.phone} onChange={(e) => setF({ ...f, phone: e.target.value })} placeholder="9820000000" /></div>
-          <div className="form-group"><label className="label">Email Address *</label><input className="input" value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} placeholder="agency@email.com" /></div>
+          <div className="form-group"><label className="label">Mobile Number *</label><input className="input" maxLength={10} value={f.phone} onChange={(e) => setF({ ...f, phone: e.target.value })} placeholder="9820000000" /></div>
+          <div className="form-group"><label className="label">Official Email ID *</label><input className="input" value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} placeholder="agency@email.com" /></div>
         </div>
         {modal === "add" && <>
           <div className="dsec">Fleet Information</div>
@@ -194,15 +215,30 @@ export function AgencyManagement(_: ModuleProps) {
             <div className="form-group"><label className="label">Account Number</label><input className="input" value={f.accNo} onChange={(e) => setF({ ...f, accNo: e.target.value })} placeholder="000000000000" /></div>
             <div className="form-group"><label className="label">IFSC Code</label><input className="input" value={f.ifsc} onChange={(e) => setF({ ...f, ifsc: e.target.value })} placeholder="HDFC0002000" /></div>
           </div>
-          <div className="dsec">Document Uploads</div>
-          {["Registration Certificate", "GST Certificate", "NOC Certificate", "Director ID"].map((d) => (
-            <div key={d} style={{ display: "flex", alignItems: "center", gap: 11, padding: "9px 0", borderBottom: "1px solid #F4F6F9" }}>
-              <span className="modal-x" style={{ width: 32, height: 32, background: "#F1F5F9", border: "none", color: "#475569" }}><Icon name="FileText" size={15} /></span>
-              <div style={{ flex: 1 }}><div style={{ fontSize: 13, fontWeight: 600 }}>{d}</div><div style={{ fontSize: 11.5, color: "#9CA3AF", marginTop: 1 }}>PDF or JPG · up to 5 MB</div></div>
-              <button className="btn btn-outline btn-xs" type="button" onClick={() => notify("Upload " + d)}><Icon name="Upload" size={12} /> Upload</button>
-            </div>
-          ))}
         </>}
+        <div className="dsec">Agency Documents</div>
+        {AGENCY_DOC_GROUPS.map((g) => (
+          <div key={g.section}>
+            <div style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: ".5px", color: "#64748B", margin: "12px 0 6px" }}>{g.section}</div>
+            {g.docs.map((d) => {
+              const fname = docFiles[d.name];
+              return <div key={d.name} style={{ display: "flex", alignItems: "center", gap: 11, padding: "9px 0", borderBottom: "1px solid #F4F6F9" }}>
+                <span className="modal-x" style={{ width: 32, height: 32, background: "#F1F5F9", border: "none", color: "#475569" }}><Icon name="FileText" size={15} /></span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 7, minWidth: 0 }}>
+                    <span style={{ fontSize: 13, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{d.name}</span>
+                    <span style={{ flexShrink: 0, fontSize: 9.5, fontWeight: 700, letterSpacing: ".5px", textTransform: "uppercase", padding: "2px 7px", borderRadius: 20, background: d.required ? "#FEF2F2" : "#F1F5F9", color: d.required ? "#DC2626" : "#64748B" }}>{d.required ? "Required" : "Optional"}</span>
+                  </div>
+                  <div style={{ fontSize: 11.5, color: fname ? "#059669" : "#9CA3AF", marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{fname || "PDF or JPG · up to 5 MB"}</div>
+                </div>
+                {fname ? <>
+                  <button className="btn btn-outline btn-xs" type="button" onClick={() => pickDocFile(d.name)}>Replace</button>
+                  <button className="btn btn-ghost danger btn-xs" type="button" onClick={() => removeDocFile(d.name)}>Remove</button>
+                </> : <button className="btn btn-outline btn-xs" type="button" onClick={() => pickDocFile(d.name)}><Icon name="Upload" size={12} /> Upload</button>}
+              </div>;
+            })}
+          </div>
+        ))}
       </Modal>
 
       {/* INVOICES */}
