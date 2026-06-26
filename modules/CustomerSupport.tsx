@@ -1,0 +1,165 @@
+"use client";
+import { useMemo, useState } from "react";
+import { bookings as SEED, Booking, BOOKING_STATUS_META } from "@/data/bookings";
+import { DataTable, FilterRow, Search, Select } from "@/components/DataTable";
+import { SideDrawer, StatusBadge, Icon } from "@/components/ui";
+import { PageHeader, Summary, DrawerHead, Sec, Row, Timeline } from "./shared";
+import { StatCard } from "@/components/StatCard";
+import { fmtINR } from "@/lib/format";
+import type { ModuleProps } from "./registry";
+
+const PAY_META: Record<Booking["fare"]["paymentStatus"], string> = {
+  paid: "paid", pending: "pending", failed: "rejected", refunded: "offboarded",
+};
+
+export function CustomerSupport(_: ModuleProps) {
+  const [q, setQ] = useState("");
+  const [st, setSt] = useState("All Status");
+  const [range, setRange] = useState("All Time");
+  const [sel, setSel] = useState<Booking | null>(null);
+
+  const counts = useMemo(() => ({
+    active: SEED.filter((b) => b.status === "ongoing" || b.status === "scheduled").length,
+    open: SEED.filter((b) => b.status === "issue").length,
+    cancelled: SEED.filter((b) => b.status === "cancelled").length,
+    payIssue: SEED.filter((b) => b.fare.paymentStatus === "failed" || b.fare.paymentStatus === "refunded").length,
+  }), []);
+
+  const filtered = useMemo(() => SEED.filter((b) => {
+    const needle = q.trim().toLowerCase();
+    const hit = !needle ||
+      b.id.toLowerCase().includes(needle) ||
+      b.customer.name.toLowerCase().includes(needle) ||
+      b.customer.phone.includes(needle);
+    const okSt = st === "All Status" || BOOKING_STATUS_META[b.status][0] === st;
+    return hit && okSt;
+  }), [q, st, range]);
+
+  const openDrawer = (b: Booking) => setSel(b);
+
+  return (
+    <div>
+      <PageHeader title="Customer Support" sub="Look up any booking and review the full ride details in one place." />
+      <Summary>
+        <StatCard icon="Activity" value={counts.active} label="Active Bookings" />
+        <StatCard icon="LifeBuoy" value={counts.open} label="Open Support Cases" />
+        <StatCard icon="CircleX" value={counts.cancelled} label="Cancelled Rides" />
+        <StatCard icon="CreditCard" value={counts.payIssue} label="Payment Issues" />
+      </Summary>
+
+      <div className="card" style={{ padding: 0 }}>
+        <FilterRow>
+          <Search value={q} onChange={setQ} placeholder="Search Booking ID, customer, or phone..." />
+          <Select value={st} onChange={setSt} options={["All Status", "Ongoing", "Scheduled", "Completed", "Cancelled", "Issue Raised"]} />
+          <Select value={range} onChange={setRange} options={["All Time", "Today", "Last 7 Days", "Last 30 Days"]} />
+        </FilterRow>
+        <DataTable<Booking>
+          rows={filtered} getKey={(b) => b.id} onRowClick={openDrawer}
+          columns={[
+            { key: "id", label: "Booking ID", render: (b) => <span className="mono" style={{ fontWeight: 600 }}>{b.id}</span> },
+            { key: "customer", label: "Customer", render: (b) => <div><div style={{ fontWeight: 600 }}>{b.customer.name}</div><div className="text-sm text-muted">{b.customer.phone} · {b.rideType}</div></div> },
+            { key: "route", label: "Route", render: (b) => (
+              <div style={{ minWidth: 0, maxWidth: 260 }}>
+                <div className="text-sm" style={{ display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} title={b.pickup}>
+                  <Icon name="MapPin" size={12} className="text-muted" />
+                  <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{b.pickup}</span>
+                </div>
+                <div className="text-sm" style={{ display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: 2, color: "#64748B" }} title={b.drop}>
+                  <Icon name="ArrowDown" size={12} className="text-muted" />
+                  <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{b.drop}</span>
+                </div>
+              </div>
+            ) },
+            { key: "status", label: "Booking Status", render: (b) => <StatusBadge status={BOOKING_STATUS_META[b.status][1]} label={BOOKING_STATUS_META[b.status][0]} /> },
+            { key: "bookedAt", label: "Booking Date & Time", className: "text-sm text-muted" },
+            { key: "x", label: "", render: (b) => <button className="btn btn-outline btn-xs" onClick={(e) => { e.stopPropagation(); openDrawer(b); }}>View →</button> },
+          ]}
+        />
+      </div>
+
+      <SideDrawer open={!!sel} onClose={() => setSel(null)} title="Booking Details">
+        {sel && <>
+          <DrawerHead
+            avatar={<Icon name="Route" size={18} />}
+            title={sel.id}
+            sub={`${sel.customer.name} · ${sel.bookedAt}`}
+            right={<StatusBadge status={BOOKING_STATUS_META[sel.status][1]} label={BOOKING_STATUS_META[sel.status][0]} />}
+          />
+          <div style={{ padding: "10px 22px 22px" }}>
+            <div style={{ paddingBottom: 22 }}>
+              <Sec>Booking</Sec>
+              <Row k="Booking ID"><span className="mono">{sel.id}</span></Row>
+              <Row k="Booking Status"><StatusBadge status={BOOKING_STATUS_META[sel.status][1]} label={BOOKING_STATUS_META[sel.status][0]} /></Row>
+              <Row k="Booking Date & Time">{sel.bookedAt}</Row>
+              <Row k="Ride Type">{sel.rideType}</Row>
+              <Row k="Ambulance Type">{sel.ambType}</Row>
+            </div>
+
+            <div style={{ borderTop: "1px solid #F1F5F9", paddingTop: 6, paddingBottom: 22 }}>
+              <Sec>Ride Timeline</Sec>
+              <Timeline items={sel.timeline.map((t) => ({ title: t.label, sub: t.time || "Pending", done: t.done, active: t.active }))} />
+            </div>
+
+            <div style={{ borderTop: "1px solid #F1F5F9", paddingTop: 6, paddingBottom: 22 }}>
+              <Sec>Locations</Sec>
+              <div style={{ border: "1px solid var(--border)", borderRadius: 10, padding: "12px 14px", marginBottom: 8, display: "flex", gap: 11 }}>
+                <div className="modal-x" style={{ width: 30, height: 30, background: "var(--primary-light)", border: "none", color: "var(--primary)" }}><Icon name="MapPin" size={14} /></div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 11, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: ".5px" }}>Pickup Location</div>
+                  <div style={{ fontSize: 13.5, fontWeight: 600, marginTop: 2 }}>{sel.pickup}</div>
+                </div>
+              </div>
+              <div style={{ border: "1px solid var(--border)", borderRadius: 10, padding: "12px 14px", display: "flex", gap: 11 }}>
+                <div className="modal-x" style={{ width: 30, height: 30, background: "#FEF2F2", border: "none", color: "#DC2626" }}><Icon name="Flag" size={14} /></div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 11, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: ".5px" }}>Drop Location</div>
+                  <div style={{ fontSize: 13.5, fontWeight: 600, marginTop: 2 }}>{sel.drop}</div>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ borderTop: "1px solid #F1F5F9", paddingTop: 6, paddingBottom: 22 }}>
+              <Sec>Fare Details</Sec>
+              <Row k="Base Fare">{fmtINR(sel.fare.base)}</Row>
+              <Row k="Distance Fare">{fmtINR(sel.fare.distance)}</Row>
+              {sel.fare.waiting !== undefined && sel.fare.waiting > 0 && <Row k="Waiting Charges">{fmtINR(sel.fare.waiting)}</Row>}
+              {sel.fare.discount !== undefined && sel.fare.discount > 0 && <Row k="Discount"><span style={{ color: "#059669" }}>− {fmtINR(sel.fare.discount)}</span></Row>}
+              <Row k="Taxes">{fmtINR(sel.fare.taxes)}</Row>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 12, padding: "12px 14px", background: "var(--primary-light)", border: "1px solid #C7D2FE", borderRadius: 10 }}>
+                <div>
+                  <div style={{ fontSize: 11, color: "#475569", textTransform: "uppercase", letterSpacing: ".5px" }}>Final Fare</div>
+                  <div style={{ fontSize: 11.5, color: "var(--muted)", marginTop: 2 }}>{sel.fare.method} · <StatusBadge status={PAY_META[sel.fare.paymentStatus]} label={sel.fare.paymentStatus.charAt(0).toUpperCase() + sel.fare.paymentStatus.slice(1)} /></div>
+                </div>
+                <div style={{ fontSize: 20, fontWeight: 800, color: "var(--primary)", letterSpacing: "-.3px" }}>{fmtINR(sel.fare.final)}</div>
+              </div>
+            </div>
+
+            <div style={{ borderTop: "1px solid #F1F5F9", paddingTop: 18, display: "flex", flexDirection: "column", gap: 12 }}>
+              {([
+                ["User", "Customer", sel.customer.name, [["Phone", sel.customer.phone], ...(sel.customer.email ? [["Email", sel.customer.email]] : [])] as [string, string][]],
+                ["UserCheck", "Driver", sel.driver.name, [["Phone", sel.driver.phone], ["Driver ID", sel.driver.driverId]] as [string, string][]],
+                ...(sel.agency ? [["Building2", "Agency", sel.agency.name, [["Contact", sel.agency.contact], ["Agency ID", sel.agency.agencyId]] as [string, string][]] as [string, string, string, [string, string][]]] : []),
+              ] as [string, string, string, [string, string][]][]).map(([icon, role, name, lines]) => (
+                <div key={role} style={{ border: "1px solid var(--border)", borderRadius: 12, padding: "14px 16px", display: "flex", gap: 12 }}>
+                  <div className="modal-x" style={{ width: 36, height: 36, background: "var(--primary-light)", border: "none", color: "var(--primary)", flexShrink: 0 }}><Icon name={icon} size={16} /></div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 10.5, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: ".6px", fontWeight: 600 }}>{role}</div>
+                    <div style={{ fontSize: 15, fontWeight: 700, marginTop: 2 }}>{name}</div>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px 14px", marginTop: 10 }}>
+                      {lines.map(([k, v]) => (
+                        <div key={k} style={{ minWidth: 0 }}>
+                          <div style={{ fontSize: 10.5, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: ".4px" }}>{k}</div>
+                          <div style={{ fontSize: 13, fontWeight: 600, marginTop: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} title={v}>{k === "Driver ID" || k === "Agency ID" ? <span className="mono">{v}</span> : v}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>}
+      </SideDrawer>
+    </div>
+  );
+}

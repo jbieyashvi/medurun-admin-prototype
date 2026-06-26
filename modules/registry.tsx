@@ -4,6 +4,7 @@ import { AgencyManagement } from "./AgencyManagement";
 import { OnboardingReview } from "./OnboardingReview";
 import { DriverVerification } from "./DriverVerification";
 import { AmbulanceQueue } from "./AmbulanceQueue";
+import { CustomerSupport } from "./CustomerSupport";
 import { GPSTracking } from "./GPSTracking";
 import { TicketsQueries } from "./TicketsQueries";
 import { FeedbackManagement } from "./FeedbackManagement";
@@ -24,6 +25,7 @@ export const SCREENS: Record<string, ComponentType<ModuleProps>> = {
   onboarding: OnboardingReview,
   "drivers-q": DriverVerification,
   "ambulance-q": AmbulanceQueue,
+  support: CustomerSupport,
   gps: GPSTracking,
   tickets: TicketsQueries,
   feedback: FeedbackManagement,
