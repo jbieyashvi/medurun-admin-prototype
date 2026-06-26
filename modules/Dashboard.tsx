@@ -45,20 +45,6 @@ export function Dashboard({ onNavigate }: ModuleProps) {
         ))}
       </div>
 
-      <div
-        onClick={() => onNavigate("gps")}
-        className="card"
-        style={{ display: "flex", alignItems: "center", gap: 16, padding: "14px 18px", marginBottom: 20, cursor: "pointer" }}
-      >
-        <div className="kpi-ic" style={{ width: 38, height: 38 }}><Icon name="MapPin" size={18} /></div>
-        <div><b style={{ fontSize: 16 }}>87</b> <span style={{ fontSize: 11.5, color: "var(--muted)" }}>Online Ambulances</span></div>
-        <div style={{ width: 1, height: 30, background: "var(--border)" }} />
-        <div><b style={{ fontSize: 16 }}>24</b> <span style={{ fontSize: 11.5, color: "var(--muted)" }}>On Ride</span></div>
-        <div style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", gap: 5, fontSize: 13, fontWeight: 600, color: "var(--primary)" }}>
-          View GPS Tracking <Icon name="ArrowRight" size={15} />
-        </div>
-      </div>
-
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
         <div className="card pad">
           <div className="section-title" style={{ marginBottom: 4 }}>Pending Actions</div>

@@ -10,10 +10,6 @@ export const NAV: NavSection[] = [
       { key: "onboarding", label: "Onboarding Review", icon: "ClipboardCheck", badge: 7 },
       { key: "drivers-q", label: "Driver Verification", icon: "UserCheck", badge: 12 },
       { key: "ambulance-q", label: "Ambulance Queue", icon: "Ambulance", badge: 5 },
-      { key: "gps", label: "GPS Tracking", icon: "MapPin" },
-      { key: "tickets", label: "Tickets & Queries", icon: "LifeBuoy", badge: 9 },
-      { key: "feedback", label: "Feedback Management", icon: "Star" },
-      { key: "documents", label: "Document Center", icon: "FolderCheck" },
     ],
   },
   {
