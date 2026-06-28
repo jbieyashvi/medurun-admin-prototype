@@ -11,18 +11,32 @@ import type { ModuleProps } from "./registry";
 const PAY_META: Record<Booking["fare"]["paymentStatus"], string> = {
   paid: "paid", pending: "pending", failed: "rejected", refunded: "offboarded",
 };
+const PAY_LABEL: Record<Booking["fare"]["paymentStatus"], string> = {
+  paid: "Paid", pending: "Pending", failed: "Failed", refunded: "Refunded",
+};
 
-export function CustomerSupport(_: ModuleProps) {
+const uniq = (xs: (string | undefined)[]) => Array.from(new Set(xs.filter(Boolean) as string[]));
+const RIDE_TYPES = uniq(SEED.map((b) => b.rideType));
+const AMB_TYPES = uniq(SEED.map((b) => b.ambType));
+const AGENCIES = uniq(SEED.map((b) => b.agency?.name));
+const CITIES = uniq(SEED.map((b) => b.city));
+
+export function BookingLogs(_: ModuleProps) {
   const [q, setQ] = useState("");
   const [st, setSt] = useState("All Status");
   const [range, setRange] = useState("All Time");
+  const [rideType, setRideType] = useState("All Ride Types");
+  const [ambType, setAmbType] = useState("All Ambulance Types");
+  const [agency, setAgency] = useState("All Agencies");
+  const [city, setCity] = useState("All Cities");
+  const [pay, setPay] = useState("All Payments");
   const [sel, setSel] = useState<Booking | null>(null);
 
   const counts = useMemo(() => ({
-    active: SEED.filter((b) => b.status === "ongoing" || b.status === "scheduled").length,
-    open: SEED.filter((b) => b.status === "issue").length,
+    total: SEED.length,
+    ongoing: SEED.filter((b) => b.status === "ongoing").length,
+    completed: SEED.filter((b) => b.status === "completed").length,
     cancelled: SEED.filter((b) => b.status === "cancelled").length,
-    payIssue: SEED.filter((b) => b.fare.paymentStatus === "failed" || b.fare.paymentStatus === "refunded").length,
   }), []);
 
   const filtered = useMemo(() => SEED.filter((b) => {
@@ -32,34 +46,44 @@ export function CustomerSupport(_: ModuleProps) {
       b.customer.name.toLowerCase().includes(needle) ||
       b.customer.phone.includes(needle);
     const okSt = st === "All Status" || BOOKING_STATUS_META[b.status][0] === st;
-    return hit && okSt;
-  }), [q, st, range]);
+    const okRide = rideType === "All Ride Types" || b.rideType === rideType;
+    const okAmb = ambType === "All Ambulance Types" || b.ambType === ambType;
+    const okAgency = agency === "All Agencies" || b.agency?.name === agency;
+    const okCity = city === "All Cities" || b.city === city;
+    const okPay = pay === "All Payments" || PAY_LABEL[b.fare.paymentStatus] === pay;
+    return hit && okSt && okRide && okAmb && okAgency && okCity && okPay;
+  }), [q, st, range, rideType, ambType, agency, city, pay]);
 
   const openDrawer = (b: Booking) => setSel(b);
 
   return (
     <div>
-      <PageHeader title="Customer Support" sub="Look up any booking and review the full ride details in one place." />
+      <PageHeader title="Booking Logs" sub="View and track every booking across the platform in one place." />
       <Summary>
-        <StatCard icon="Activity" value={counts.active} label="Active Bookings" />
-        <StatCard icon="LifeBuoy" value={counts.open} label="Open Support Cases" />
-        <StatCard icon="CircleX" value={counts.cancelled} label="Cancelled Rides" />
-        <StatCard icon="CreditCard" value={counts.payIssue} label="Payment Issues" />
+        <StatCard icon="ClipboardList" value={counts.total} label="Total Bookings" />
+        <StatCard icon="Activity" value={counts.ongoing} label="Ongoing" />
+        <StatCard icon="CircleCheck" value={counts.completed} label="Completed" />
+        <StatCard icon="CircleX" value={counts.cancelled} label="Cancelled" />
       </Summary>
 
       <div className="card" style={{ padding: 0 }}>
         <FilterRow>
           <Search value={q} onChange={setQ} placeholder="Search Booking ID, customer, or phone..." />
-          <Select value={st} onChange={setSt} options={["All Status", "Ongoing", "Scheduled", "Completed", "Cancelled", "Issue Raised"]} />
+          <Select value={st} onChange={setSt} options={["All Status", "Ongoing", "Scheduled", "Completed", "Cancelled", "Issue Raised", "Payment Pending"]} />
           <Select value={range} onChange={setRange} options={["All Time", "Today", "Last 7 Days", "Last 30 Days"]} />
+          <Select value={rideType} onChange={setRideType} options={["All Ride Types", ...RIDE_TYPES]} />
+          <Select value={ambType} onChange={setAmbType} options={["All Ambulance Types", ...AMB_TYPES]} />
+          <Select value={agency} onChange={setAgency} options={["All Agencies", ...AGENCIES]} />
+          <Select value={city} onChange={setCity} options={["All Cities", ...CITIES]} />
+          <Select value={pay} onChange={setPay} options={["All Payments", "Paid", "Pending", "Failed", "Refunded"]} />
         </FilterRow>
         <DataTable<Booking>
           rows={filtered} getKey={(b) => b.id} onRowClick={openDrawer}
           columns={[
             { key: "id", label: "Booking ID", render: (b) => <span className="mono" style={{ fontWeight: 600 }}>{b.id}</span> },
-            { key: "customer", label: "Customer", render: (b) => <div><div style={{ fontWeight: 600 }}>{b.customer.name}</div><div className="text-sm text-muted">{b.customer.phone} · {b.rideType}</div></div> },
+            { key: "customer", label: "Customer", render: (b) => <div style={{ minWidth: 0, maxWidth: 140 }}><div style={{ fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{b.customer.name}</div><div className="text-sm text-muted" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{b.customer.phone} · {b.rideType}</div></div> },
             { key: "route", label: "Route", render: (b) => (
-              <div style={{ minWidth: 0, maxWidth: 260 }}>
+              <div style={{ minWidth: 0, maxWidth: 160 }}>
                 <div className="text-sm" style={{ display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} title={b.pickup}>
                   <Icon name="MapPin" size={12} className="text-muted" />
                   <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{b.pickup}</span>
@@ -70,8 +94,14 @@ export function CustomerSupport(_: ModuleProps) {
                 </div>
               </div>
             ) },
-            { key: "status", label: "Booking Status", render: (b) => <StatusBadge status={BOOKING_STATUS_META[b.status][1]} label={BOOKING_STATUS_META[b.status][0]} /> },
-            { key: "bookedAt", label: "Booking Date & Time", className: "text-sm text-muted" },
+            { key: "driverAgency", label: "Driver & Agency", render: (b) => <div style={{ minWidth: 0, maxWidth: 140 }}><div style={{ fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{b.driver.name}</div><div className="text-sm text-muted" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{b.agency ? b.agency.name : "—"}</div></div> },
+            { key: "status", label: "Status", render: (b) => (
+              <div style={{ display: "inline-flex", flexDirection: "column", alignItems: "flex-start", gap: 4 }}>
+                <StatusBadge status={BOOKING_STATUS_META[b.status][1]} label={BOOKING_STATUS_META[b.status][0]} />
+                <StatusBadge status={PAY_META[b.fare.paymentStatus]} label={PAY_LABEL[b.fare.paymentStatus]} />
+              </div>
+            ) },
+            { key: "date", label: "Date", render: (b) => { const [d, ...t] = b.bookedAt.split(" · "); const time = t.join(" · ").replace(/\s*\(scheduled\)/i, "").trim(); return <div style={{ whiteSpace: "nowrap" }}><div style={{ fontWeight: 500 }}>{d}</div><div className="text-sm text-muted">{time || "—"}</div></div>; } },
             { key: "x", label: "", render: (b) => <button className="btn btn-outline btn-xs" onClick={(e) => { e.stopPropagation(); openDrawer(b); }}>View →</button> },
           ]}
         />
@@ -93,6 +123,7 @@ export function CustomerSupport(_: ModuleProps) {
               <Row k="Booking Date & Time">{sel.bookedAt}</Row>
               <Row k="Ride Type">{sel.rideType}</Row>
               <Row k="Ambulance Type">{sel.ambType}</Row>
+              <Row k="City">{sel.city}</Row>
             </div>
 
             <div style={{ borderTop: "1px solid #F1F5F9", paddingTop: 6, paddingBottom: 22 }}>
@@ -128,7 +159,7 @@ export function CustomerSupport(_: ModuleProps) {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 12, padding: "12px 14px", background: "var(--primary-light)", border: "1px solid #C7D2FE", borderRadius: 10 }}>
                 <div>
                   <div style={{ fontSize: 11, color: "#475569", textTransform: "uppercase", letterSpacing: ".5px" }}>Final Fare</div>
-                  <div style={{ fontSize: 11.5, color: "var(--muted)", marginTop: 2 }}>{sel.fare.method} · <StatusBadge status={PAY_META[sel.fare.paymentStatus]} label={sel.fare.paymentStatus.charAt(0).toUpperCase() + sel.fare.paymentStatus.slice(1)} /></div>
+                  <div style={{ fontSize: 11.5, color: "var(--muted)", marginTop: 2 }}>{sel.fare.method} · <StatusBadge status={PAY_META[sel.fare.paymentStatus]} label={PAY_LABEL[sel.fare.paymentStatus]} /></div>
                 </div>
                 <div style={{ fontSize: 20, fontWeight: 800, color: "var(--primary)", letterSpacing: "-.3px" }}>{fmtINR(sel.fare.final)}</div>
               </div>

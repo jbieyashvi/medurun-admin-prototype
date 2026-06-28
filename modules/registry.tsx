@@ -4,11 +4,11 @@ import { AgencyManagement } from "./AgencyManagement";
 import { OnboardingReview } from "./OnboardingReview";
 import { DriverVerification } from "./DriverVerification";
 import { AmbulanceQueue } from "./AmbulanceQueue";
-import { CustomerSupport } from "./CustomerSupport";
+import { BookingLogs } from "./BookingLogs";
 import { GPSTracking } from "./GPSTracking";
 import { TicketsQueries } from "./TicketsQueries";
 import { FeedbackManagement } from "./FeedbackManagement";
-import { DocumentCenter } from "./DocumentCenter";
+import { DocumentExpiry } from "./DocumentExpiry";
 import { RevenueCommission } from "./RevenueCommission";
 import { PayoutManagement } from "./PayoutManagement";
 import { EmployeeManagement } from "./EmployeeManagement";
@@ -25,11 +25,11 @@ export const SCREENS: Record<string, ComponentType<ModuleProps>> = {
   onboarding: OnboardingReview,
   "drivers-q": DriverVerification,
   "ambulance-q": AmbulanceQueue,
-  support: CustomerSupport,
+  support: BookingLogs,
   gps: GPSTracking,
   tickets: TicketsQueries,
   feedback: FeedbackManagement,
-  documents: DocumentCenter,
+  documents: DocumentExpiry,
   revenue: RevenueCommission,
   payouts: PayoutManagement,
   employees: EmployeeManagement,

@@ -8,6 +8,7 @@ import { StatCard } from "@/components/StatCard";
 import { initials } from "@/lib/format";
 import { useReviews, nowStamp } from "@/lib/reviewStore";
 import { DocVerification, DocStatus } from "@/components/DocVerification";
+import { AddDriverWizard } from "./AddDriverWizard";
 import type { ModuleProps } from "./registry";
 
 const ST: Record<string, [string, string]> = {
@@ -24,6 +25,7 @@ export function DriverVerification(_: ModuleProps) {
   const [docMap, setDocMap] = useState<Record<string, { status: DocStatus; reason?: string }>>({});
   const [modal, setModal] = useState<null | "correction" | "reject">(null);
   const [reason, setReason] = useState(""); const [note, setNote] = useState("");
+  const [addOpen, setAddOpen] = useState(false);
 
   const effStatus = (d: QueueDriver) => map[d.name]?.status || (d.status === "review" ? "review" : "pending");
   const rec = sel ? map[sel.name] : undefined;
@@ -55,7 +57,8 @@ export function DriverVerification(_: ModuleProps) {
 
   return (
     <div>
-      <PageHeader title="Driver Verification Queue" sub="Review and verify driver registrations" />
+      <PageHeader title="Driver Verification Queue" sub="Review and verify driver registrations"
+        action={<button className="btn btn-primary" onClick={() => setAddOpen(true)}>+ Add Driver</button>} />
       <Summary>
         <StatCard icon="Clock" value={driverQueue.filter((d) => !["verified", "rejected"].includes(effStatus(d))).length} label="Pending Verification" />
         <StatCard icon="TriangleAlert" value={driverQueue.filter((d) => effStatus(d) === "correction").length} label="Correction Required" />
@@ -124,6 +127,8 @@ export function DriverVerification(_: ModuleProps) {
         footer={<><button className="btn btn-outline btn-sm" onClick={() => setModal(null)}>Cancel</button><button className="btn btn-danger-soft btn-sm" onClick={submitReject}>Reject Driver</button></>}>
         <div className="form-group"><label className="label">Rejection Reason *</label><textarea className="input" value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Explain why this application is rejected..." /></div>
       </Modal>
+
+      <AddDriverWizard open={addOpen} onClose={() => setAddOpen(false)} />
     </div>
   );
 }

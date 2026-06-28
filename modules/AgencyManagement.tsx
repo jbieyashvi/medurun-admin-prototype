@@ -6,6 +6,7 @@ import { DataTable, FilterRow, Search, Select } from "@/components/DataTable";
 import { SideDrawer, Modal, StatusBadge, useToast, Icon } from "@/components/ui";
 import { PageHeader, DrawerHead, Metrics, Sec, Tabs, Timeline, Row } from "./shared";
 import { initials, fmtINR, parseAmt } from "@/lib/format";
+import { AddAgencyWizard, NewAgency } from "./AddAgencyWizard";
 import type { ModuleProps } from "./registry";
 
 const OFFBOARD_REASONS = ["Contract ended", "Compliance issue", "Poor service quality", "Payment dispute", "Agency requested removal", "Other"];
@@ -15,22 +16,13 @@ export function AgencyManagement(_: ModuleProps) {
   const [rows, setRows] = useState<Agency[]>(SEED);
   const [q, setQ] = useState(""); const [city, setCity] = useState("All Cities"); const [status, setStatus] = useState("All Status");
   const [sel, setSel] = useState<Agency | null>(null); const [tab, setTab] = useState("overview");
-  const [modal, setModal] = useState<null | "add" | "edit" | "invoices" | "rides" | "suspend" | "remove" | "doc">(null);
+  const [modal, setModal] = useState<null | "edit" | "invoices" | "rides" | "suspend" | "remove" | "doc">(null);
+  const [addOpen, setAddOpen] = useState(false);
   const [docName, setDocName] = useState("");
   // edit/add form
   const [f, setF] = useState({ name: "", contact: "", phone: "", email: "", city: "Mumbai", type: "Private", reg: "", gst: "", bls: 0, als: 0, icu: 0, neo: 0, bankName: "", accHolder: "", accNo: "", ifsc: "" });
   const [removeText, setRemoveText] = useState("");
   const [suspendReason, setSuspendReason] = useState(""); const [suspendNote, setSuspendNote] = useState("");
-  const [docFiles, setDocFiles] = useState<Record<string, string>>({});
-
-  const pickDocFile = (key: string) => {
-    if (typeof window === "undefined") return;
-    const inp = document.createElement("input");
-    inp.type = "file"; inp.accept = "application/pdf,image/*";
-    inp.onchange = () => { const f = inp.files?.[0]; if (f) setDocFiles((p) => ({ ...p, [key]: f.name })); };
-    inp.click();
-  };
-  const removeDocFile = (key: string) => setDocFiles((p) => { const c = { ...p }; delete c[key]; return c; });
 
   const filtered = useMemo(() => rows.filter((a) =>
     (!q || a.name.toLowerCase().includes(q.toLowerCase()) || a.city.toLowerCase().includes(q.toLowerCase())) &&
@@ -41,14 +33,10 @@ export function AgencyManagement(_: ModuleProps) {
   const ambTypes = sel ? [["BLS", Math.round(sel.ambulances * 0.4)], ["ALS", Math.round(sel.ambulances * 0.3)], ["ICU", Math.round(sel.ambulances * 0.18)], ["Neonatal", Math.round(sel.ambulances * 0.12)]] as [string, number][] : [];
   const sampleDrivers = sel ? ALL_DRIVERS.slice(0, Math.min(4, Math.max(1, Math.round(sel.drivers / 18) || 3))) : [];
 
-  const openAdd = () => { setF({ name: "", contact: "", phone: "", email: "", city: "Mumbai", type: "Private", reg: "", gst: "", bls: 0, als: 0, icu: 0, neo: 0, bankName: "", accHolder: "", accNo: "", ifsc: "" }); setDocFiles({}); setModal("add"); };
-  const fleetTotal = f.bls + f.als + f.icu + f.neo;
-  const createAgency = () => {
-    if (!f.name || !f.contact || !f.phone || !f.email) { notify("Fill all required fields", "warning"); return; }
-    setRows([{ id: Math.max(...rows.map((r) => r.id)) + 1, name: f.name, city: f.city, status: "pending", ambulances: fleetTotal, drivers: 0, revenue: "—", rating: "—", contact: f.contact, phone: f.phone, email: f.email, established: "2026", type: f.type }, ...rows]);
-    setModal(null); notify(`"${f.name}" submitted — sent to Onboarding Review Queue`);
+  const addAgency = (a: NewAgency) => {
+    setRows((rs) => [{ id: Math.max(...rs.map((r) => r.id)) + 1, name: a.name, city: a.city, status: "pending", ambulances: a.ambulances, drivers: 0, revenue: "—", rating: "—", contact: a.contact, phone: a.phone, email: a.email, established: "2026", type: a.type }, ...rs]);
   };
-  const openEdit = () => { if (sel) { setF({ name: sel.name, contact: sel.contact, phone: sel.phone, email: sel.email, city: sel.city, type: sel.type || "Private", reg: "", gst: "", bls: 0, als: 0, icu: 0, neo: 0, bankName: "", accHolder: "", accNo: "", ifsc: "" }); setDocFiles({}); setModal("edit"); } };
+  const openEdit = () => { if (sel) { setF({ name: sel.name, contact: sel.contact, phone: sel.phone, email: sel.email, city: sel.city, type: sel.type || "Private", reg: "", gst: "", bls: 0, als: 0, icu: 0, neo: 0, bankName: "", accHolder: "", accNo: "", ifsc: "" }); setModal("edit"); } };
   const saveEdit = () => { if (!sel) return; const u = { ...sel, name: f.name, contact: f.contact, phone: f.phone, email: f.email, city: f.city, type: f.type }; setRows(rows.map((r) => r.id === sel.id ? u : r)); setSel(u); setModal(null); notify("Agency details updated"); };
   const confirmOffboard = () => {
     if (!suspendReason) { notify("Select an offboarding reason", "warning"); return; }
@@ -62,7 +50,7 @@ export function AgencyManagement(_: ModuleProps) {
   return (
     <div>
       <PageHeader title="Agency Data" sub={`${rows.length} agencies across all cities`}
-        action={<button className="btn btn-primary" onClick={openAdd}>+ Add Agency</button>} />
+        action={<button className="btn btn-primary" onClick={() => setAddOpen(true)}>+ Add Agency</button>} />
 
       <div className="card" style={{ padding: 0 }}>
         <FilterRow>
@@ -179,69 +167,24 @@ export function AgencyManagement(_: ModuleProps) {
         </>}
       </SideDrawer>
 
-      {/* ADD / EDIT AGENCY */}
-      <Modal open={modal === "add" || modal === "edit"} onClose={() => setModal(null)} title={modal === "edit" ? "Edit Agency" : "Add New Agency"} sub={modal === "edit" ? "Update agency administration details" : "Onboard a new ambulance agency to the platform"}
-        footer={<><button className="btn btn-outline btn-sm" onClick={() => setModal(null)}>Cancel</button><button className="btn btn-primary btn-sm" onClick={modal === "edit" ? saveEdit : createAgency}>{modal === "edit" ? "Save Changes" : "Create Agency"}</button></>}>
+      {/* EDIT AGENCY */}
+      <Modal open={modal === "edit"} onClose={() => setModal(null)} title="Edit Agency" sub="Update agency administration details"
+        footer={<><button className="btn btn-outline btn-sm" onClick={() => setModal(null)}>Cancel</button><button className="btn btn-primary btn-sm" onClick={saveEdit}>Save Changes</button></>}>
         <div className="dsec" style={{ marginTop: 0 }}>Agency Information</div>
         <div className="form-group"><label className="label">Agency Name *</label><input className="input" value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} placeholder="e.g. LifeLine Ambulance" /></div>
         <div className="grid2">
           <div className="form-group"><label className="label">Agency Type *</label><select className="input" value={f.type} onChange={(e) => setF({ ...f, type: e.target.value })}><option>Private</option><option>Hospital</option><option>Government</option><option>NGO</option></select></div>
           <div className="form-group"><label className="label">City *</label><select className="input" value={f.city} onChange={(e) => setF({ ...f, city: e.target.value })}>{["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Pune", "Ahmedabad", "Lucknow", "Jaipur"].map((o) => <option key={o}>{o}</option>)}</select></div>
         </div>
-        {modal === "add" && <div className="grid2">
-          <div className="form-group"><label className="label">Registration Number</label><input className="input" value={f.reg} onChange={(e) => setF({ ...f, reg: e.target.value })} placeholder="REG-2026-000000" /></div>
-          <div className="form-group"><label className="label">GST Number</label><input className="input" value={f.gst} onChange={(e) => setF({ ...f, gst: e.target.value })} placeholder="27AAACL1234C1Z5" /></div>
-        </div>}
         <div className="dsec">Primary Contact</div>
         <div className="form-group"><label className="label">Contact Person *</label><input className="input" value={f.contact} onChange={(e) => setF({ ...f, contact: e.target.value })} placeholder="Full name" /></div>
         <div className="grid2">
           <div className="form-group"><label className="label">Mobile Number *</label><input className="input" maxLength={10} value={f.phone} onChange={(e) => setF({ ...f, phone: e.target.value })} placeholder="9820000000" /></div>
           <div className="form-group"><label className="label">Official Email ID *</label><input className="input" value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} placeholder="agency@email.com" /></div>
         </div>
-        {modal === "add" && <>
-          <div className="dsec">Fleet Information</div>
-          <div className="grid2">
-            <div className="form-group"><label className="label">BLS Ambulances</label><input className="input" type="number" min={0} value={f.bls} onChange={(e) => setF({ ...f, bls: +e.target.value || 0 })} /></div>
-            <div className="form-group"><label className="label">ALS Ambulances</label><input className="input" type="number" min={0} value={f.als} onChange={(e) => setF({ ...f, als: +e.target.value || 0 })} /></div>
-            <div className="form-group"><label className="label">ICU Ambulances</label><input className="input" type="number" min={0} value={f.icu} onChange={(e) => setF({ ...f, icu: +e.target.value || 0 })} /></div>
-            <div className="form-group"><label className="label">Neonatal Ambulances</label><input className="input" type="number" min={0} value={f.neo} onChange={(e) => setF({ ...f, neo: +e.target.value || 0 })} /></div>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#FAFBFC", border: "1px solid var(--border)", borderRadius: 10, padding: "12px 14px", marginTop: 4 }}>
-            <div><div style={{ fontSize: 13, fontWeight: 600 }}>Total Ambulances</div><div style={{ fontSize: 11.5, color: "var(--muted)" }}>Auto-calculated from fleet types</div></div>
-            <div style={{ fontSize: 22, fontWeight: 700, color: "var(--primary)", letterSpacing: "-.5px" }}>{fleetTotal}</div>
-          </div>
-          <div className="dsec">Bank / Payout Details</div>
-          <div className="grid2">
-            <div className="form-group"><label className="label">Bank Name</label><input className="input" value={f.bankName} onChange={(e) => setF({ ...f, bankName: e.target.value })} placeholder="HDFC Bank" /></div>
-            <div className="form-group"><label className="label">Account Holder Name</label><input className="input" value={f.accHolder} onChange={(e) => setF({ ...f, accHolder: e.target.value })} placeholder="As per bank records" /></div>
-            <div className="form-group"><label className="label">Account Number</label><input className="input" value={f.accNo} onChange={(e) => setF({ ...f, accNo: e.target.value })} placeholder="000000000000" /></div>
-            <div className="form-group"><label className="label">IFSC Code</label><input className="input" value={f.ifsc} onChange={(e) => setF({ ...f, ifsc: e.target.value })} placeholder="HDFC0002000" /></div>
-          </div>
-        </>}
-        <div className="dsec">Agency Documents</div>
-        {AGENCY_DOC_GROUPS.map((g) => (
-          <div key={g.section}>
-            <div style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: ".5px", color: "#64748B", margin: "12px 0 6px" }}>{g.section}</div>
-            {g.docs.map((d) => {
-              const fname = docFiles[d.name];
-              return <div key={d.name} style={{ display: "flex", alignItems: "center", gap: 11, padding: "9px 0", borderBottom: "1px solid #F4F6F9" }}>
-                <span className="modal-x" style={{ width: 32, height: 32, background: "#F1F5F9", border: "none", color: "#475569" }}><Icon name="FileText" size={15} /></span>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 7, minWidth: 0 }}>
-                    <span style={{ fontSize: 13, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{d.name}</span>
-                    <span style={{ flexShrink: 0, fontSize: 9.5, fontWeight: 700, letterSpacing: ".5px", textTransform: "uppercase", padding: "2px 7px", borderRadius: 20, background: d.required ? "#FEF2F2" : "#F1F5F9", color: d.required ? "#DC2626" : "#64748B" }}>{d.required ? "Required" : "Optional"}</span>
-                  </div>
-                  <div style={{ fontSize: 11.5, color: fname ? "#059669" : "#9CA3AF", marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{fname || "PDF or JPG · up to 5 MB"}</div>
-                </div>
-                {fname ? <>
-                  <button className="btn btn-outline btn-xs" type="button" onClick={() => pickDocFile(d.name)}>Replace</button>
-                  <button className="btn btn-ghost danger btn-xs" type="button" onClick={() => removeDocFile(d.name)}>Remove</button>
-                </> : <button className="btn btn-outline btn-xs" type="button" onClick={() => pickDocFile(d.name)}><Icon name="Upload" size={12} /> Upload</button>}
-              </div>;
-            })}
-          </div>
-        ))}
       </Modal>
+
+      <AddAgencyWizard open={addOpen} onClose={() => setAddOpen(false)} onCreated={addAgency} />
 
       {/* INVOICES */}
       <Modal open={modal === "invoices"} onClose={() => setModal(null)} title="Invoice History" wide sub={sel ? sel.name + " · invoice history" : ""}

@@ -37,6 +37,13 @@ export const AGENCY_DOC_GROUPS: { section: string; docs: { name: string; require
     { name: "MSME Certificate", required: false },
     { name: "EPF & ESIC Certificate", required: false },
   ]},
+  { section: "Licenses & Permits", docs: [
+    { name: "Trade License", required: true },
+    { name: "Fire NOC", required: true },
+    { name: "Clinical Establishment License", required: true },
+    { name: "Pollution Certificate", required: false },
+    { name: "Biomedical Waste Authorization", required: false },
+  ]},
   { section: "Governance", docs: [
     { name: "Undertaking (Seal, Stamp & Sign)", required: true },
     { name: "Organogram", required: true },

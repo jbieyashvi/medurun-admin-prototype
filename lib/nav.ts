@@ -10,7 +10,9 @@ export const NAV: NavSection[] = [
       { key: "onboarding", label: "Onboarding Review", icon: "ClipboardCheck", badge: 7 },
       { key: "drivers-q", label: "Driver Verification", icon: "UserCheck", badge: 12 },
       { key: "ambulance-q", label: "Ambulance Data", icon: "Ambulance", badge: 5 },
-      { key: "support", label: "Customer Support", icon: "Headset" },
+      { key: "gps", label: "GPS Tracking", icon: "MapPin" },
+      { key: "support", label: "Booking Logs", icon: "ClipboardList" },
+      { key: "documents", label: "Document Expiry", icon: "CalendarClock" },
     ],
   },
   {
@@ -34,8 +36,8 @@ export const NAV: NavSection[] = [
 
 export const PAGE_TITLES: Record<string, string> = {
   dashboard: "Dashboard", agencies: "Agency Data", onboarding: "Onboarding Review",
-  "drivers-q": "Driver Verification Queue", "ambulance-q": "Ambulance Data", support: "Customer Support", gps: "GPS Tracking",
-  tickets: "Tickets & Queries", feedback: "Feedback Management", documents: "Document Center", revenue: "Revenue & Commission",
+  "drivers-q": "Driver Verification Queue", "ambulance-q": "Ambulance Data", support: "Booking Logs", gps: "GPS Tracking",
+  tickets: "Tickets & Queries", feedback: "Feedback Management", documents: "Document Expiry", revenue: "Revenue & Commission",
   payouts: "Payout Management", drivers: "Driver Data", users: "Customer Data",
   employees: "Employee Management", analytics: "Platform Analytics", settings: "Platform Settings",
 };

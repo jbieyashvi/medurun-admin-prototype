@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 import { employees as seed, EMP_MODULES, PERM_TYPES, EMP_ST, accessLevel, seedPerms, Employee } from "@/data/employees";
 
-const HIDDEN_PERM_MODULES = new Set(["gps", "tickets", "feedback", "documents"]);
+const HIDDEN_PERM_MODULES = new Set(["onboarding", "drivers-q", "ambulance-q", "gps", "tickets", "settings", "documents"]);
 const VISIBLE_EMP_MODULES = EMP_MODULES.filter(([k]) => !HIDDEN_PERM_MODULES.has(k));
 import { DataTable, FilterRow, Search, Select } from "@/components/DataTable";
 import { SideDrawer, Modal, StatusBadge, useToast } from "@/components/ui";
@@ -49,7 +49,7 @@ export function EmployeeManagement(_: ModuleProps) {
       <div className="card" style={{ padding: 0 }}>
         <FilterRow>
           <Search value={q} onChange={setQ} placeholder="Search employee..." />
-          <Select value={role} onChange={setRole} options={["All Roles", "Super Admin", "Operations", "Finance", "Customer Support", "Marketing", "Custom Role"]} />
+          <Select value={role} onChange={setRole} options={["All Roles", "Top Management", "HR", "Finance & Accounts", "Customer Support"]} />
           <Select value={status} onChange={setStatus} options={["All Status", "Online", "Offline", "Suspended", "Invited"]} />
         </FilterRow>
         <DataTable
@@ -127,7 +127,7 @@ export function EmployeeManagement(_: ModuleProps) {
 
       <Modal open={add} onClose={() => setAdd(false)} title="Add Employee" sub="Create a new internal staff account"
         footer={<><button className="btn btn-outline btn-sm" onClick={() => setAdd(false)}>Cancel</button><button className="btn btn-primary btn-sm" onClick={() => {
-          const role = eRole || "Operations"; const id = "EMP-1023"; const pwd = "Med1023#" + role.charAt(0) + "x";
+          const role = eRole || "Customer Support"; const id = "EMP-1023"; const pwd = "Med1023#" + role.charAt(0) + "x";
           setRows([{ name: eName || "New Employee", empId: id, email: eEmail || "new@medurun.in", phone: ePhone || "—", dept: eDept || "Operations", role, status: "invited", last: "—", created: "22 Jun 2026", by: "Arjun Mehta", perms: seedPerms(role) }, ...rows]);
           setAdd(false); setSuccess({ id, pwd });
         }}>Create Employee</button></>}>
@@ -136,7 +136,7 @@ export function EmployeeManagement(_: ModuleProps) {
           <div className="form-group"><label className="label">Email *</label><input className="input" value={eEmail} onChange={(ev) => setEEmail(ev.target.value)} /></div>
           <div className="form-group"><label className="label">Phone *</label><input className="input" value={ePhone} onChange={(ev) => setEPhone(ev.target.value)} /></div>
           <div className="form-group"><label className="label">Department *</label><select className="input" value={eDept} onChange={(ev) => setEDept(ev.target.value)}><option value="">Select</option><option>Operations</option><option>Finance</option><option>Customer Support</option><option>Marketing</option></select></div>
-          <div className="form-group"><label className="label">Role *</label><select className="input" value={eRole} onChange={(ev) => setERole(ev.target.value)}><option value="">Select</option><option>Operations</option><option>Finance</option><option>Customer Support</option><option>Marketing</option><option>Super Admin</option></select></div>
+          <div className="form-group"><label className="label">Role *</label><select className="input" value={eRole} onChange={(ev) => setERole(ev.target.value)}><option value="">Select</option><option>Top Management</option><option>HR</option><option>Finance & Accounts</option><option>Customer Support</option></select></div>
         </div>
       </Modal>
 
@@ -151,7 +151,7 @@ export function EmployeeManagement(_: ModuleProps) {
           <div className="form-group"><label className="label">Email</label><input className="input" value={eEmail} onChange={(ev) => setEEmail(ev.target.value)} /></div>
           <div className="form-group"><label className="label">Phone</label><input className="input" value={ePhone} onChange={(ev) => setEPhone(ev.target.value)} /></div>
           <div className="form-group"><label className="label">Department</label><select className="input" value={eDept} onChange={(ev) => setEDept(ev.target.value)}><option>Administration</option><option>Operations</option><option>Finance</option><option>Customer Support</option><option>Marketing</option></select></div>
-          <div className="form-group"><label className="label">Role</label><select className="input" value={eRole} onChange={(ev) => setERole(ev.target.value)}><option>Super Admin</option><option>Operations</option><option>Finance</option><option>Customer Support</option><option>Marketing</option><option>Custom Role</option></select></div>
+          <div className="form-group"><label className="label">Role</label><select className="input" value={eRole} onChange={(ev) => setERole(ev.target.value)}><option>Top Management</option><option>HR</option><option>Finance & Accounts</option><option>Customer Support</option></select></div>
         </div>
       </Modal>
 
