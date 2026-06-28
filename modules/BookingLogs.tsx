@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import { bookings as SEED, Booking, BOOKING_STATUS_META } from "@/data/bookings";
-import { DataTable, FilterRow, Search, Select } from "@/components/DataTable";
+import { DataTable } from "@/components/DataTable";
 import { SideDrawer, StatusBadge, Icon } from "@/components/ui";
 import { PageHeader, Summary, DrawerHead, Sec, Row, Timeline } from "./shared";
 import { StatCard } from "@/components/StatCard";
@@ -13,6 +13,9 @@ const PAY_META: Record<Booking["fare"]["paymentStatus"], string> = {
 };
 const PAY_LABEL: Record<Booking["fare"]["paymentStatus"], string> = {
   paid: "Paid", pending: "Pending", failed: "Failed", refunded: "Refunded",
+};
+const PAY_DOT: Record<Booking["fare"]["paymentStatus"], string> = {
+  paid: "#059669", pending: "#D97706", failed: "#DC2626", refunded: "#64748B",
 };
 
 const uniq = (xs: (string | undefined)[]) => Array.from(new Set(xs.filter(Boolean) as string[]));
@@ -67,16 +70,24 @@ export function BookingLogs(_: ModuleProps) {
       </Summary>
 
       <div className="card" style={{ padding: 0 }}>
-        <FilterRow>
-          <Search value={q} onChange={setQ} placeholder="Search Booking ID, customer, or phone..." />
-          <Select value={st} onChange={setSt} options={["All Status", "Ongoing", "Scheduled", "Completed", "Cancelled", "Issue Raised", "Payment Pending"]} />
-          <Select value={range} onChange={setRange} options={["All Time", "Today", "Last 7 Days", "Last 30 Days"]} />
-          <Select value={rideType} onChange={setRideType} options={["All Ride Types", ...RIDE_TYPES]} />
-          <Select value={ambType} onChange={setAmbType} options={["All Ambulance Types", ...AMB_TYPES]} />
-          <Select value={agency} onChange={setAgency} options={["All Agencies", ...AGENCIES]} />
-          <Select value={city} onChange={setCity} options={["All Cities", ...CITIES]} />
-          <Select value={pay} onChange={setPay} options={["All Payments", "Paid", "Pending", "Failed", "Refunded"]} />
-        </FilterRow>
+        <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "nowrap", padding: "14px 16px 0", overflowX: "auto" }}>
+          <input className="filter-input" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search Booking ID, customer, phone..."
+            style={{ height: 34, fontSize: 12.5, flex: "0 1 210px", minWidth: 150 }} />
+          {([
+            [st, setSt, ["All Status", "Ongoing", "Scheduled", "Completed", "Cancelled", "Issue Raised", "Payment Pending"]],
+            [range, setRange, ["All Time", "Today", "Last 7 Days", "Last 30 Days"]],
+            [rideType, setRideType, ["All Ride Types", ...RIDE_TYPES]],
+            [ambType, setAmbType, ["All Ambulance Types", ...AMB_TYPES]],
+            [agency, setAgency, ["All Agencies", ...AGENCIES]],
+            [city, setCity, ["All Cities", ...CITIES]],
+            [pay, setPay, ["All Payments", "Paid", "Pending", "Failed", "Refunded"]],
+          ] as [string, (v: string) => void, string[]][]).map(([val, setter, opts], i) => (
+            <select key={i} className="filter-input" value={val} onChange={(e) => setter(e.target.value)}
+              style={{ height: 34, fontSize: 12.5, padding: "0 20px 0 8px", flex: "0 1 auto", maxWidth: 122 }}>
+              {opts.map((o) => <option key={o}>{o}</option>)}
+            </select>
+          ))}
+        </div>
         <DataTable<Booking>
           rows={filtered} getKey={(b) => b.id} onRowClick={openDrawer}
           columns={[
@@ -98,7 +109,10 @@ export function BookingLogs(_: ModuleProps) {
             { key: "status", label: "Status", render: (b) => (
               <div style={{ display: "inline-flex", flexDirection: "column", alignItems: "flex-start", gap: 4 }}>
                 <StatusBadge status={BOOKING_STATUS_META[b.status][1]} label={BOOKING_STATUS_META[b.status][0]} />
-                <StatusBadge status={PAY_META[b.fare.paymentStatus]} label={PAY_LABEL[b.fare.paymentStatus]} />
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11.5, color: "var(--muted)", whiteSpace: "nowrap" }}>
+                  <span style={{ width: 6, height: 6, borderRadius: "50%", background: PAY_DOT[b.fare.paymentStatus], flexShrink: 0 }} />
+                  {PAY_LABEL[b.fare.paymentStatus]}
+                </span>
               </div>
             ) },
             { key: "date", label: "Date", render: (b) => { const [d, ...t] = b.bookedAt.split(" · "); const time = t.join(" · ").replace(/\s*\(scheduled\)/i, "").trim(); return <div style={{ whiteSpace: "nowrap" }}><div style={{ fontWeight: 500 }}>{d}</div><div className="text-sm text-muted">{time || "—"}</div></div>; } },
