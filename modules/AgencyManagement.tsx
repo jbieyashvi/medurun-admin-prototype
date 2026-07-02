@@ -30,7 +30,7 @@ export function AgencyManagement(_: ModuleProps) {
   ), [rows, q, city, status]);
 
   const openDrawer = (a: Agency) => { setSel(a); setTab("overview"); };
-  const ambTypes = sel ? [["BLS", Math.round(sel.ambulances * 0.4)], ["ALS", Math.round(sel.ambulances * 0.3)], ["ICU", Math.round(sel.ambulances * 0.18)], ["Neonatal", Math.round(sel.ambulances * 0.12)]] as [string, number][] : [];
+  const ambTypes = sel ? (() => { const a = sel.ambulances; const acls = Math.round(a * 0.45); const bls = Math.round(a * 0.4); return [["ACLS", acls], ["BLS", bls], ["Specialty", Math.max(0, a - acls - bls)]] as [string, number][]; })() : [];
   const sampleDrivers = sel ? ALL_DRIVERS.slice(0, Math.min(4, Math.max(1, Math.round(sel.drivers / 18) || 3))) : [];
 
   const addAgency = (a: NewAgency) => {
@@ -150,7 +150,7 @@ export function AgencyManagement(_: ModuleProps) {
               {ambTypes.filter((t) => t[1] > 0).map(([t, n]) => (
                 <div key={t} style={{ display: "flex", alignItems: "center", gap: 11, padding: "10px 0", borderBottom: "1px solid #F1F5F9" }}>
                   <div className="modal-x" style={{ width: 34, height: 34, background: "var(--primary-light)", border: "none", color: "var(--primary)" }}><Icon name="Ambulance" size={15} /></div>
-                  <div style={{ flex: 1 }}><div style={{ fontWeight: 600, fontSize: 13 }}>{t} Units</div><div className="text-sm text-muted">{t === "ICU" ? "Critical care equipped" : t === "BLS" ? "Basic life support" : t === "ALS" ? "Advanced life support" : "Specialized"}</div></div>
+                  <div style={{ flex: 1 }}><div style={{ fontWeight: 600, fontSize: 13 }}>{t} Units</div><div className="text-sm text-muted">{t === "ACLS" ? "Advanced cardiac life support" : t === "BLS" ? "Basic life support" : "Freezer / hearse vans"}</div></div>
                   <span style={{ fontWeight: 700, fontSize: 15 }}>{n}</span>
                 </div>
               ))}
@@ -200,7 +200,7 @@ export function AgencyManagement(_: ModuleProps) {
         footer={<button className="btn btn-outline btn-sm" onClick={() => setModal(null)}>Close</button>}>
         {sel && <div className="table-wrap"><table>
           <thead><tr><th>Ride ID</th><th>Date</th><th>City</th><th>Type</th><th>Fare</th><th>Status</th></tr></thead>
-          <tbody>{["BLS", "ALS", "ICU", "BLS", "Neonatal"].map((t, k) => <tr key={k}><td className="mono" style={{ fontWeight: 600 }}>RD-2606{(sel.id * 5 + k).toString().padStart(3, "0")}</td><td className="text-sm text-muted">{22 - k} Jun 2026</td><td>{sel.city}</td><td>{t}</td><td style={{ fontWeight: 600 }}>{fmtINR(1500 + k * 700)}</td><td><StatusBadge status={k === 1 ? "pending" : "active"} label={k === 1 ? "Ongoing" : "Completed"} /></td></tr>)}</tbody>
+          <tbody>{["BLS Winger", "ALS Tempo", "ALS Bolero", "BLS Bolero", "Neo Tempo"].map((t, k) => <tr key={k}><td className="mono" style={{ fontWeight: 600 }}>RD-2606{(sel.id * 5 + k).toString().padStart(3, "0")}</td><td className="text-sm text-muted">{22 - k} Jun 2026</td><td>{sel.city}</td><td>{t}</td><td style={{ fontWeight: 600 }}>{fmtINR(1500 + k * 700)}</td><td><StatusBadge status={k === 1 ? "pending" : "active"} label={k === 1 ? "Ongoing" : "Completed"} /></td></tr>)}</tbody>
         </table></div>}
       </Modal>
 

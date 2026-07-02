@@ -14,7 +14,7 @@ const REQUIRED_DOCS = ALL_AGENCY_DOCS.filter((d) => d.required);
 const makeBlank = () => ({
   name: "", type: "", city: "", reg: "", gst: "",
   contact: "", phone: "", email: "", bankName: "", accHolder: "", accNo: "", ifsc: "",
-  bls: 0, als: 0, icu: 0, neo: 0,
+  acls: 0, bls: 0, specialty: 0,
   docs: {} as Record<string, DocMeta>,
 });
 
@@ -31,7 +31,7 @@ export function AddAgencyWizard({ open, onClose, onCreated }: { open: boolean; o
   const reset = () => { setStep(0); setF(makeBlank()); };
   const close = () => { reset(); onClose(); };
 
-  const fleetTotal = f.bls + f.als + f.icu + f.neo;
+  const fleetTotal = f.acls + f.bls + f.specialty;
 
   const toggleDoc = (name: string) => setF((p) => ({ ...p, docs: { ...p.docs, [name]: { ...(p.docs[name] || emptyMeta()), up: !p.docs[name]?.up } } }));
   const setDocField = (name: string, field: "number" | "issue" | "expiry", val: string) =>
@@ -64,7 +64,7 @@ export function AddAgencyWizard({ open, onClose, onCreated }: { open: boolean; o
     close();
   };
 
-  const fleetField = (label: string, k: "bls" | "als" | "icu" | "neo") => (
+  const fleetField = (label: string, k: "acls" | "bls" | "specialty") => (
     <div className="form-group"><label className="label">{label}</label>
       <input className="input" type="number" min={0} value={f[k]} onChange={(e) => set(k, Math.max(0, +e.target.value || 0))} /></div>
   );
@@ -128,12 +128,11 @@ export function AddAgencyWizard({ open, onClose, onCreated }: { open: boolean; o
 
       {/* STEP 3 — Fleet Information */}
       {step === 2 && <>
-        <div style={{ fontSize: 12.5, color: "var(--muted)", marginBottom: 14 }}>Enter the agency's fleet count by ambulance type. Total is calculated automatically.</div>
+        <div style={{ fontSize: 12.5, color: "var(--muted)", marginBottom: 14 }}>Enter the agency's fleet count by service class (ACLS, BLS, Specialty). Total is calculated automatically.</div>
         <div className="grid2">
+          {fleetField("ACLS Ambulances", "acls")}
           {fleetField("BLS Ambulances", "bls")}
-          {fleetField("ALS Ambulances", "als")}
-          {fleetField("ICU Ambulances", "icu")}
-          {fleetField("Neonatal Ambulances", "neo")}
+          {fleetField("Specialty Vehicles", "specialty")}
         </div>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#FAFBFC", border: "1px solid var(--border)", borderRadius: 10, padding: "12px 14px", marginTop: 4 }}>
           <div><div style={{ fontSize: 13, fontWeight: 600 }}>Total Ambulances</div><div style={{ fontSize: 11.5, color: "var(--muted)" }}>Auto-calculated from fleet types</div></div>

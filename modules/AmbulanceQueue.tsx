@@ -1,6 +1,8 @@
 "use client";
 import { useMemo, useState } from "react";
 import { ambulanceQueue, AMB_DOCS, AMB_PHOTOS, AMB_PHOTO_GROUPS, AMB_VIDEOS, Ambulance } from "@/data/ambulances";
+import { AMB_TYPE_GROUPS } from "@/data/ambulanceTypes";
+import { ServiceClassBadge } from "@/components/AmbTypePicker";
 import { DataTable, FilterRow, Search, Select } from "@/components/DataTable";
 import { SideDrawer, Modal, StatusBadge, Icon, useToast } from "@/components/ui";
 import { PageHeader, Summary, DrawerHead, ProfGrid, Sec, Row, Timeline } from "./shared";
@@ -42,7 +44,7 @@ export function AmbulanceQueue(_: ModuleProps) {
   const rec = sel ? map[sel.reg] : undefined;
 
   const filtered = useMemo(() => ambulanceQueue.filter((a) =>
-    (!q || a.reg.toLowerCase().includes(q.toLowerCase())) && (type === "All Types" || a.type === type)
+    (!q || a.reg.toLowerCase().includes(q.toLowerCase())) && (type === "All Types" || a.shortName === type)
     && (status === "All Status" || ST[effStatus(a)][0] === status)
   ), [q, type, status, map]);
 
@@ -71,13 +73,16 @@ export function AmbulanceQueue(_: ModuleProps) {
         <FilterRow>
           <Search value={q} onChange={setQ} placeholder="Search registration..." />
           <Select value={status} onChange={setStatus} options={["All Status", "Pending", "Approved", "Correction Required", "Rejected"]} />
-          <Select value={type} onChange={setType} options={["All Types", "BLS", "ALS", "ICU", "Neonatal"]} />
+          <select className="filter-input" value={type} onChange={(e) => setType(e.target.value)}>
+            <option>All Types</option>
+            {AMB_TYPE_GROUPS.map((g) => <optgroup key={g.label} label={g.label}>{g.items.map((t) => <option key={t.shortName}>{t.shortName}</option>)}</optgroup>)}
+          </select>
         </FilterRow>
         <DataTable<Ambulance>
           rows={filtered} getKey={(a) => a.reg} onRowClick={openAmb}
           columns={[
             { key: "reg", label: "Registration", render: (a) => <b className="mono">{a.reg}</b> },
-            { key: "type", label: "Type" },
+            { key: "type", label: "Type", render: (a) => <span style={{ display: "inline-flex", alignItems: "center", gap: 7 }}><span style={{ fontWeight: 600 }}>{a.shortName}</span> <ServiceClassBadge short={a.shortName} /></span> },
             { key: "agency", label: "Agency" },
             { key: "city", label: "City" },
             { key: "year", label: "Year", className: "text-muted" },
@@ -96,14 +101,14 @@ export function AmbulanceQueue(_: ModuleProps) {
         </div>
       </>}>
         {sel && <>
-          <DrawerHead avatar={<Icon name="Ambulance" size={18} />} title={sel.reg} sub={`${sel.agency} · ${sel.type}`} right={<StatusBadge status={ST[effStatus(sel)][1]} label={ST[effStatus(sel)][0]} />} />
+          <DrawerHead avatar={<Icon name="Ambulance" size={18} />} title={sel.reg} sub={`${sel.agency} · ${sel.shortName}`} right={<StatusBadge status={ST[effStatus(sel)][1]} label={ST[effStatus(sel)][0]} />} />
           <div style={{ padding: "10px 22px 18px" }}>
             {rec?.status === "approved" && <div className="banner green" style={{ marginBottom: 4 }}><div className="banner-ic"><Icon name="CircleCheck" size={16} /></div><div><div className="banner-title">Ambulance Approved</div><div className="banner-msg">Added to active operational fleet.</div></div></div>}
             {rec?.status === "correction" && <><Sec>Correction Required</Sec><Row k="Issue Category"><span style={{ color: "#7C3AED" }}>{rec.category}</span></Row><Row k="Correction Reason">{rec.reason}</Row><Row k="Requested By">{rec.by}</Row><Row k="Requested Date">{rec.date}</Row></>}
             {rec?.status === "rejected" && <><Sec>Rejection</Sec><Row k="Rejection Reason"><span style={{ color: "#DC2626" }}>{rec.reason}</span></Row><Row k="Rejected By">{rec.by}</Row><Row k="Rejected Date">{rec.date}</Row></>}
 
             <Sec>Ambulance Details</Sec>
-            <ProfGrid items={[["Registration", sel.reg], ["Type", sel.type], ["Agency", sel.agency], ["City", sel.city], ["Year", sel.year]]} />
+            <ProfGrid items={[["Registration", sel.reg], ["Ambulance Type", sel.ambulanceType], ["Service Class", <ServiceClassBadge key="sc" short={sel.shortName} />], ["Short Name", sel.shortName], ["Agency", sel.agency], ["City", sel.city], ["Year", sel.year]]} />
             <Sec>Equipment Checklist</Sec>
             {([["Oxygen", sel.equip.oxygen], ["AED", sel.equip.aed], ["Stretcher", sel.equip.stretcher], ["Monitor", sel.equip.monitor]] as [string, boolean][]).map(([l, ok]) => (
               <div key={l} style={{ display: "flex", alignItems: "center", gap: 11, padding: "8px 0" }}>

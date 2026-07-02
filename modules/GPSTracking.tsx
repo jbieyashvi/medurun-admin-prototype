@@ -1,6 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import { gpsVehicles, GPS_ST, GpsVehicle } from "@/data/ambulances";
+import { getVariant } from "@/data/ambulanceTypes";
 import { SideDrawer, Modal, Icon, useToast } from "@/components/ui";
 import { PageHeader, Summary, DrawerHead, ProfGrid, Sec, Row } from "./shared";
 import { StatCard } from "@/components/StatCard";
@@ -139,7 +140,7 @@ export function GPSTracking(_: ModuleProps) {
             <Sec>Ambulance Details</Sec>
             <ProfGrid items={[["Ambulance Number", sel.reg], ["Type", sel.type], ["Agency", sel.agency], ["City", sel.city], ["Verification", "Approved"], ["Fleet Status", GPS_ST[sel.status]]]} />
             <Sec>Operations</Sec>
-            <Row k="Equipment">{sel.type === "ICU" ? "Critical care equipped" : sel.type === "ALS" ? "Advanced life support" : "Basic life support"}</Row>
+            <Row k="Equipment">{getVariant(sel.type)?.serviceClass === "ACLS" ? "Advanced cardiac life support" : getVariant(sel.type)?.serviceClass === "Specialty" ? "Specialty vehicle" : "Basic life support"}</Row>
             <Row k="GPS Device"><span className="mono">GPS-{1000 + idx * 7}</span></Row>
             <Row k="Last Service">04 Jun 2026</Row>
             <Row k="Current Location">{sel.location}</Row>

@@ -66,7 +66,7 @@ export function PlatformSettings(_: ModuleProps) {
 /* ---------- PRICING ---------- */
 function Pricing({ logAudit }: { logAudit: (c: string, o: string, n: string) => void }) {
   const notify = useToast();
-  const init = { base: "120", km: "20", wait: "2", night: "150", emrg: "300", bls: "1500", als: "2800", icu: "4500", neo: "5200" };
+  const init = { base: "120", km: "20", wait: "2", night: "150", emrg: "300", acls: "2800", bls: "1500", specialty: "2200" };
   const [edit, setEdit] = useState(false);
   const [v, setV] = useState(init);
   const [saved, setSaved] = useState(init);
@@ -94,12 +94,11 @@ function Pricing({ logAudit }: { logAudit: (c: string, o: string, n: string) => 
         <Field label="Night Charges" prefix="₹" value={v.night} onChange={set("night")} disabled={!edit} />
         <Field label="Emergency Charge" prefix="₹" value={v.emrg} onChange={set("emrg")} disabled={!edit} />
       </div>
-      <div className="dsec">Ambulance Type Pricing</div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "0 16px" }}>
+      <div className="dsec">Service Class Pricing</div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0 16px" }}>
+        <Field label="ACLS" prefix="₹" value={v.acls} onChange={set("acls")} disabled={!edit} />
         <Field label="BLS" prefix="₹" value={v.bls} onChange={set("bls")} disabled={!edit} />
-        <Field label="ALS" prefix="₹" value={v.als} onChange={set("als")} disabled={!edit} />
-        <Field label="ICU" prefix="₹" value={v.icu} onChange={set("icu")} disabled={!edit} />
-        <Field label="Neonatal" prefix="₹" value={v.neo} onChange={set("neo")} disabled={!edit} />
+        <Field label="Specialty" prefix="₹" value={v.specialty} onChange={set("specialty")} disabled={!edit} />
       </div>
     </div>
   );
@@ -113,7 +112,7 @@ function Commission({ logAudit }: { logAudit: (c: string, o: string, n: string) 
   const [def, setDef] = useState("15");
   const [savedDef, setSavedDef] = useState("15");
   const [cityOv, setCityOv] = useState<Override[]>([{ key: "Mumbai", val: "12" }, { key: "Delhi", val: "14" }, { key: "Bangalore", val: "13" }]);
-  const [typeOv, setTypeOv] = useState<Override[]>([{ key: "ICU", val: "18" }, { key: "Neonatal", val: "20" }]);
+  const [typeOv, setTypeOv] = useState<Override[]>([{ key: "ALS Bolero", val: "18" }, { key: "Neo Tempo", val: "20" }]);
   const [modal, setModal] = useState<null | "city" | "type">(null);
   const [nk, setNk] = useState(""); const [nv, setNv] = useState("");
 
@@ -156,7 +155,7 @@ function Commission({ logAudit }: { logAudit: (c: string, o: string, n: string) 
 
       <Modal open={!!modal} onClose={() => setModal(null)} title={`Add ${modal === "city" ? "City" : "Ambulance Type"} Override`} sub="Set a custom commission rate"
         footer={<><button className="btn btn-outline btn-sm" onClick={() => setModal(null)}>Cancel</button><button className="btn btn-primary btn-sm" onClick={addOverride}>Add Override</button></>}>
-        <div className="form-group"><label className="label">{modal === "city" ? "City" : "Ambulance Type"} *</label><input className="input" value={nk} onChange={(e) => setNk(e.target.value)} placeholder={modal === "city" ? "e.g. Hyderabad" : "e.g. BLS"} /></div>
+        <div className="form-group"><label className="label">{modal === "city" ? "City" : "Ambulance Type"} *</label><input className="input" value={nk} onChange={(e) => setNk(e.target.value)} placeholder={modal === "city" ? "e.g. Hyderabad" : "e.g. BLS Winger"} /></div>
         <Field label="Commission %" suffix="%" value={nv} onChange={setNv} />
       </Modal>
     </div>

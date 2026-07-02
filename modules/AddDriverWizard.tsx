@@ -4,13 +4,14 @@ import { Modal, StatusBadge, useToast, Icon } from "@/components/ui";
 import { DRIVER_DOCS } from "@/data/drivers";
 import { agencies } from "@/data/agencies";
 import { ambulanceQueue, AMB_DOCS } from "@/data/ambulances";
+import { AMB_TYPE_GROUPS, getVariant } from "@/data/ambulanceTypes";
+import { ServiceClassBadge } from "@/components/AmbTypePicker";
 import { docExpires, addUploadedDocs, UploadedDoc } from "@/lib/docExpiry";
 import { DocUploadRow, DocMeta, emptyMeta, docComplete } from "@/components/DocUpload";
 
 type DriverType = "individual" | "agency";
 const STEPS = ["Driver Details", "Documents", "Vehicle Assignment", "Review & Create"];
 const CITIES = ["Mumbai", "Delhi", "Bangalore", "Pune", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata"];
-const AMB_TYPES = ["BLS", "ALS", "ICU", "Neonatal"];
 const EQUIPMENT = ["Oxygen Cylinder", "AED / Defibrillator", "Stretcher", "Patient Monitor", "Suction Machine", "First-Aid Kit"];
 const MAX_INDIVIDUAL_VEHICLES = 2;
 
@@ -204,9 +205,10 @@ export function AddDriverWizard({ open, onClose }: { open: boolean; onClose: () 
 
             <div className="form-group"><label className="label">Registration Number *</label><input className="input mono" value={v.reg} onChange={(e) => patchVehicle(idx, { reg: e.target.value.toUpperCase() })} placeholder="e.g. MH01-AB-1234" /></div>
             <div className="grid2">
-              <div className="form-group"><label className="label">Ambulance Type *</label><select className="input" value={v.ambType} onChange={(e) => patchVehicle(idx, { ambType: e.target.value })}><option value="">Select type</option>{AMB_TYPES.map((t) => <option key={t}>{t}</option>)}</select></div>
+              <div className="form-group"><label className="label">Ambulance Type *</label><select className="input" value={v.ambType} onChange={(e) => patchVehicle(idx, { ambType: e.target.value })}><option value="">Select type</option>{AMB_TYPE_GROUPS.map((g) => <optgroup key={g.label} label={g.label}>{g.items.map((t) => <option key={t.shortName} value={t.shortName}>{t.shortName}</option>)}</optgroup>)}</select></div>
               <div className="form-group"><label className="label">Manufacturing Year *</label><input className="input" value={v.year} onChange={(e) => patchVehicle(idx, { year: e.target.value.replace(/[^0-9]/g, "").slice(0, 4) })} placeholder="e.g. 2023" /></div>
             </div>
+            {getVariant(v.ambType) && <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "-4px 0 12px" }}><ServiceClassBadge short={v.ambType} /><span style={{ fontSize: 11.5, color: "#64748B" }}>{getVariant(v.ambType)!.full}</span></div>}
             <div className="form-group"><label className="label">Make &amp; Model *</label><input className="input" value={v.makeModel} onChange={(e) => patchVehicle(idx, { makeModel: e.target.value })} placeholder="e.g. Force Traveller Ambulance" /></div>
 
             <div className="form-group">
@@ -255,7 +257,7 @@ export function AddDriverWizard({ open, onClose }: { open: boolean; onClose: () 
                 <div className="modal-x" style={{ width: 34, height: 34, border: "none", background: "var(--bg)", color: "var(--primary)", flexShrink: 0 }}><Icon name="Ambulance" size={16} /></div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 13, fontWeight: 600 }} className="mono">{v.reg}</div>
-                  <div style={{ fontSize: 11.5, color: "var(--muted)", marginTop: 1 }}>{v.type} · {v.agency} · {v.city}</div>
+                  <div style={{ fontSize: 11.5, color: "var(--muted)", marginTop: 1 }}>{v.shortName} · {v.agency} · {v.city}</div>
                 </div>
               </button>
             );

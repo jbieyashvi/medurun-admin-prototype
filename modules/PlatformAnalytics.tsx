@@ -44,7 +44,7 @@ function CityBars() {
 
 /* ---------- Ambulance Type Donut ---------- */
 function Donut() {
-  const segs: [string, number, string][] = [["BLS", 40, "#635BFF"], ["ALS", 30, "#8B85FF"], ["ICU", 18, "#B7B3FF"], ["Neonatal", 12, "#E0DEFF"]];
+  const segs: [string, number, string][] = [["BLS", 46, "#635BFF"], ["ACLS", 42, "#8B85FF"], ["Specialty", 12, "#B7B3FF"]];
   const R = 56, C = 2 * Math.PI * R;
   let offset = 0;
   return (

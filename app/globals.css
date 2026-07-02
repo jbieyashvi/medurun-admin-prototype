@@ -93,6 +93,9 @@ tr.clickable:hover td{background:#F8FAFC}
 .badge.expiring{color:#B45309;background:#FFFBEB}
 .badge.reupload{color:#7C3AED;background:#F5F3FF}
 .badge.exception{color:#0E7490;background:#ECFEFF}
+.badge.acls{color:#7C3AED;background:#F5F3FF}
+.badge.bls-class{color:#059669;background:#ECFDF5}
+.badge.specialty{color:#475569;background:#F1F5F9}
 .badge.valid{color:#059669;background:#ECFDF5}
 .badge.expiring7{color:#EA580C;background:#FFF7ED}
 .badge.expiring30{color:#A16207;background:#FEF9C3}

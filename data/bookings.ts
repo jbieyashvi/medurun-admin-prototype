@@ -63,7 +63,7 @@ const TL_SCHEDULED = (start: string): TimelineStep[] => [
 
 export const bookings: Booking[] = [
   {
-    id: "BK-90231", status: "ongoing", rideType: "Emergency", ambType: "ALS", city: "Mumbai",
+    id: "BK-90231", status: "ongoing", rideType: "Emergency", ambType: "ALS Winger", city: "Mumbai",
     bookedAt: "22 Jun 2026 · 03:42 PM",
     pickup: "Andheri East, Mumbai — Powai Hospital",
     drop: "Lilavati Hospital, Bandra West, Mumbai",
@@ -74,7 +74,7 @@ export const bookings: Booking[] = [
     fare: { base: 800, distance: 920, waiting: 60, taxes: 318, final: 2098, method: "UPI", paymentStatus: "pending" },
   },
   {
-    id: "BK-90228", status: "completed", rideType: "Pre-booked", ambType: "BLS", city: "Hyderabad",
+    id: "BK-90228", status: "completed", rideType: "Pre-booked", ambType: "BLS Winger", city: "Hyderabad",
     bookedAt: "22 Jun 2026 · 02:10 PM",
     pickup: "Banjara Hills, Hyderabad",
     drop: "Apollo Hospital, Jubilee Hills, Hyderabad",
@@ -85,7 +85,7 @@ export const bookings: Booking[] = [
     fare: { base: 600, distance: 740, taxes: 241, discount: 100, final: 1481, method: "Card", paymentStatus: "paid" },
   },
   {
-    id: "BK-90220", status: "issue", rideType: "Emergency", ambType: "ALS", city: "Pune",
+    id: "BK-90220", status: "issue", rideType: "Emergency", ambType: "ALS Tempo", city: "Pune",
     bookedAt: "22 Jun 2026 · 01:05 PM",
     pickup: "Hinjewadi Phase 2, Pune",
     drop: "Ruby Hall Clinic, Pune",
@@ -96,7 +96,7 @@ export const bookings: Booking[] = [
     fare: { base: 800, distance: 1100, waiting: 180, taxes: 374, final: 2454, method: "UPI", paymentStatus: "failed" },
   },
   {
-    id: "BK-90215", status: "completed", rideType: "Pre-booked", ambType: "ICU", city: "Mumbai",
+    id: "BK-90215", status: "completed", rideType: "Pre-booked", ambType: "ALS Bolero", city: "Mumbai",
     bookedAt: "22 Jun 2026 · 11:48 AM",
     pickup: "Powai, Mumbai",
     drop: "Tata Memorial Hospital, Parel, Mumbai",
@@ -107,7 +107,7 @@ export const bookings: Booking[] = [
     fare: { base: 1200, distance: 1480, taxes: 482, final: 3162, method: "UPI", paymentStatus: "paid" },
   },
   {
-    id: "BK-90211", status: "cancelled", rideType: "Emergency", ambType: "BLS", city: "Bangalore",
+    id: "BK-90211", status: "cancelled", rideType: "Emergency", ambType: "BLS Tempo", city: "Bangalore",
     bookedAt: "22 Jun 2026 · 10:32 AM",
     pickup: "Koramangala 4th Block, Bangalore",
     drop: "Manipal Hospital, HAL Old Airport Rd",
@@ -118,7 +118,7 @@ export const bookings: Booking[] = [
     fare: { base: 600, distance: 0, taxes: 108, final: 708, method: "UPI", paymentStatus: "refunded" },
   },
   {
-    id: "BK-90207", status: "completed", rideType: "Emergency", ambType: "BLS", city: "Delhi",
+    id: "BK-90207", status: "completed", rideType: "Emergency", ambType: "BLS Bolero", city: "Delhi",
     bookedAt: "22 Jun 2026 · 09:15 AM",
     pickup: "Connaught Place, Delhi",
     drop: "AIIMS Delhi",
@@ -129,7 +129,7 @@ export const bookings: Booking[] = [
     fare: { base: 600, distance: 580, taxes: 212, final: 1392, method: "Cash", paymentStatus: "paid" },
   },
   {
-    id: "BK-90203", status: "scheduled", rideType: "Pre-booked", ambType: "Neonatal", city: "Mumbai",
+    id: "BK-90203", status: "scheduled", rideType: "Pre-booked", ambType: "Neo ALS Winger", city: "Mumbai",
     bookedAt: "23 Jun 2026 · 07:00 AM (scheduled)",
     pickup: "Bandra West, Mumbai (Home pickup)",
     drop: "Hinduja Hospital, Mahim, Mumbai",
@@ -140,7 +140,7 @@ export const bookings: Booking[] = [
     fare: { base: 1500, distance: 0, taxes: 270, final: 1770, method: "UPI", paymentStatus: "pending" },
   },
   {
-    id: "BK-90199", status: "completed", rideType: "Pre-booked", ambType: "BLS", city: "Bangalore",
+    id: "BK-90199", status: "completed", rideType: "Pre-booked", ambType: "BLS Eeco", city: "Bangalore",
     bookedAt: "21 Jun 2026 · 05:45 PM",
     pickup: "Whitefield, Bangalore",
     drop: "Columbia Asia, Yeshwanthpur, Bangalore",
@@ -150,7 +150,7 @@ export const bookings: Booking[] = [
     fare: { base: 600, distance: 880, taxes: 266, discount: 50, final: 1696, method: "Card", paymentStatus: "paid" },
   },
   {
-    id: "BK-90196", status: "payment_pending", rideType: "Emergency", ambType: "ALS", city: "Delhi",
+    id: "BK-90196", status: "payment_pending", rideType: "Emergency", ambType: "ALS Bolero", city: "Delhi",
     bookedAt: "21 Jun 2026 · 04:20 PM",
     pickup: "Saket, Delhi",
     drop: "Max Super Speciality Hospital, Saket, Delhi",
@@ -161,7 +161,7 @@ export const bookings: Booking[] = [
     fare: { base: 800, distance: 760, taxes: 281, final: 1841, method: "UPI", paymentStatus: "pending" },
   },
   {
-    id: "BK-90190", status: "scheduled", rideType: "Pre-booked", ambType: "ICU", city: "Chennai",
+    id: "BK-90190", status: "scheduled", rideType: "Pre-booked", ambType: "Neo Tempo", city: "Chennai",
     bookedAt: "24 Jun 2026 · 09:30 AM (scheduled)",
     pickup: "T. Nagar, Chennai (Home pickup)",
     drop: "Apollo Hospitals, Greams Road, Chennai",
